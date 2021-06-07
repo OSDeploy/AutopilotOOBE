@@ -5,11 +5,12 @@ function Start-AutopilotOOBE {
         [string]$GroupTag,
         [string]$AddToGroup,
         [ValidateSet (
+            'None',
             'Sysprep',
             'SysprepReboot',
             'SysprepShutdown'
         )]
-        [string]$PostAction = '',
+        [string]$PostAction = 'None',
         [ValidateSet (
             'CommandPrompt',
             'PowerShell',
