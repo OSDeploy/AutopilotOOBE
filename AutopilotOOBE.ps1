@@ -166,8 +166,8 @@ function LoadForm {
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
-            <Label Name = "Title1"
+        <StackPanel Width = "600">
+            <Label Name = "TitleMain"
             Content = "Join Autopilot OOBE"
             FontFamily = "Segoe UI Light" FontSize = "46"
             Foreground = "White"
@@ -176,7 +176,7 @@ function LoadForm {
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Label Name = "GroupTagLabel"
             Content = "GroupTag:"
             FontFamily = "Segoe UI" FontSize = "15"
@@ -185,7 +185,7 @@ function LoadForm {
             Margin = "0,100,0,0"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <TextBox Name = "GroupTagTextBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -196,12 +196,12 @@ function LoadForm {
             Height = "40"
             HorizontalAlignment = "Stretch"
             Margin = "180,90,0,0"
-            Width = "360"
+            Width = "410"
             Padding = "8"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Label Name = "AddToGroupLabel"
             Content = "AddToGroup:"
             FontFamily = "Segoe UI"
@@ -211,7 +211,7 @@ function LoadForm {
             Margin = "0,150,0,0"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <TextBox Name = "AddToGroupTextBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -222,22 +222,22 @@ function LoadForm {
             Height = "40"
             HorizontalAlignment = "Stretch"
             Margin = "180,140,0,0"
-            Width = "360"
+            Width = "410"
             Padding = "8"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Label Name = "AssignedUserLabel"
             Content = "AssignedUser:"
             FontFamily = "Segoe UI"
             FontSize = "15"
             Foreground = "White"
             HorizontalAlignment = "Stretch"
-            Margin = "0,210,0,0"
+            Margin = "0,200,0,0"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <TextBox Name = "AssignedUserTextBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -247,23 +247,23 @@ function LoadForm {
             Foreground = "White"
             Height = "40"
             HorizontalAlignment = "Stretch"
-            Margin = "180,200,0,0"
-            Width = "360"
+            Margin = "180,190,0,0"
+            Width = "410"
             Padding = "8"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Label Name = "AssignedComputerNameLabel"
             Content = "AssignedComputerName:"
             FontFamily = "Segoe UI"
             FontSize = "15"
             Foreground = "White"
             HorizontalAlignment = "Stretch"
-            Margin = "0,270,0,0"
+            Margin = "0,250,0,0"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <TextBox Name = "AssignedComputerNameTextBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -273,24 +273,24 @@ function LoadForm {
             Foreground = "White"
             Height = "40"
             HorizontalAlignment = "Stretch"
-            Margin = "180,260,0,0"
+            Margin = "180,240,0,0"
             Text = "Azure AD Join Only"
-            Width = "360"
+            Width = "410"
             Padding = "8"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Label Name = "PostActionLabel"
             Content = "PostAction:"
             FontFamily = "Segoe UI"
             FontSize = "15"
             Foreground = "White"
             HorizontalAlignment = "Stretch"
-            Margin = "0,330,0,0"
+            Margin = "0,300,0,0"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <ComboBox Name = "PostActionComboBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -300,13 +300,13 @@ function LoadForm {
             Foreground = "Black"
             Height = "40"
             HorizontalAlignment = "Stretch"
-            Margin = "180,320,0,0"
-            Width = "360"
+            Margin = "180,290,0,0"
+            Width = "410"
             Padding = "8"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <CheckBox Name = "AssignCheckbox"
             HorizontalAlignment = "Stretch"
             Background = "#002846"
@@ -314,35 +314,35 @@ function LoadForm {
             FontFamily = "Segoe UI"
             FontSize = "15"
             Foreground = "White"
-            Margin = "180,380,0,0"
-            >Assign: Wait for Intune to assign an Autopilot profile
+            Margin = "5,350,0,0"
+            >Assign: Wait for Intune to assign an Autopilot profile for this device
             </CheckBox>
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Button Name = "RegisterButton"
             Content = "Register"
             FontFamily = "Segoe UI"
             FontSize = "15"
             Height = "40"
-            HorizontalAlignment = "Right"
-            Margin = "0,420,0,0"
+            HorizontalAlignment = "Left"
+            Margin = "0,390,0,0"
             Width = "170"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <Button Name = "RunButton"
             Content = "Run"
             FontSize = "15"
             FontWeight = "Normal"
             Height = "40"
             HorizontalAlignment = "Left"
-            Margin = "0,510,0,0"
+            Margin = "0,520,0,0"
             Width = "100"
             />
         </StackPanel>
-        <StackPanel Width = "550">
+        <StackPanel Width = "600">
             <ComboBox Name = "RunComboBox"
             Background = "#002846"
             BorderThickness = "2"
@@ -351,14 +351,14 @@ function LoadForm {
             Foreground = "Black"
             Height = "40"
             HorizontalAlignment = "Left"
-            Margin = "100,510,0,0"
+            Margin = "100,520,0,0"
             Padding = "8"
-            Width = "450"
+            Width = "500"
             />
         </StackPanel>
 
-        <StackPanel Width = "550">
-            <Button Name = "StartButton"
+        <StackPanel Width = "600">
+            <Button Name = "DocsButton"
             Content = "Docs"
             FontSize = "15"
             FontWeight = "Normal"
@@ -368,8 +368,8 @@ function LoadForm {
             Width = "100"
             />
         </StackPanel>
-        <StackPanel Width = "550">
-            <TextBox Name = "StartTextBox"
+        <StackPanel Width = "600">
+            <TextBox Name = "DocsTextBox"
             Background = "#002846"
             BorderThickness = "2"
             FontSize = "15"
@@ -379,7 +379,7 @@ function LoadForm {
             HorizontalAlignment = "Left"
             Margin = "100,570,0,0"
             Padding = "8"
-            Width = "450"
+            Width = "500"
             />
         </StackPanel>
     </Grid>
@@ -430,14 +430,10 @@ $SidebarBiosVersion.Content = "BIOS Version: $BiosVersion"
 #   Parameters
 #=======================================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
-#=======================================================================
-#   Parameter GroupTag
-#=======================================================================
-$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
-#=======================================================================
-#   Parameter AddToGroup
-#=======================================================================
+
 $AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
+$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
+$TitleMain.Content = $Global:AutopilotOOBE.Title
 #=======================================================================
 #   Parameter PostAction
 #=======================================================================
@@ -512,17 +508,17 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
 })
 #=======================================================================
-#   Parameter Start
+#   Parameter Docs
 #=======================================================================
-$StartTextBox.Text = $Global:AutopilotOOBE.Start
+$DocsTextBox.Text = $Global:AutopilotOOBE.Docs
 
-$StartButton.add_Click( {
-    Write-Host -ForegroundColor Cyan "Run: $($StartTextBox.Text)"
+$DocsButton.add_Click( {
+    Write-Host -ForegroundColor Cyan "Run: $($DocsTextBox.Text)"
     try {
-        Start-Process $StartTextBox.Text
+        Start-Process $DocsTextBox.Text
     }
     catch {
-        Write-Warning "Could not execute $($StartTextBox.Text)"
+        Write-Warning "Could not execute $($DocsTextBox.Text)"
     }
 })
 #=======================================================================

@@ -1,9 +1,9 @@
 function Start-AutopilotOOBE {
     [CmdletBinding()]
     param (
+        [string]$AddToGroup,
         [switch]$Assign,
         [string]$GroupTag,
-        [string]$AddToGroup,
         [ValidateSet (
             'None',
             'Sysprep',
@@ -28,7 +28,8 @@ function Start-AutopilotOOBE {
             'MDMDiagAutopilotTPM'
         )]
         [string]$Run = 'PowerShell',
-        [string]$Start = 'https://docs.microsoft.com/en-us/mem/autopilot/'
+        [string]$Docs = 'https://docs.microsoft.com/en-us/mem/autopilot/',
+        [string]$Title = 'Join Autopilot OOBE'
     )
 
     $Global:AutopilotOOBE = @{
@@ -37,7 +38,8 @@ function Start-AutopilotOOBE {
         GroupTag = $GroupTag
         PostAction = $PostAction
         Run = $Run
-        Start = $Start
+        Docs = $Docs
+        Title = $Title
     }
 
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\AutopilotOOBE.ps1"
