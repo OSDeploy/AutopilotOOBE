@@ -124,7 +124,7 @@ function LoadForm {
         <Grid>
             <StackPanel Width = "700">
                 <Label Name = "Title1"
-                Content = "Autopilot Azure Join"
+                Content = "Autopilot OOBE Join"
                 FontFamily = "Segoe UI Light"
                 FontSize = "40"
                 Foreground = "White"
