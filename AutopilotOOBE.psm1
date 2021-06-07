@@ -6,7 +6,7 @@ function Start-AutopilotOOBE {
         [string]$AddToGroup,
         [ValidateSet (
             'Sysprep',
-            'SysprepRestart',
+            'SysprepReboot',
             'SysprepShutdown'
         )]
         [string]$PostAction = '',
@@ -20,7 +20,7 @@ function Start-AutopilotOOBE {
             'Restart',
             'Shutdown',
             'Sysprep',
-            'SysprepRestart',
+            'SysprepReboot',
             'SysprepShutdown',
             'MDMDiag',
             'MDMDiagAutopilot',

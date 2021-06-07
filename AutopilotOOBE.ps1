@@ -378,11 +378,11 @@ $AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
 #$PostActionComboBox.SelectedValue = $Global:AutopilotOOBE.PostAction
 $PostActionComboBox.Items.Add('') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
-$PostActionComboBox.Items.Add('Sysprep /oobe /restart') | Out-Null
+$PostActionComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 
 if ($Global:AutopilotOOBE.PostAction -eq 'Sysprep') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
-if ($Global:AutopilotOOBE.PostAction -eq 'SysprepRestart') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /restart'}
+if ($Global:AutopilotOOBE.PostAction -eq 'SysprepReboot') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepShutdown') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
 #=======================================================================
 #   Parameter Assign
@@ -404,7 +404,7 @@ $RunComboBox.Items.Add('Open Network and Wireless Settings') | Out-Null
 $RunComboBox.Items.Add('Restart Computer') | Out-Null
 $RunComboBox.Items.Add('Shutdown Computer') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
-$RunComboBox.Items.Add('Sysprep /oobe /restart') | Out-Null
+$RunComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
@@ -419,7 +419,7 @@ if ($Global:AutopilotOOBE.Run -eq 'NetworkingWireless') {$RunComboBox.SelectedVa
 if ($Global:AutopilotOOBE.Run -eq 'Restart') {$RunComboBox.SelectedValue = 'Restart Computer'}
 if ($Global:AutopilotOOBE.Run -eq 'Shutdown') {$RunComboBox.SelectedValue = 'Shutdown Computer'}
 if ($Global:AutopilotOOBE.Run -eq 'Sysprep') {$RunComboBox.SelectedValue = 'Sysprep /oobe /quit'}
-if ($Global:AutopilotOOBE.Run -eq 'SysprepRestart') {$RunComboBox.SelectedValue = 'Sysprep /oobe /restart'}
+if ($Global:AutopilotOOBE.Run -eq 'SysprepReboot') {$RunComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepShutdown') {$RunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiag') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilot') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
@@ -435,7 +435,7 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
     if ($RunComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /quit') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit"}
-    if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /restart') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/restart"}
+    if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /shutdown') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
@@ -508,8 +508,8 @@ $RegisterButton.add_Click( {
     if ($PostActionComboBox.SelectedValue -match 'quit') {
         Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
     }
-    if ($PostActionComboBox.SelectedValue -match 'restart') {
-        Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/restart" -Wait
+    if ($PostActionComboBox.SelectedValue -match 'reboot') {
+        Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
     }
     if ($PostActionComboBox.SelectedValue -match 'shutdown') {
         Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
