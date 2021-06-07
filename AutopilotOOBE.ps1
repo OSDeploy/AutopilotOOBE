@@ -125,7 +125,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Margin = "0,0,0,0"
             />
         </StackPanel>
@@ -134,7 +134,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Margin = "0,15,0,0"
             />
         </StackPanel>
@@ -143,7 +143,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Margin = "0,30,0,0"
             />
         </StackPanel>
@@ -152,7 +152,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Margin = "0,45,0,0"
             />
         </StackPanel>
@@ -161,12 +161,12 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Margin = "0,60,0,0"
             />
         </StackPanel>
 
-        <StackPanel Width = "600">
+        <StackPanel Width = "950">
             <Label Name = "TitleMain"
             Content = "Join Autopilot OOBE"
             FontFamily = "Segoe UI Light" FontSize = "46"
