@@ -3,6 +3,7 @@ function Start-AutopilotOOBE {
     param (
         [Parameter(ValueFromPipeline = $true)]
         [string]$Profile,
+        [switch]$Demo,
 
         [ValidateSet (
             'GroupTag',
@@ -97,6 +98,7 @@ function Start-AutopilotOOBE {
         AssignedComputerName = $AssignedComputerName
         AssignedComputerNameExample = $AssignedComputerNameExample
         Disable = $Disable
+        Demo = $Demo
         GroupTag = $GroupTag
         PostAction = $PostAction
         Run = $Run
