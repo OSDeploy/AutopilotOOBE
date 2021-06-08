@@ -125,7 +125,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Right"
+            HorizontalAlignment = "Left"
             Margin = "0,0,0,0"
             />
         </StackPanel>
@@ -135,7 +135,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,15,0,0"
+            Margin = "0,0,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -144,7 +144,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,30,0,0"
+            Margin = "0,15,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -153,7 +153,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,45,0,0"
+            Margin = "0,30,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -162,7 +162,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,60,0,0"
+            Margin = "0,45,0,0"
             />
         </StackPanel>
 
@@ -292,7 +292,6 @@ function LoadForm {
         </StackPanel>
         <StackPanel Width = "600">
             <ComboBox Name = "PostActionComboBox"
-            Background = "#002846"
             BorderThickness = "2"
             FontFamily = "Segoe UI"
             FontSize = "15"
@@ -422,18 +421,24 @@ else {
 }
 
 $SerialNumber = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-$SidebarSerialNumber.Content = "Serial Number: $SerialNumber"
+$SidebarSerialNumber.Content = $SerialNumber
 
 $BiosVersion = ((Get-CimInstance -ClassName Win32_BIOS).SMBIOSBIOSVersion).Trim()
-$SidebarBiosVersion.Content = "BIOS Version: $BiosVersion"
+$SidebarBiosVersion.Content = "BIOS $BiosVersion"
 #=======================================================================
 #   Parameters
 #=======================================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
 
-$AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
-$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
 $TitleMain.Content = $Global:AutopilotOOBE.Title
+$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
+$AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
+
+$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
+$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
+
+if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser}
+if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName}
 #=======================================================================
 #   Parameter PostAction
 #=======================================================================
@@ -522,66 +527,78 @@ $DocsButton.add_Click( {
     }
 })
 #=======================================================================
+#   Parameter Disable
+#=======================================================================
+if ($Disable -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
+if ($Disable -contains 'AddToGroup') {$AddToGroupTextBox.IsEnabled = $false}
+if ($Disable -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
+if ($Disable -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
+if ($Disable -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
+#=======================================================================
 #   RegisterButton
 #=======================================================================
 $RegisterButton.add_Click( {
     $xamGUI.Close()
     Show-PowershellWindow
 
-    Write-Host -ForegroundColor Cyan "Online: $true"
     $Params = @{
         Online = $true
     }
 
     if ($AssignCheckbox.IsChecked) {
-        Write-Host -ForegroundColor Cyan "Assign: $true" 
         $Params.Assign = $true
     }
 
     if ($AddToGroupTextBox.Text -gt 0) {
         $Params.AddToGroup = $AddToGroupTextBox.Text
-        Write-Host -ForegroundColor Cyan "AddToGroup: $($Params.AddToGroup)" 
     }
 
     if ($GroupTagTextBox.Text -gt 0) {
         $Params.GroupTag = $GroupTagTextBox.Text
-        Write-Host -ForegroundColor Cyan "GroupTag: $($Params.GroupTag)" 
     }
 
-    if ($AssignedUserTextBox.Text -gt 0) {
+    if (($AssignedUserTextBox.Text -gt 0) -and ($AssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
         $Params.AssignedUser = $AssignedUserTextBox.Text
-        Write-Host -ForegroundColor Cyan "AssignedUser: $($Params.AssignedUser)" 
     }
 
-    if (($AssignedComputerNameTextBox.Text -gt 0) -and ($AssignedComputerNameTextBox.Text -notmatch 'Azure AD Join Only')) {
+    if (($AssignedComputerNameTextBox.Text -gt 0) -and ($AssignedComputerNameTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedComputerNameExample)) {
         $Params.AssignedComputerName = $AssignedComputerNameTextBox.Text
-        Write-Host -ForegroundColor Cyan "AssignedComputerName: $($Params.AssignedComputerName)" 
     }
 
     Write-Host -ForegroundColor Cyan "Install-Script Get-WindowsAutoPilotInfo"
-    Start-Sleep -Seconds 3
-    Install-Script Get-WindowsAutoPilotInfo -Force
+    if ($Global:AutopilotOOBE.Demo -ne $true) {
+        Start-Sleep -Seconds 3
+        Install-Script Get-WindowsAutoPilotInfo -Force
+    }
 
-    Write-Host -ForegroundColor Cyan "Get-WindowsAutoPilotInfo"
-    Start-Sleep -Seconds 3
+    Write-Host ($Params | Out-String)
+    Write-Host -ForegroundColor Cyan "Get-WindowsAutoPilotInfo @Params"
 
-    Get-WindowsAutoPilotInfo @Params
-    Start-Sleep -Seconds 3
+    if ($Global:AutopilotOOBE.Demo -ne $true) {
+        Start-Sleep -Seconds 3
+        Get-WindowsAutoPilotInfo @Params
+    }
 
     if ($PostActionComboBox.SelectedValue -match 'Sysprep') {
-        Start-Sleep -Seconds 5
+        Write-Host -ForegroundColor Cyan "Executing Sysprep"
     }
-    if ($PostActionComboBox.SelectedValue -match 'quit') {
-        Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
+    if ($Global:AutopilotOOBE.Demo -ne $true) {
+        if ($PostActionComboBox.SelectedValue -match 'quit') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
+        }
+        if ($PostActionComboBox.SelectedValue -match 'reboot') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
+        }
+        if ($PostActionComboBox.SelectedValue -match 'shutdown') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
+        }
     }
-    if ($PostActionComboBox.SelectedValue -match 'reboot') {
-        Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
-    }
-    if ($PostActionComboBox.SelectedValue -match 'shutdown') {
-        Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
-    }
+
     if ($PostActionComboBox.SelectedValue -notmatch 'Sysprep') {
-        & "$($MyInvocation.MyCommand.Module.ModuleBase)\AutopilotOOBE.ps1"
+        & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
     }
 })
 #=======================================================================
