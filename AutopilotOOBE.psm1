@@ -2,7 +2,7 @@ function Start-AutopilotOOBE {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline = $true)]
-        [string]$Profile,
+        [string]$CustomProfile,
         [switch]$Demo,
 
         [ValidateSet (
@@ -12,7 +12,16 @@ function Start-AutopilotOOBE {
             'AssignedComputerName',
             'Assign'
         )]
-        [string[]]$Disable,
+        [string[]]$Disabled,
+
+        [ValidateSet (
+            'GroupTag',
+            'AddToGroup',
+            'AssignedUser',
+            'AssignedComputerName',
+            'Assign'
+        )]
+        [string[]]$Hidden,
 
         [string]$AddToGroup,
         [switch]$Assign,
@@ -51,41 +60,42 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Profile OSDeploy
     #=======================================================================
-    if ($Profile -in 'OSD','OSDeploy','OSDeploy.com') {
+    if ($CustomProfile -in 'OSD','OSDeploy','OSDeploy.com') {
+        $Title = 'OSDeploy.com Autopilot Enrollment'
         $Assign = $true
         $AssignedUserExample = 'someone@osdeploy.com'
         $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $Disable = 'GroupTag'
+        $Disabled = 'GroupTag'
         $AddToGroup = 'Administrators'
         $PostAction = 'SysprepReboot'
         $Run = 'NetworkingWireless'
-        $Title = 'Welcome to OSDeploy.com Autopilot'
     }
     #=======================================================================
     #   Profile SeguraOSD
     #=======================================================================
-    if ($Profile -match 'SeguraOSD') {
+    if ($CustomProfile -match 'SeguraOSD') {
+        $Title = '@SeguraOSD Autopilot Enrollment'
         $Assign = $true
-        $AssignedUserExample = 'david@segura.org'
+        $AssignedUserExample = 'someone@segura.org'
         $AssignedComputerName = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $Disable = 'GroupTag'
+        $Disabled = 'GroupTag'
         $AddToGroup = 'Twitter'
         $PostAction = 'SysprepReboot'
         $Run = 'PowerShell'
-        $Title = 'Welcome to @SeguraOSD Autopilot'
     }
     #=======================================================================
     #   Profile Baker Hughes
     #=======================================================================
-    if ($Profile -eq 'BH') {
+    if ($CustomProfile -eq 'BH') {
+        $Title = 'Baker Hughes Autopilot Enrollment'
         $Assign = $true
         $AssignedUserExample = 'first.last@bakerhughes.com'
-        $AssignedComputerNameExample = 'AAD Only'
-        $Disable = 'AddToGroup','AssignedComputerName'
+        $AssignedComputerNameExample = 'Disabled for Hybrid Join'
+        $Disabled = 'AddToGroup','AssignedComputerName'
+        $Hidden = 'AddToGroup'
         $GroupTag = 'Enterprise'
         $PostAction = 'SysprepReboot'
         $Run = 'NetworkingWireless'
-        $Title = 'Welcome to Baker Hughes Autopilot'
     }
     #=======================================================================
     #   Set Global Variable
@@ -97,9 +107,10 @@ function Start-AutopilotOOBE {
         AssignedUserExample = $AssignedUserExample
         AssignedComputerName = $AssignedComputerName
         AssignedComputerNameExample = $AssignedComputerNameExample
-        Disable = $Disable
+        Disabled = $Disabled
         Demo = $Demo
         GroupTag = $GroupTag
+        Hidden = $Hidden
         PostAction = $PostAction
         Run = $Run
         Docs = $Docs

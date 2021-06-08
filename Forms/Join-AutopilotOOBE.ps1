@@ -429,16 +429,64 @@ $SidebarBiosVersion.Content = "BIOS $BiosVersion"
 #   Parameters
 #=======================================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
-
+#=======================================================================
+#   Parameter Title
+#=======================================================================
 $TitleMain.Content = $Global:AutopilotOOBE.Title
+#=======================================================================
+#   Parameter GroupTag
+#=======================================================================
 $GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
+
+if ($Disabled -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
+
+if ($Hidden -contains 'GroupTag') {
+    $GroupTagLabel.Visibility = 'Hidden'
+    $GroupTagTextBox.Visibility = 'Hidden'
+}
+#=======================================================================
+#   Parameter AddToGroup
+#=======================================================================
 $AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
 
-$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
-$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
+if ($Disabled -contains 'AddToGroup') {
+    $AddToGroupTextBox.IsEnabled = $false
+}
 
+if ($Hidden -contains 'AddToGroup') {
+    $AddToGroupLabel.Visibility = 'Hidden'
+    $AddToGroupTextBox.Visibility = 'Hidden'
+}
+#=======================================================================
+#   Parameter AssignedUser
+#=======================================================================
+$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
 if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser}
+
+if ($Disabled -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
+
+if ($Hidden -contains 'AssignedUser') {
+    $AssignedUserLabel.Visibility = 'Hidden'
+    $AssignedUserTextBox.Visibility = 'Hidden'
+}
+#=======================================================================
+#   Parameter AssignedComputerName
+#=======================================================================
+$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
 if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName}
+
+if ($Disabled -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
+
+if ($Hidden -contains 'AssignedComputerName') {
+    $AssignedComputerNameLabel.Visibility = 'Hidden'
+    $AssignedComputerNameTextBox.Visibility = 'Hidden'
+}
+#=======================================================================
+#   Parameter Assign
+#=======================================================================
+if ($Disabled -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
+
+if ($Hidden -contains 'Assign') {$AssignCheckBox.Visibility = 'Hidden'}
 #=======================================================================
 #   Parameter PostAction
 #=======================================================================
@@ -526,14 +574,6 @@ $DocsButton.add_Click( {
         Write-Warning "Could not execute $($DocsTextBox.Text)"
     }
 })
-#=======================================================================
-#   Parameter Disable
-#=======================================================================
-if ($Disable -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
-if ($Disable -contains 'AddToGroup') {$AddToGroupTextBox.IsEnabled = $false}
-if ($Disable -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
-if ($Disable -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
-if ($Disable -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
 #=======================================================================
 #   RegisterButton
 #=======================================================================
