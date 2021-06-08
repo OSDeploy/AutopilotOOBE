@@ -430,9 +430,15 @@ $SidebarBiosVersion.Content = "BIOS $BiosVersion"
 #=======================================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
 
-$AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
-$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
 $TitleMain.Content = $Global:AutopilotOOBE.Title
+$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
+$AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
+
+$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
+$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
+
+if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser}
+if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName}
 #=======================================================================
 #   Parameter PostAction
 #=======================================================================
@@ -521,6 +527,14 @@ $DocsButton.add_Click( {
     }
 })
 #=======================================================================
+#   Parameter Disable
+#=======================================================================
+if ($Disable -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
+if ($Disable -contains 'AddToGroup') {$AddToGroupTextBox.IsEnabled = $false}
+if ($Disable -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
+if ($Disable -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
+if ($Disable -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
+#=======================================================================
 #   RegisterButton
 #=======================================================================
 $RegisterButton.add_Click( {
@@ -544,15 +558,15 @@ $RegisterButton.add_Click( {
 
     if ($GroupTagTextBox.Text -gt 0) {
         $Params.GroupTag = $GroupTagTextBox.Text
-        Write-Host -ForegroundColor Cyan "GroupTag: $($Params.GroupTag)" 
+        Write-Host -ForegroundColor Cyan "GroupTag: $($Params.GroupTag)"
     }
 
-    if ($AssignedUserTextBox.Text -gt 0) {
+    if (($AssignedUserTextBox.Text -gt 0) -and ($AssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
         $Params.AssignedUser = $AssignedUserTextBox.Text
         Write-Host -ForegroundColor Cyan "AssignedUser: $($Params.AssignedUser)" 
     }
 
-    if (($AssignedComputerNameTextBox.Text -gt 0) -and ($AssignedComputerNameTextBox.Text -notmatch 'Azure AD Join Only')) {
+    if (($AssignedComputerNameTextBox.Text -gt 0) -and ($AssignedComputerNameTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedComputerNameExample)) {
         $Params.AssignedComputerName = $AssignedComputerNameTextBox.Text
         Write-Host -ForegroundColor Cyan "AssignedComputerName: $($Params.AssignedComputerName)" 
     }
@@ -580,7 +594,7 @@ $RegisterButton.add_Click( {
         Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
     }
     if ($PostActionComboBox.SelectedValue -notmatch 'Sysprep') {
-        & "$($MyInvocation.MyCommand.Module.ModuleBase)\AutopilotOOBE.ps1"
+        & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
     }
 })
 #=======================================================================
