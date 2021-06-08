@@ -125,7 +125,7 @@ function LoadForm {
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Right"
+            HorizontalAlignment = "Left"
             Margin = "0,0,0,0"
             />
         </StackPanel>
@@ -135,7 +135,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,15,0,0"
+            Margin = "0,0,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -144,7 +144,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,30,0,0"
+            Margin = "0,15,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -153,7 +153,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,45,0,0"
+            Margin = "0,30,0,0"
             />
         </StackPanel>
         <StackPanel>
@@ -162,7 +162,7 @@ function LoadForm {
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,60,0,0"
+            Margin = "0,45,0,0"
             />
         </StackPanel>
 
@@ -292,7 +292,6 @@ function LoadForm {
         </StackPanel>
         <StackPanel Width = "600">
             <ComboBox Name = "PostActionComboBox"
-            Background = "#002846"
             BorderThickness = "2"
             FontFamily = "Segoe UI"
             FontSize = "15"
@@ -422,10 +421,10 @@ else {
 }
 
 $SerialNumber = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-$SidebarSerialNumber.Content = "Serial Number: $SerialNumber"
+$SidebarSerialNumber.Content = $SerialNumber
 
 $BiosVersion = ((Get-CimInstance -ClassName Win32_BIOS).SMBIOSBIOSVersion).Trim()
-$SidebarBiosVersion.Content = "BIOS Version: $BiosVersion"
+$SidebarBiosVersion.Content = "BIOS $BiosVersion"
 #=======================================================================
 #   Parameters
 #=======================================================================
