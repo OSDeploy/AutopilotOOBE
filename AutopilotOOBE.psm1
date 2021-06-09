@@ -28,12 +28,14 @@ function Start-AutopilotOOBE {
         [string[]]$Hidden,
 
         [string]$AddToGroup,
+        [string[]]$AddToGroupOptions,
         [switch]$Assign,
         [string]$AssignedUser,
         [string]$AssignedUserExample = 'someone@example.com',
         [string]$AssignedComputerName,
         [string]$AssignedComputerNameExample = 'Azure AD Join Only',
         [string]$GroupTag,
+        [string[]]$GroupTagOptions,
         [ValidateSet (
             'None',
             'Sysprep',
@@ -94,10 +96,10 @@ function Start-AutopilotOOBE {
     if ($CustomProfile -eq 'BH') {
         $Title = 'Baker Hughes Autopilot Enrollment'
         $Assign = $true
-        $AssignedUserExample = 'first.last@bakerhughes.com'
         $AssignedComputerNameExample = 'Disabled for Hybrid Join'
-        $Hidden = 'AddToGroup','AssignedComputerName'
+        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
         $GroupTag = 'Enterprise'
+        $GroupTagOptions = 'Development','Enterprise'
         $PostAction = 'SysprepReboot'
         $Run = 'WindowsSettings'
     }
@@ -106,6 +108,7 @@ function Start-AutopilotOOBE {
     #=======================================================================
     $Global:AutopilotOOBE = @{
         AddToGroup = $AddToGroup
+        AddToGroupOptions = $AddToGroupOptions
         Assign = $Assign
         AssignedUser = $AssignedUser
         AssignedUserExample = $AssignedUserExample
@@ -114,6 +117,7 @@ function Start-AutopilotOOBE {
         Disabled = $Disabled
         Demo = $Demo
         GroupTag = $GroupTag
+        GroupTagOptions = $GroupTagOptions
         Hidden = $Hidden
         PostAction = $PostAction
         Run = $Run

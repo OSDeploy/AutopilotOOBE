@@ -192,41 +192,47 @@ function LoadForm {
 
         <StackPanel Grid.Column = "2" Grid.Row = "1">
             <StackPanel x:Name = "StackPanelGroupTag" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label Name = "GroupTagLabel"
+                <Label
+                Name = "GroupTagLabel"
                 Content = "GroupTag:"
                 FontFamily = "Segoe UI" FontSize = "15"
                 Foreground = "White"
                 />
 
-                <TextBox Name = "GroupTagTextBox"
+                <ComboBox
+                Name = "GroupTagComboBox"
                 Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 FontWeight = "Normal"
-                Foreground = "White"
+                Foreground = "Black"
                 Height = "40"
+                IsEditable = "true"
                 Padding = "8"
                 Width = "380"
                 />
             </StackPanel>
 
             <StackPanel x:Name = "StackPanelAddToGroup" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label Name = "AddToGroupLabel"
+                <Label
+                Name = "AddToGroupLabel"
                 Content = "AddToGroup:"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 Foreground = "White"
                 />
 
-                <TextBox Name = "AddToGroupTextBox"
+                <ComboBox
+                Name = "AddToGroupComboBox"
                 Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 FontWeight = "Normal"
-                Foreground = "White"
+                Foreground = "Black"
                 Height = "40"
+                IsEditable = "true"
                 Width = "380"
                 Padding = "8"
                 />
@@ -334,7 +340,8 @@ function LoadForm {
                 Width = "60"
                 />
 
-                <ComboBox Name = "RunComboBox"
+                <ComboBox
+                Name = "RunComboBox"
                 Background = "#002846"
                 BorderThickness = "2"
                 FontSize = "15"
@@ -421,9 +428,15 @@ $TitleMain.Content = $Global:AutopilotOOBE.Title
 #=======================================================================
 #   Parameter GroupTag
 #=======================================================================
-$GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
+$Global:AutopilotOOBE.GroupTagOptions | ForEach-Object {
+    $GroupTagComboBox.Items.Add($_) | Out-Null
+}
 
-if ($Disabled -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
+if ($Global:AutopilotOOBE.GroupTag) {
+    $GroupTagComboBox.Text = $Global:AutopilotOOBE.GroupTag
+}
+
+if ($Disabled -contains 'GroupTag') {$GroupTagComboBox.IsEnabled = $false}
 
 if ($Hidden -contains 'GroupTag') {
     $StackPanelGroupTag = $Global:xamGUI.FindName("StackPanelGroupTag")
@@ -432,11 +445,15 @@ if ($Hidden -contains 'GroupTag') {
 #=======================================================================
 #   Parameter AddToGroup
 #=======================================================================
-$AddToGroupTextBox.Text = $Global:AutopilotOOBE.AddToGroup
-
-if ($Disabled -contains 'AddToGroup') {
-    $AddToGroupTextBox.IsEnabled = $false
+$Global:AutopilotOOBE.AddToGroupOptions | ForEach-Object {
+    $AddToGroupComboBox.Items.Add($_) | Out-Null
 }
+
+if ($Global:AutopilotOOBE.AddToGroup) {
+    $AddToGroupComboBox.Text = $Global:AutopilotOOBE.AddToGroup
+}
+
+if ($Disabled -contains 'AddToGroup') {$AddToGroupComboBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AddToGroup') {
     $StackPanelAddToGroup = $Global:xamGUI.FindName("StackPanelAddToGroup")
@@ -592,12 +609,12 @@ $RegisterButton.add_Click( {
         $Params.Assign = $true
     }
 
-    if ($AddToGroupTextBox.Text -gt 0) {
-        $Params.AddToGroup = $AddToGroupTextBox.Text
+    if ($AddToGroupComboBox.Text -gt 0) {
+        $Params.AddToGroup = $AddToGroupComboBox.Text
     }
 
-    if ($GroupTagTextBox.Text -gt 0) {
-        $Params.GroupTag = $GroupTagTextBox.Text
+    if ($GroupTagComboBox.Text -gt 0) {
+        $Params.GroupTag = $GroupTagComboBox.Text
     }
 
     if (($AssignedUserTextBox.Text -gt 0) -and ($AssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
@@ -641,7 +658,7 @@ $RegisterButton.add_Click( {
     }
 
     if ($PostActionComboBox.SelectedValue -notmatch 'Sysprep') {
-        & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
+        & "$Global:MyScriptDir\Join-AutopilotOOBE.ps1"
     }
 })
 #=======================================================================
