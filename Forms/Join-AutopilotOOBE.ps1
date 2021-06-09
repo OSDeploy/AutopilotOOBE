@@ -119,270 +119,255 @@ function LoadForm {
 
         </ResourceDictionary>
     </Window.Resources>
+
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="380"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column = "0">
             <Label Name = "SidebarModuleVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Left"
-            Margin = "0,0,0,0"
+            Padding = "10,1,10,0"
             />
         </StackPanel>
-        <StackPanel>
+
+        <StackPanel Grid.Column = "4">
             <Label Name = "SidebarManufacturer"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,0,0,0"
+            Padding = "10,1,10,0"
             />
-        </StackPanel>
-        <StackPanel>
+
             <Label Name = "SidebarModel"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,15,0,0"
+            Padding = "10,1,10,0"
             />
-        </StackPanel>
-        <StackPanel>
+
             <Label Name = "SidebarSerialNumber"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,30,0,0"
+            Padding = "10,1,10,0"
             />
-        </StackPanel>
-        <StackPanel>
+
             <Label Name = "SidebarBiosVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
             HorizontalAlignment = "Right"
-            Margin = "0,45,0,0"
+            Padding = "10,1,10,0"
             />
         </StackPanel>
 
-        <StackPanel Width = "950">
+        <StackPanel Grid.Column = "1" Grid.ColumnSpan = "3">
             <Label Name = "TitleMain"
-            Content = "Join Autopilot OOBE"
+            Content = "Autopilot Manual Enrollment"
             FontFamily = "Segoe UI Light" FontSize = "46"
             Foreground = "White"
             HorizontalAlignment = "Center"
-            Margin = "0,0,0,0"
+            Grid.Row = "0"
             />
         </StackPanel>
 
-        <StackPanel Width = "600">
-            <Label Name = "GroupTagLabel"
-            Content = "GroupTag:"
-            FontFamily = "Segoe UI" FontSize = "15"
-            Foreground = "White"
-            HorizontalAlignment = "Stretch"
-            Margin = "0,100,0,0"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <TextBox Name = "GroupTagTextBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "White"
-            Height = "40"
-            HorizontalAlignment = "Stretch"
-            Margin = "180,90,0,0"
-            Width = "410"
-            Padding = "8"
-            />
+        <StackPanel Grid.Column = "2" Grid.Row = "1">
+            <StackPanel x:Name = "StackPanelGroupTag" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Label Name = "GroupTagLabel"
+                Content = "GroupTag:"
+                FontFamily = "Segoe UI" FontSize = "15"
+                Foreground = "White"
+                />
+
+                <TextBox Name = "GroupTagTextBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "White"
+                Height = "40"
+                Padding = "8"
+                Width = "380"
+                />
+            </StackPanel>
+
+            <StackPanel x:Name = "StackPanelAddToGroup" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Label Name = "AddToGroupLabel"
+                Content = "AddToGroup:"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Foreground = "White"
+                />
+
+                <TextBox Name = "AddToGroupTextBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "White"
+                Height = "40"
+                Width = "380"
+                Padding = "8"
+                />
+            </StackPanel>
+
+            <StackPanel x:Name = "StackPanelAssignedUser" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Label Name = "AssignedUserLabel"
+                Content = "AssignedUser:"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Foreground = "White"
+                />
+
+                <TextBox Name = "AssignedUserTextBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "White"
+                Height = "40"
+                Width = "380"
+                Padding = "8"
+                />
+            </StackPanel>
+
+            <StackPanel x:Name = "StackPanelAssignedComputerName" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Label Name = "AssignedComputerNameLabel"
+                Content = "AssignedComputerName:"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Foreground = "White"
+                />
+
+                <TextBox Name = "AssignedComputerNameTextBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "White"
+                Height = "40"
+                Text = "Azure AD Join Only"
+                Width = "380"
+                Padding = "8"
+                />
+            </StackPanel>
+
+            <StackPanel x:Name = "StackPanelPostAction" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Label
+                Name = "PostActionLabel"
+                Content = "PostAction:"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Foreground = "White"
+                />
+
+                <ComboBox
+                Name = "PostActionComboBox"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "Black"
+                Height = "40"
+                Padding = "8"
+                Width = "380"
+                />
+            </StackPanel>
+
+            <StackPanel x:Name = "StackPanelAssign" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <CheckBox
+                Name = "AssignCheckbox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Foreground = "White"
+                >Assign: Wait for Intune to assign an Autopilot profile for this device
+                </CheckBox>
+            </StackPanel>
+
+            <StackPanel Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Button Name = "RegisterButton"
+                Content = "Register"
+                FontFamily = "Segoe UI"
+                FontSize = "15"
+                Height = "40"
+                Width = "170"
+                />
+            </StackPanel>
+
+            <StackPanel Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+
+            </StackPanel>
         </StackPanel>
 
-        <StackPanel Width = "600">
-            <Label Name = "AddToGroupLabel"
-            Content = "AddToGroup:"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Foreground = "White"
-            HorizontalAlignment = "Stretch"
-            Margin = "0,150,0,0"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <TextBox Name = "AddToGroupTextBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "White"
-            Height = "40"
-            HorizontalAlignment = "Stretch"
-            Margin = "180,140,0,0"
-            Width = "410"
-            Padding = "8"
-            />
-        </StackPanel>
+        <StackPanel Grid.Column = "2" Grid.Row = "3" VerticalAlignment = "Bottom">
+            <StackPanel x:Name = "StackPanelRun" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Button Name = "RunButton"
+                Content = "Run"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Height = "40"
+                Width = "60"
+                />
 
-        <StackPanel Width = "600">
-            <Label Name = "AssignedUserLabel"
-            Content = "AssignedUser:"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Foreground = "White"
-            HorizontalAlignment = "Stretch"
-            Margin = "0,200,0,0"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <TextBox Name = "AssignedUserTextBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "White"
-            Height = "40"
-            HorizontalAlignment = "Stretch"
-            Margin = "180,190,0,0"
-            Width = "410"
-            Padding = "8"
-            />
-        </StackPanel>
+                <ComboBox Name = "RunComboBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "Black"
+                Height = "40"
+                Padding = "8"
+                Width = "500"
+                />
+            </StackPanel>
+            <StackPanel x:Name = "StackPanelDocs" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
+                <Button Name = "DocsButton"
+                Content = "Docs"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Height = "40"
+                Width = "60"
+                />
 
-        <StackPanel Width = "600">
-            <Label Name = "AssignedComputerNameLabel"
-            Content = "AssignedComputerName:"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Foreground = "White"
-            HorizontalAlignment = "Stretch"
-            Margin = "0,250,0,0"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <TextBox Name = "AssignedComputerNameTextBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "White"
-            Height = "40"
-            HorizontalAlignment = "Stretch"
-            Margin = "180,240,0,0"
-            Text = "Azure AD Join Only"
-            Width = "410"
-            Padding = "8"
-            />
-        </StackPanel>
-
-        <StackPanel Width = "600">
-            <Label Name = "PostActionLabel"
-            Content = "PostAction:"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Foreground = "White"
-            HorizontalAlignment = "Stretch"
-            Margin = "0,300,0,0"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <ComboBox Name = "PostActionComboBox"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "Black"
-            Height = "40"
-            HorizontalAlignment = "Stretch"
-            Margin = "180,290,0,0"
-            Width = "410"
-            Padding = "8"
-            />
-        </StackPanel>
-
-        <StackPanel Width = "600">
-            <CheckBox Name = "AssignCheckbox"
-            HorizontalAlignment = "Stretch"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Foreground = "White"
-            Margin = "5,350,0,0"
-            >Assign: Wait for Intune to assign an Autopilot profile for this device
-            </CheckBox>
-        </StackPanel>
-
-        <StackPanel Width = "600">
-            <Button Name = "RegisterButton"
-            Content = "Register"
-            FontFamily = "Segoe UI"
-            FontSize = "15"
-            Height = "40"
-            HorizontalAlignment = "Left"
-            Margin = "0,390,0,0"
-            Width = "170"
-            />
-        </StackPanel>
-
-        <StackPanel Width = "600">
-            <Button Name = "RunButton"
-            Content = "Run"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Height = "40"
-            HorizontalAlignment = "Left"
-            Margin = "0,520,0,0"
-            Width = "100"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <ComboBox Name = "RunComboBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "Black"
-            Height = "40"
-            HorizontalAlignment = "Left"
-            Margin = "100,520,0,0"
-            Padding = "8"
-            Width = "500"
-            />
-        </StackPanel>
-
-        <StackPanel Width = "600">
-            <Button Name = "DocsButton"
-            Content = "Docs"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Height = "40"
-            HorizontalAlignment = "Left"
-            Margin = "0,570,0,0"
-            Width = "100"
-            />
-        </StackPanel>
-        <StackPanel Width = "600">
-            <TextBox Name = "DocsTextBox"
-            Background = "#002846"
-            BorderThickness = "2"
-            FontSize = "15"
-            FontWeight = "Normal"
-            Foreground = "White"
-            Height = "40"
-            HorizontalAlignment = "Left"
-            Margin = "100,570,0,0"
-            Padding = "8"
-            Width = "500"
-            />
+                <TextBox Name = "DocsTextBox"
+                Background = "#002846"
+                BorderThickness = "2"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Foreground = "White"
+                Height = "40"
+                Padding = "8"
+                Width = "500"
+                />
+            </StackPanel>
         </StackPanel>
     </Grid>
-    </Controls:MetroWindow>
+</Controls:MetroWindow>
 "@
 
     # Add WPF and Windows Forms assemblies
@@ -441,8 +426,8 @@ $GroupTagTextBox.Text = $Global:AutopilotOOBE.GroupTag
 if ($Disabled -contains 'GroupTag') {$GroupTagTextBox.IsEnabled = $false}
 
 if ($Hidden -contains 'GroupTag') {
-    $GroupTagLabel.Visibility = 'Hidden'
-    $GroupTagTextBox.Visibility = 'Hidden'
+    $StackPanelGroupTag = $Global:xamGUI.FindName("StackPanelGroupTag")
+    $StackPanelGroupTag.Visibility = 'Collapsed'
 }
 #=======================================================================
 #   Parameter AddToGroup
@@ -454,8 +439,8 @@ if ($Disabled -contains 'AddToGroup') {
 }
 
 if ($Hidden -contains 'AddToGroup') {
-    $AddToGroupLabel.Visibility = 'Hidden'
-    $AddToGroupTextBox.Visibility = 'Hidden'
+    $StackPanelAddToGroup = $Global:xamGUI.FindName("StackPanelAddToGroup")
+    $StackPanelAddToGroup.Visibility = 'Collapsed'
 }
 #=======================================================================
 #   Parameter AssignedUser
@@ -466,8 +451,8 @@ if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$AssignedUserTextBox.Text = $Glob
 if ($Disabled -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AssignedUser') {
-    $AssignedUserLabel.Visibility = 'Hidden'
-    $AssignedUserTextBox.Visibility = 'Hidden'
+    $StackPanelAssignedUser = $Global:xamGUI.FindName("StackPanelAssignedUser")
+    $StackPanelAssignedUser.Visibility = 'Collapsed'
 }
 #=======================================================================
 #   Parameter AssignedComputerName
@@ -478,15 +463,9 @@ if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$AssignedComputerNameText
 if ($Disabled -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AssignedComputerName') {
-    $AssignedComputerNameLabel.Visibility = 'Hidden'
-    $AssignedComputerNameTextBox.Visibility = 'Hidden'
+    $StackPanelAssignedComputerName = $Global:xamGUI.FindName("StackPanelAssignedComputerName")
+    $StackPanelAssignedComputerName.Visibility = 'Collapsed'
 }
-#=======================================================================
-#   Parameter Assign
-#=======================================================================
-if ($Disabled -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
-
-if ($Hidden -contains 'Assign') {$AssignCheckBox.Visibility = 'Hidden'}
 #=======================================================================
 #   Parameter PostAction
 #=======================================================================
@@ -503,10 +482,24 @@ if ($Global:AutopilotOOBE.PostAction -eq 'None') {$PostActionComboBox.SelectedVa
 if ($Global:AutopilotOOBE.PostAction -eq 'Sysprep') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepReboot') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepShutdown') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
+
+if ($Disabled -contains 'PostAction') {$PostActionComboBox.IsEnabled = $false}
+
+if ($Hidden -contains 'PostAction') {
+    $StackPanelPostAction = $Global:xamGUI.FindName("StackPanelPostAction")
+    $StackPanelPostAction.Visibility = 'Collapsed'
+}
 #=======================================================================
 #   Parameter Assign
 #=======================================================================
 if ($Global:AutopilotOOBE.Assign -eq $true) {$AssignCheckBox.IsChecked = $true}
+
+if ($Disabled -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
+
+if ($Hidden -contains 'Assign') {
+    $StackPanelAssign = $Global:xamGUI.FindName("StackPanelAssign")
+    $StackPanelAssign.Visibility = 'Collapsed'
+}
 #=======================================================================
 #   Parameter Run
 #=======================================================================
@@ -560,6 +553,11 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
 })
+
+if ($Hidden -contains 'Run') {
+    $StackPanelRun = $Global:xamGUI.FindName("StackPanelRun")
+    $StackPanelRun.Visibility = 'Collapsed'
+}
 #=======================================================================
 #   Parameter Docs
 #=======================================================================
@@ -574,6 +572,11 @@ $DocsButton.add_Click( {
         Write-Warning "Could not execute $($DocsTextBox.Text)"
     }
 })
+
+if ($Hidden -contains 'Docs') {
+    $StackPanelDocs = $Global:xamGUI.FindName("StackPanelDocs")
+    $StackPanelDocs.Visibility = 'Collapsed'
+}
 #=======================================================================
 #   RegisterButton
 #=======================================================================
