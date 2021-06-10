@@ -31,351 +31,13 @@ $host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE"
 #=======================================================================
 function LoadForm {
     [CmdletBinding()]
-    param()
+    Param(
+     [Parameter(Mandatory = $False, Position = 1)]
+     [string]$XamlPath
+    )
 
-    [xml]$Global:xmlWPF = @"
-    <Controls:MetroWindow
-        xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:Controls = "clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-
-        Title = ""
-        BorderBrush = "{DynamicResource AccentColorBrush}"
-        BorderThickness = "2"
-        Width = "980"
-        Height = "670"
-        Background = "#004275"
-        
-        ResizeMode = "CanResizeWithGrip"
-        WindowStartupLocation = "CenterScreen"
-        WindowStyle = "None">
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <Style TargetType="{x:Type Window}">
-                <Setter Property="FontFamily" Value="Segoe UI" />
-                <Setter Property="FontWeight" Value="Light" />
-                <Setter Property="Background" Value="#1f1f1f" />
-                <Setter Property="Foreground" Value="white" />
-            </Style>
-
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="Background" Value="#FF1D3245" />
-                <Setter Property="Foreground" Value="#FFE8EDF9" />
-                <Setter Property="FontSize" Value="15" />
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button" >
-                            <Border Name = "Border"
-                                BorderThickness = "1"
-                                Padding = "4,2" 
-                                BorderBrush = "#336891" 
-                                CornerRadius = "1" 
-                                Background = "#0078d7">
-                                <ContentPresenter HorizontalAlignment = "Center" VerticalAlignment = "Center" TextBlock.TextAlignment = "Center" />
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property = "IsFocused" Value = "False">
-                                    <Setter TargetName = "Border" Property = "BorderBrush" Value = "#336891" />
-                                    <Setter Property = "Button.Background" Value = "#336891" />
-                                </Trigger>
-                                <Trigger Property = "IsMouseOver" Value="True">
-                                    <Setter TargetName = "Border" Property = "BorderBrush" Value = "#FFE8EDF9" />
-                                </Trigger>
-                                <Trigger Property = "IsEnabled" Value = "False">
-                                    <Setter TargetName = "Border" Property = "BorderBrush" Value = "#336891" />
-                                    <Setter Property = "Button.Foreground" Value = "#336891" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style TargetType="{x:Type Label}">
-                <Setter Property = "FontFamily" Value = "Segoe UI" />
-            </Style>
-
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property = "FontFamily" Value = "Segoe UI" />
-            </Style>
-
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property = "FontFamily" Value = "Segoe UI" />
-            </Style>
-
-        </ResourceDictionary>
-    </Window.Resources>
-
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="600"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="85"/>
-            <RowDefinition Height="380"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="10"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Grid.Column = "0">
-            <Label Name = "SidebarModuleVersion"
-            Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
-            HorizontalAlignment = "Left"
-            Padding = "10,1,10,0"
-            />
-        </StackPanel>
-
-        <StackPanel Grid.Column = "4">
-            <Label Name = "SidebarManufacturer"
-            Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
-            HorizontalAlignment = "Right"
-            Padding = "10,1,10,0"
-            />
-
-            <Label Name = "SidebarModel"
-            Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
-            HorizontalAlignment = "Right"
-            Padding = "10,1,10,0"
-            />
-
-            <Label Name = "SidebarSerialNumber"
-            Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
-            HorizontalAlignment = "Right"
-            Padding = "10,1,10,0"
-            />
-
-            <Label Name = "SidebarBiosVersion"
-            Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
-            HorizontalAlignment = "Right"
-            Padding = "10,1,10,0"
-            />
-        </StackPanel>
-
-        <StackPanel Grid.Column = "1" Grid.ColumnSpan = "3">
-            <Label Name = "TitleMain"
-            Content = "Autopilot Manual Enrollment"
-            FontFamily = "Segoe UI Light" FontSize = "46"
-            Foreground = "White"
-            HorizontalAlignment = "Center"
-            Grid.Row = "0"
-            />
-        </StackPanel>
-
-        <StackPanel Grid.Column = "2" Grid.Row = "1">
-            <StackPanel x:Name = "StackPanelGroupTag" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label
-                Name = "GroupTagLabel"
-                Content = "GroupTag:"
-                FontFamily = "Segoe UI" FontSize = "15"
-                Foreground = "White"
-                />
-
-                <ComboBox
-                Name = "GroupTagComboBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                IsEditable = "true"
-                Padding = "8"
-                Width = "380"
-                />
-            </StackPanel>
-
-            <StackPanel x:Name = "StackPanelAddToGroup" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label
-                Name = "AddToGroupLabel"
-                Content = "AddToGroup:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "White"
-                />
-
-                <ComboBox
-                Name = "AddToGroupComboBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                IsEditable = "true"
-                Width = "380"
-                Padding = "8"
-                />
-            </StackPanel>
-
-            <StackPanel x:Name = "StackPanelAssignedUser" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label Name = "AssignedUserLabel"
-                Content = "AssignedUser:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "White"
-                />
-
-                <TextBox Name = "AssignedUserTextBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "White"
-                Height = "40"
-                Width = "380"
-                Padding = "8"
-                />
-            </StackPanel>
-
-            <StackPanel x:Name = "StackPanelAssignedComputerName" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label Name = "AssignedComputerNameLabel"
-                Content = "AssignedComputerName:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "White"
-                />
-
-                <TextBox Name = "AssignedComputerNameTextBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "White"
-                Height = "40"
-                Text = "Azure AD Join Only"
-                Width = "380"
-                Padding = "8"
-                />
-            </StackPanel>
-
-            <StackPanel x:Name = "StackPanelPostAction" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label
-                Name = "PostActionLabel"
-                Content = "PostAction:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "White"
-                />
-
-                <ComboBox
-                Name = "PostActionComboBox"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                Padding = "8"
-                Width = "380"
-                />
-            </StackPanel>
-
-            <StackPanel x:Name = "StackPanelAssign" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <CheckBox
-                Name = "AssignCheckbox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "White"
-                >Assign: Wait for Intune to assign an Autopilot profile for this device
-                </CheckBox>
-            </StackPanel>
-
-            <StackPanel Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Button Name = "RegisterButton"
-                Content = "Register"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Height = "40"
-                Width = "170"
-                />
-            </StackPanel>
-
-            <StackPanel Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-
-            </StackPanel>
-        </StackPanel>
-
-        <StackPanel Grid.Column = "2" Grid.Row = "3" VerticalAlignment = "Bottom">
-            <StackPanel x:Name = "StackPanelRun" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Button Name = "RunButton"
-                Content = "Run"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Height = "40"
-                Width = "60"
-                />
-
-                <ComboBox
-                Name = "RunComboBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                Padding = "8"
-                Width = "500"
-                />
-            </StackPanel>
-            <StackPanel x:Name = "StackPanelDocs" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Button Name = "DocsButton"
-                Content = "Docs"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Height = "40"
-                Width = "60"
-                />
-
-                <TextBox Name = "DocsTextBox"
-                Background = "#002846"
-                BorderThickness = "2"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "White"
-                Height = "40"
-                Padding = "8"
-                Width = "500"
-                />
-            </StackPanel>
-        </StackPanel>
-    </Grid>
-</Controls:MetroWindow>
-"@
+    # Import the XAML code
+    [xml]$Global:xmlWPF = Get-Content -Path $XamlPath
 
     # Add WPF and Windows Forms assemblies
     Try {
@@ -396,12 +58,29 @@ function LoadForm {
 #=======================================================================
 #   LoadForm
 #=======================================================================
-LoadForm
+LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'Join-AutopilotOOBE.xaml')
 #=======================================================================
 #   Sidebar
 #=======================================================================
 $ModuleVersion = (Get-Module -Name AutopilotOOBE | Sort-Object Version | Select-Object Version -Last 1).Version
-$SidebarModuleVersion.Content = "Version: $ModuleVersion"
+$SidebarModuleVersion.Content = "$ModuleVersion"
+
+try {
+    $Tpm = (Get-CimInstance -Namespace "root\CIMV2\Security\MicrosoftTPM" -ClassName Win32_Tpm).SpecVersion
+}
+catch {}
+
+if ($Tpm -match '2.0') {
+    $SidebarTpmVersion.Content = "TPM: 2.0"
+    $SidebarTpmVersion.Background = "Green"
+}
+elseif ($Tpm -match '1.2') {
+    $SidebarTpmVersion.Content = "TPM: 1.2"
+    $SidebarTpmVersion.Background = "Red"
+}
+else {
+    $SidebarTpmVersion.Visibility = "Collapsed"
+}
 
 $SidebarManufacturer.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Manufacturer).Trim()
 
@@ -535,6 +214,7 @@ $RunComboBox.Items.Add('Shutdown Computer') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
+$RunComboBox.Items.Add('Sysprep /audit /reboot') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') | Out-Null
@@ -550,6 +230,7 @@ if ($Global:AutopilotOOBE.Run -eq 'Shutdown') {$RunComboBox.SelectedValue = 'Shu
 if ($Global:AutopilotOOBE.Run -eq 'Sysprep') {$RunComboBox.SelectedValue = 'Sysprep /oobe /quit'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepReboot') {$RunComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepShutdown') {$RunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
+if ($Global:AutopilotOOBE.Run -eq 'SysprepAudit') {$RunComboBox.SelectedValue = 'Sysprep /audit /reboot'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiag') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilot') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilotTPM') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'}
@@ -566,6 +247,7 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /quit') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit"}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /shutdown') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown"}
+    if ($RunComboBox.SelectedValue -eq 'Sysprep /audit /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/audit", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
@@ -578,15 +260,54 @@ if ($Hidden -contains 'Run') {
 #=======================================================================
 #   Parameter Docs
 #=======================================================================
-$DocsTextBox.Text = $Global:AutopilotOOBE.Docs
+$DocsComboBox.Items.Add('Windows Autopilot Documentation') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot Overview') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot User-Driven Mode') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot for Pre-Provisioned Deployment') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot Deployment for Existing Devices') | Out-Null
+$DocsComboBox.Items.Add('Manually register devices with Windows Autopilot') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot Troubleshooting Overview') | Out-Null
+$DocsComboBox.Items.Add('Troubleshoot Autopilot Device Import and Enrollment') | Out-Null
+$DocsComboBox.Items.Add('Troubleshoot Autopilot OOBE Issues') | Out-Null
+$DocsComboBox.Items.Add('Troubleshoot Azure Active Directory Join Issues') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot Known Issues') | Out-Null
+$DocsComboBox.Items.Add('Windows Autopilot Resolved Issues') | Out-Null
+$DocsComboBox.Items.Add('Sysprep Overview') | Out-Null
+$DocsComboBox.Items.Add('Sysprep Audit Mode Overview') | Out-Null
+$DocsComboBox.Items.Add('Sysprep Command-Line Options') | Out-Null
+
+$DocsComboBox.SelectedValue = 'Windows Autopilot Documentation'
+
+if ($Global:AutopilotOOBE.Docs) {
+    $DocsComboBox.Items.Add($Global:AutopilotOOBE.Docs) | Out-Null
+    $DocsComboBox.SelectedValue = $Global:AutopilotOOBE.Docs
+}
 
 $DocsButton.add_Click( {
-    Write-Host -ForegroundColor Cyan "Run: $($DocsTextBox.Text)"
-    try {
-        Start-Process $DocsTextBox.Text
-    }
-    catch {
-        Write-Warning "Could not execute $($DocsTextBox.Text)"
+    Write-Host -ForegroundColor Cyan "Run: $($DocsComboBox.SelectedValue)"
+
+    if ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Documentation') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Overview') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/windows-autopilot'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot User-Driven Mode') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/user-driven'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot for Pre-Provisioned Deployment') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/pre-provision'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Deployment for Existing Devices') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/existing-devices'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Manually register devices with Windows Autopilot') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/add-devices'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Troubleshooting Overview') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/troubleshooting'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Troubleshoot Autopilot Device Import and Enrollment') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/troubleshoot-device-enrollment'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Troubleshoot Autopilot OOBE Issues') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/troubleshoot-oobe'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Troubleshoot Azure Active Directory Join Issues') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/troubleshoot-aad-join'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Known Issues') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/known-issues'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Windows Autopilot Resolved Issues') {Start-Process 'https://docs.microsoft.com/en-us/mem/autopilot/resolved-issues'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Sysprep Overview') {Start-Process 'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--system-preparation--overview'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Sysprep Audit Mode Overview') {Start-Process 'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/audit-mode-overview'}
+    elseif ($DocsComboBox.SelectedValue -eq 'Sysprep Command-Line Options') {Start-Process 'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep-command-line-options'}
+    else {
+        try {
+            Start-Process $DocsComboBox.SelectedValue
+        }
+        catch {
+            Write-Warning "Could not execute $($DocsComboBox.SelectedValue)"
+        }
     }
 })
 
@@ -647,11 +368,11 @@ $RegisterButton.add_Click( {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
         }
-        if ($PostActionComboBox.SelectedValue -match 'reboot') {
+        elseif ($PostActionComboBox.SelectedValue -match 'reboot') {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
         }
-        if ($PostActionComboBox.SelectedValue -match 'shutdown') {
+        elseif ($PostActionComboBox.SelectedValue -match 'shutdown') {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
         }

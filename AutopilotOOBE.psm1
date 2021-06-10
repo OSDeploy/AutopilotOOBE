@@ -55,13 +55,14 @@ function Start-AutopilotOOBE {
             'Sysprep',
             'SysprepReboot',
             'SysprepShutdown',
+            'SysprepAudit',
             'MDMDiag',
             'MDMDiagAutopilot',
             'MDMDiagAutopilotTPM'
         )]
         [string]$Run = 'PowerShell',
-        [string]$Docs = 'https://docs.microsoft.com/en-us/mem/autopilot/',
-        [string]$Title = 'Manual Autopilot Enrollment'
+        [string]$Docs,
+        [string]$Title = 'Autopilot Manual Enrollment'
     )
     #=======================================================================
     #   Profile OSDeploy
