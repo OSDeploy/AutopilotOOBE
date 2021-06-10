@@ -38,6 +38,8 @@ function Start-AutopilotOOBE {
         [string[]]$GroupTagOptions,
         [ValidateSet (
             'None',
+            'Restart',
+            'Shutdown',
             'Sysprep',
             'SysprepReboot',
             'SysprepShutdown'
@@ -72,7 +74,7 @@ function Start-AutopilotOOBE {
         $AddToGroup = 'Administrators'
         $AssignedUserExample = 'someone@osdeploy.com'
         $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $PostAction = 'SysprepShutdown'
+        $PostAction = 'Shutdown'
         $Assign = $true
         $Run = 'PowerShell'
         $Docs = 'https://www.osdeploy.com/'
@@ -85,7 +87,7 @@ function Start-AutopilotOOBE {
         $Title = 'SeguraOSD Autopilot Enrollment'
         $GroupTag = 'Twitter'
         $AssignedComputerName = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $PostAction = 'SysprepReboot'
+        $PostAction = 'Restart'
         $Assign = $true
         $Run = 'WindowsSettings'
         $Docs = 'https://twitter.com/SeguraOSD'
@@ -101,7 +103,7 @@ function Start-AutopilotOOBE {
         $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $PostAction = 'SysprepReboot'
+        $PostAction = 'Restart'
         $Run = 'WindowsSettings'
     }
     #=======================================================================

@@ -170,11 +170,15 @@ if ($Hidden -contains 'AssignedComputerName') {
 #}
 #$PostActionComboBox.SelectedValue = $Global:AutopilotOOBE.PostAction
 $PostActionComboBox.Items.Add('None') | Out-Null
+$PostActionComboBox.Items.Add('Restart Computer') | Out-Null
+$PostActionComboBox.Items.Add('Shutdown Computer') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 
 if ($Global:AutopilotOOBE.PostAction -eq 'None') {$PostActionComboBox.SelectedValue = 'None'}
+if ($Global:AutopilotOOBE.PostAction -eq 'Restart') {$PostActionComboBox.SelectedValue = 'Restart Computer'}
+if ($Global:AutopilotOOBE.PostAction -eq 'Shutdown') {$PostActionComboBox.SelectedValue = 'Shutdown Computer'}
 if ($Global:AutopilotOOBE.PostAction -eq 'Sysprep') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepReboot') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepShutdown') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
@@ -368,6 +372,8 @@ $RegisterButton.add_Click( {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
         }
+        elseif ($PostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
+        elseif ($PostActionComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}
         elseif ($PostActionComboBox.SelectedValue -match 'reboot') {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
@@ -378,7 +384,7 @@ $RegisterButton.add_Click( {
         }
     }
 
-    if ($PostActionComboBox.SelectedValue -notmatch 'Sysprep') {
+    if ($PostActionComboBox.SelectedValue -match 'None') {
         & "$Global:MyScriptDir\Join-AutopilotOOBE.ps1"
     }
 })
