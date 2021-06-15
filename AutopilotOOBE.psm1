@@ -42,7 +42,9 @@ function Start-AutopilotOOBE {
             'Shutdown',
             'Sysprep',
             'SysprepReboot',
-            'SysprepShutdown'
+            'SysprepShutdown',
+            'GeneralizeReboot',
+            'GeneralizeShutdown'
         )]
         [string]$PostAction = 'None',
         [ValidateSet (
@@ -59,6 +61,7 @@ function Start-AutopilotOOBE {
             'SysprepShutdown',
             'SysprepAudit',
             'EventViewer',
+            'GetAutopilotDiagnostics',
             'MDMDiag',
             'MDMDiagAutopilot',
             'MDMDiagAutopilotTPM'
@@ -100,12 +103,12 @@ function Start-AutopilotOOBE {
     if ($CustomProfile -eq 'BH') {
         $Title = 'Baker Hughes Autopilot Enrollment'
         $Assign = $true
-        $AssignedComputerNameExample = 'Disabled for Hybrid Join'
-        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
+        $AssignedUserExample = 'first.last@bakerhughes.com'
+        $Hidden = 'AddToGroup','AssignedComputerName'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $PostAction = 'Restart'
-        $Run = 'EventViewer'
+        $PostAction = 'GeneralizeReboot'
+        $Run = 'NetworkingWireless'
     }
     #=======================================================================
     #   Profile HalfMan
@@ -140,7 +143,6 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Launch
     #=======================================================================
-    Install-Script Get-AutopilotDiagnostics -Force -Verbose
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
 }
 #=======================================================================

@@ -209,6 +209,8 @@ $PostActionComboBox.Items.Add('Shutdown Computer') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $PostActionComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
+$PostActionComboBox.Items.Add('Sysprep /generalize /oobe /reboot') | Out-Null
+$PostActionComboBox.Items.Add('Sysprep /generalize /oobe /shutdown') | Out-Null
 
 if ($Global:AutopilotOOBE.PostAction -eq 'None') {$PostActionComboBox.SelectedValue = 'None'}
 if ($Global:AutopilotOOBE.PostAction -eq 'Restart') {$PostActionComboBox.SelectedValue = 'Restart Computer'}
@@ -216,6 +218,8 @@ if ($Global:AutopilotOOBE.PostAction -eq 'Shutdown') {$PostActionComboBox.Select
 if ($Global:AutopilotOOBE.PostAction -eq 'Sysprep') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepReboot') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.PostAction -eq 'SysprepShutdown') {$PostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
+if ($Global:AutopilotOOBE.PostAction -eq 'GeneralizeReboot') {$PostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /reboot'}
+if ($Global:AutopilotOOBE.PostAction -eq 'GeneralizeShutdown') {$PostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /shutdown'}
 
 if ($Disabled -contains 'PostAction') {$PostActionComboBox.IsEnabled = $false}
 
@@ -254,6 +258,7 @@ $RunComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 $RunComboBox.Items.Add('Sysprep /audit /reboot') | Out-Null
 $RunComboBox.Items.Add('Event Viewer') | Out-Null
+$RunComboBox.Items.Add('Get-AutopilotDiagnostics') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') | Out-Null
@@ -271,6 +276,7 @@ if ($Global:AutopilotOOBE.Run -eq 'SysprepReboot') {$RunComboBox.SelectedValue =
 if ($Global:AutopilotOOBE.Run -eq 'SysprepShutdown') {$RunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepAudit') {$RunComboBox.SelectedValue = 'Sysprep /audit /reboot'}
 if ($Global:AutopilotOOBE.Run -eq 'EventViewer') {$RunComboBox.SelectedValue = 'Event Viewer'}
+if ($Global:AutopilotOOBE.Run -eq 'AutopilotDiagnostics') {$RunComboBox.SelectedValue = 'Get-AutopilotDiagnostics'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiag') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilot') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilotTPM') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'}
@@ -290,7 +296,14 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Sysprep /audit /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/audit", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'Event Viewer') {
         $MDMEventLog | Set-Content -Path "$env:ProgramData\Microsoft\Event Viewer\Views\MDMDiagnosticsTool.xml"
+        Start-Sleep -Seconds 2
         Show-EventLog
+    }
+    if ($RunComboBox.SelectedValue -eq 'Get-AutopilotDiagnostics') {
+        Show-PowershellWindow
+        Install-Script Get-AutopilotDiagnostics -Force -Verbose
+        Get-AutopilotDiagnostics -Online
+        Pause
     }
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
@@ -414,6 +427,16 @@ $RegisterButton.add_Click( {
         }
         elseif ($PostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
         elseif ($PostActionComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}
+        
+        elseif (($PostActionComboBox.SelectedValue -match 'reboot') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
+        }
+        elseif (($PostActionComboBox.SelectedValue -match 'shutdown') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
+        }
+
         elseif ($PostActionComboBox.SelectedValue -match 'reboot') {
             Start-Sleep -Seconds 3
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
