@@ -37,7 +37,7 @@ function Start-AutopilotOOBE {
         [string]$GroupTag,
         [string[]]$GroupTagOptions,
         [ValidateSet (
-            'None',
+            'Quit',
             'Restart',
             'Shutdown',
             'Sysprep',
@@ -46,7 +46,7 @@ function Start-AutopilotOOBE {
             'GeneralizeReboot',
             'GeneralizeShutdown'
         )]
-        [string]$PostAction = 'None',
+        [string]$PostAction = 'Quit',
         [ValidateSet (
             'CommandPrompt',
             'PowerShell',
@@ -107,8 +107,7 @@ function Start-AutopilotOOBE {
         $Hidden = 'AddToGroup','AssignedComputerName'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $PostAction = 'GeneralizeReboot'
-        $Run = 'NetworkingWireless'
+        $Run = 'WindowsSettings'
     }
     #=======================================================================
     #   Profile HalfMan
