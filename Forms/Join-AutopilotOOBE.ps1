@@ -59,6 +59,40 @@ function LoadForm {
 #   LoadForm
 #=======================================================================
 LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'Join-AutopilotOOBE.xaml')
+
+$MDMEventLog = @'
+<ViewerConfig>
+	<QueryConfig>
+		<QueryParams>
+			<UserQuery/>
+		</QueryParams>
+		<QueryNode>
+			<Name LanguageNeutralValue="MDMDiagnosticsTool">MDMDiagnosticsTool</Name>
+			<Description>MDMDiagnosticsTool</Description>
+			<SuppressQueryExecutionErrors>1</SuppressQueryExecutionErrors>
+			<QueryList>
+				<Query Id="0" Path="Microsoft-Windows-AAD/Operational">
+					<Select Path="Microsoft-Windows-AAD/Operational">*</Select>
+					<Select Path="Microsoft-Windows-AppXDeployment-Server/Operational">*</Select>
+					<Select Path="Microsoft-Windows-AssignedAccess/Admin">*</Select>
+					<Select Path="Microsoft-Windows-AssignedAccess/Operational">*</Select>
+					<Select Path="Microsoft-Windows-AssignedAccessBroker/Admin">*</Select>
+					<Select Path="Microsoft-Windows-AssignedAccessBroker/Operational">*</Select>
+					<Select Path="Microsoft-Windows-Crypto-NCrypt/Operational">*</Select>
+					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin">*</Select>
+					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Debug">*</Select>
+					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Operational">*</Select>
+					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/Autopilot">*</Select>
+					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/ManagementService">*</Select>
+					<Select Path="Microsoft-Windows-Provisioning-Diagnostics-Provider/Admin">*</Select>
+					<Select Path="Microsoft-Windows-Shell-Core/Operational">*</Select>
+					<Select Path="Microsoft-Windows-User Device Registration/Admin">*</Select>
+				</Query>
+			</QueryList>
+		</QueryNode>
+	</QueryConfig>
+</ViewerConfig>
+'@
 #=======================================================================
 #   Sidebar
 #=======================================================================
@@ -219,6 +253,7 @@ $RunComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 $RunComboBox.Items.Add('Sysprep /audit /reboot') | Out-Null
+$RunComboBox.Items.Add('Event Viewer') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') | Out-Null
@@ -235,6 +270,7 @@ if ($Global:AutopilotOOBE.Run -eq 'Sysprep') {$RunComboBox.SelectedValue = 'Sysp
 if ($Global:AutopilotOOBE.Run -eq 'SysprepReboot') {$RunComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepShutdown') {$RunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
 if ($Global:AutopilotOOBE.Run -eq 'SysprepAudit') {$RunComboBox.SelectedValue = 'Sysprep /audit /reboot'}
+if ($Global:AutopilotOOBE.Run -eq 'EventViewer') {$RunComboBox.SelectedValue = 'Event Viewer'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiag') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilot') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilotTPM') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'}
@@ -252,6 +288,10 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /oobe /shutdown') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown"}
     if ($RunComboBox.SelectedValue -eq 'Sysprep /audit /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/audit", "/reboot"}
+    if ($RunComboBox.SelectedValue -eq 'Event Viewer') {
+        $MDMEventLog | Set-Content -Path "$env:ProgramData\Microsoft\Event Viewer\Views\MDMDiagnosticsTool.xml"
+        Show-EventLog
+    }
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}

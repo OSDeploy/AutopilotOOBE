@@ -58,6 +58,7 @@ function Start-AutopilotOOBE {
             'SysprepReboot',
             'SysprepShutdown',
             'SysprepAudit',
+            'EventViewer',
             'MDMDiag',
             'MDMDiagAutopilot',
             'MDMDiagAutopilotTPM'
@@ -104,7 +105,7 @@ function Start-AutopilotOOBE {
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
         $PostAction = 'Restart'
-        $Run = 'WindowsSettings'
+        $Run = 'EventViewer'
     }
     #=======================================================================
     #   Profile HalfMan
