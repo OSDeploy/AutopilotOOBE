@@ -311,7 +311,10 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'Update-MyDellBios') {
+        Show-PowershellWindow
         Install-Module OSD -Force
+        Start-Sleep -Seconds 2
+        Get-MyDellBios
         Update-MyDellBios
     }
 })
