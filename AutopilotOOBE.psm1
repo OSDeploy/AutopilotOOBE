@@ -108,7 +108,17 @@ function Start-AutopilotOOBE {
         $Hidden = 'AddToGroup','AssignedComputerName'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $Run = 'UpdateMyDellBios'
+        $Run = 'WindowsSettings'
+
+        if (-NOT (Get-Module -Name OSD -ListAvailable)) {
+            Install-Module OSD -Force
+            Import-Module OSD -Force
+        }
+        if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
+            Get-MyDellBios
+            Update-MyDellBios
+            Start-Sleep -Seconds 5
+        }
     }
     #=======================================================================
     #   Profile HalfMan
