@@ -353,7 +353,7 @@ $RegisterButton.add_Click( {
     Write-Host -ForegroundColor Cyan "Install-Script Get-WindowsAutoPilotInfo"
     if ($Global:AutopilotOOBE.Demo -ne $true) {
         Start-Sleep -Seconds 3
-        Install-Script Get-WindowsAutoPilotInfo -Force
+        Install-Script Get-WindowsAutoPilotInfo -Force -Verbose
     }
 
     Write-Host ($Params | Out-String)

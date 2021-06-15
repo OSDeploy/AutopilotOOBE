@@ -107,6 +107,15 @@ function Start-AutopilotOOBE {
         $Run = 'WindowsSettings'
     }
     #=======================================================================
+    #   Profile HalfMan
+    #=======================================================================
+    if ($CustomProfile -eq 'HalfMan') {
+        $Title = 'Autopilot Enrollment'
+        $Hidden = 'GroupTag'
+        $AddToGroup = 'Azr_crp_ent_modern_workplace_devices'
+        $AddToGroupOptions = 'Azr_crp_ent_modern_workplace_devices'
+    }
+    #=======================================================================
     #   Set Global Variable
     #=======================================================================
     $Global:AutopilotOOBE = @{
@@ -130,6 +139,7 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Launch
     #=======================================================================
+    Install-Script Get-AutopilotDiagnostics -Force -Verbose
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
 }
 #=======================================================================
