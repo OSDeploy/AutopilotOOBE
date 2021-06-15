@@ -64,7 +64,8 @@ function Start-AutopilotOOBE {
             'GetAutopilotDiagnostics',
             'MDMDiag',
             'MDMDiagAutopilot',
-            'MDMDiagAutopilotTPM'
+            'MDMDiagAutopilotTPM',
+            'UpdateMyDellBios'
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
@@ -107,7 +108,7 @@ function Start-AutopilotOOBE {
         $Hidden = 'AddToGroup','AssignedComputerName'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $Run = 'WindowsSettings'
+        $Run = 'UpdateMyDellBios'
     }
     #=======================================================================
     #   Profile HalfMan

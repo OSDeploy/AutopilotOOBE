@@ -262,6 +262,7 @@ $RunComboBox.Items.Add('Get-AutopilotDiagnostics') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') | Out-Null
+$RunComboBox.Items.Add('Update-MyDellBios') | Out-Null
 
 if ($Global:AutopilotOOBE.Run -eq 'CommandPrompt') {$RunComboBox.SelectedValue = 'Command Prompt'}
 if ($Global:AutopilotOOBE.Run -eq 'PowerShell') {$RunComboBox.SelectedValue = 'PowerShell'}
@@ -280,6 +281,7 @@ if ($Global:AutopilotOOBE.Run -eq 'AutopilotDiagnostics') {$RunComboBox.Selected
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiag') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilot') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
 if ($Global:AutopilotOOBE.Run -eq 'MDMDiagAutopilotTPM') {$RunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'}
+if ($Global:AutopilotOOBE.Run -eq 'UpdateMyDellBios') {$RunComboBox.SelectedValue = 'Update-MyDellBios'}
 
 $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Command Prompt') {Start-Process Cmd.exe}
@@ -308,6 +310,10 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
+    if ($RunComboBox.SelectedValue -eq 'Update-MyDellBios') {
+        Install-Module OSD -Force
+        Update-MyDellBios
+    }
 })
 
 if ($Hidden -contains 'Run') {
