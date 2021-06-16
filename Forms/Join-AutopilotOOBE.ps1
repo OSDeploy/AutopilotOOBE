@@ -71,7 +71,7 @@ $MDMEventLog = @'
 			<Description>MDMDiagnosticsTool</Description>
 			<SuppressQueryExecutionErrors>1</SuppressQueryExecutionErrors>
 			<QueryList>
-				<Query Id="0" Path="Microsoft-Windows-AAD/Operational">
+				<Query>
 					<Select Path="Microsoft-Windows-AAD/Operational">*</Select>
 					<Select Path="Microsoft-Windows-AppXDeployment-Server/Operational">*</Select>
 					<Select Path="Microsoft-Windows-AssignedAccess/Admin">*</Select>
@@ -80,7 +80,6 @@ $MDMEventLog = @'
 					<Select Path="Microsoft-Windows-AssignedAccessBroker/Operational">*</Select>
 					<Select Path="Microsoft-Windows-Crypto-NCrypt/Operational">*</Select>
 					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin">*</Select>
-					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Debug">*</Select>
 					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Operational">*</Select>
 					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/Autopilot">*</Select>
 					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/ManagementService">*</Select>

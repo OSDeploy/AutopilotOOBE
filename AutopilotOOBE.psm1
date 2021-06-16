@@ -69,8 +69,14 @@ function Start-AutopilotOOBE {
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
-        [string]$Title = 'Autopilot Manual Enrollment'
+        [string]$Title = 'Autopilot Manual Enrollment',
+        [switch]$Test
     )
+    #=======================================================================
+    #   Transcript
+    #=======================================================================
+    $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
+    Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     #=======================================================================
     #   Profile OSDeploy
     #=======================================================================
@@ -104,20 +110,19 @@ function Start-AutopilotOOBE {
     if ($CustomProfile -eq 'BH') {
         $Title = 'Baker Hughes Autopilot Enrollment'
         $Assign = $true
-        $AssignedUserExample = 'first.last@bakerhughes.com'
-        $Hidden = 'AddToGroup','AssignedComputerName'
+        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
-        $Run = 'WindowsSettings'
+        $Run = 'NetworkingWireless'
+        $Test = $true
 
         if (-NOT (Get-Module -Name OSD -ListAvailable)) {
             Install-Module OSD -Force
             Import-Module OSD -Force
         }
         if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
-            Get-MyDellBios
             Update-MyDellBios
-            Start-Sleep -Seconds 5
+            Start-Sleep -Seconds 2
         }
     }
     #=======================================================================
@@ -149,6 +154,162 @@ function Start-AutopilotOOBE {
         Run = $Run
         Docs = $Docs
         Title = $Title
+    }
+    #=======================================================================
+    #   Test
+    #   https://docs.microsoft.com/en-us/mem/autopilot/networking-requirements
+    #=======================================================================
+    if ($Test) {
+        Write-Host -ForegroundColor Cyan "Testing Windows Autopilot networking requirements"
+        Write-Host -ForegroundColor Cyan "https://docs.microsoft.com/en-us/mem/autopilot/networking-requirements"
+        #=======================================================================
+        #   PowerShell Gallery
+        #=======================================================================
+        $TestPSGallery = @(
+            'powershellgallery.com'
+        )
+        Write-Host ""
+        Write-Host -ForegroundColor Cyan "PowerShell Gallery"
+        foreach ($Item in $TestPSGallery){
+            try {
+                if (Test-NetConnection -ComputerName $Item -Port 443 -InformationLevel Quiet -ErrorAction Stop) {
+                    Write-Host -ForegroundColor Green $Item
+                }
+                else {
+                }
+            }
+            catch {
+                Write-Host -ForegroundColor Red $Item
+            }
+        }
+        #=======================================================================
+        #   Windows Autopilot Deployment Service
+        #=======================================================================
+        $TestWADS = @(
+            'cs.dds.microsoft.com'
+            'login.live.com'
+            'ztd.dds.microsoft.com'
+        )
+        Write-Host ""
+        Write-Host -ForegroundColor Cyan "Windows Autopilot Deployment Service"
+        foreach ($Item in $TestWADS){
+            try {
+                if (Test-NetConnection -ComputerName $Item -Port 443 -InformationLevel Quiet -ErrorAction Stop) {
+                    Write-Host -ForegroundColor Green $Item
+                }
+                else {
+                }
+            }
+            catch {
+                Write-Host -ForegroundColor Red $Item
+            }
+        }
+        #=======================================================================
+        #   Windows Activation
+        #=======================================================================
+        $TestWA = @(
+            'activation.sls.microsoft.com'
+            'activation-v2.sls.microsoft.com'
+            'crl.microsoft.com'
+            'displaycatalog.mp.microsoft.com'
+            'displaycatalog.md.mp.microsoft.com'
+            'go.microsoft.com'
+            'licensing.mp.microsoft.com'
+            'licensing.md.mp.microsoft.com'
+            'purchase.mp.microsoft.com'
+            'validation.sls.microsoft.com'
+            'validation-v2.sls.microsoft.com'
+        )
+        Write-Host ""
+        Write-Host -ForegroundColor Cyan "Windows Activation"
+        foreach ($Item in $TestWA){
+            try {
+                if (Test-NetConnection -ComputerName $Item -Port 443 -InformationLevel Quiet -ErrorAction Stop) {
+                    Write-Host -ForegroundColor Green $Item
+                }
+                else {
+                }
+            }
+            catch {
+                Write-Host -ForegroundColor Red $Item
+            }
+        }
+        #=======================================================================
+        #   Windows Update
+        #=======================================================================
+        $TestWU = @(
+            'prod.do.dsp.mp.microsoft.com'
+            'emdl.ws.microsoft.com'
+            'delivery.mp.microsoft.com'
+            'dl.delivery.mp.microsoft.com'
+            'tsfe.trafficshaping.dsp.mp.microsoft.com'
+            'update.microsoft.com'
+            'windowsupdate.com'
+        )
+<#         Write-Host ""
+        Write-Host -ForegroundColor Cyan "Windows Update"
+        foreach ($Item in $TestWU){
+            try {
+                if (Test-NetConnection -ComputerName $Item -Port 443 -InformationLevel Quiet -ErrorAction Stop) {
+                    Write-Host -ForegroundColor Green $Item
+                }
+                else {
+                }
+            }
+            catch {
+                Write-Host -ForegroundColor Red $Item
+            }
+        } #>
+        #=======================================================================
+        #   Autopilot self-Deploying mode and Autopilot pre-provisioning
+        #=======================================================================
+        $TestTPM = @(
+            'ekcert.spserv.microsoft.com'
+            'ekop.intel.com'
+            'ftpm.amd.com'
+        )
+        Write-Host ""
+        Write-Host -ForegroundColor Cyan "Autopilot self-Deploying mode and Autopilot pre-provisioning"
+        foreach ($Item in $TestTPM){
+            try {
+                if (Test-NetConnection -ComputerName $Item -Port 443 -InformationLevel Quiet -ErrorAction Stop) {
+                    Write-Host -ForegroundColor Green $Item
+                }
+                else {
+                }
+            }
+            catch {
+                Write-Host -ForegroundColor Red $Item
+            }
+        }
+        #=======================================================================
+        #   Windows Autopilot Deployment Service
+        #   https://raw.githubusercontent.com/Mauvlans/AutoPilot/master/AutopilotNetworkValidation.ps1
+        #=======================================================================
+        $hash = @(
+            'a.manage.microsoft.com'
+            'account.azureedge.net'
+            'account.live.com'
+            'enrollment.manage.microsoft.com'
+            'EnterpriseEnrollment.manage.microsoft.com'
+            'EnterpriseEnrollment-s.manage.microsoft.com'
+            'enterpriseregistration.windows.net'
+            'fef.msua06.manage.microsoft.com'
+            'i.manage.microsoft.com'
+            'login.microsoftonline.com'
+            'm.fei.msua01.manage.microsoft.com'
+            'm.manage.microsoft.com'
+            'manage.microsoft.com'
+            'msftconnecttest.com'
+            'portal.fei.msua01.manage.microsoft.com'
+            'portal.manage.microsoft.com'
+            'r.manage.microsoft.com'
+            'secure.aadcdn.microsoftonline-p.com'
+            'signup.live.com'
+            'sts.manage.microsoft.com'
+        )
+
+        
     }
     #=======================================================================
     #   Launch
