@@ -138,6 +138,23 @@ $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
 #=======================================================================
 $TitleMain.Content = $Global:AutopilotOOBE.Title
 #=======================================================================
+#   Windows Version Info
+#=======================================================================
+$Global:GetRegCurrentVersion = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+
+$SubTitleProductName = ($Global:GetRegCurrentVersion).ProductName
+
+if ($Global:GetRegCurrentVersion.DisplayVersion -gt 0) {
+    $SubTitleDisplayVersion = ($Global:GetRegCurrentVersion).DisplayVersion
+}
+else {
+    $SubTitleDisplayVersion = ($Global:GetRegCurrentVersion).ReleaseId
+}
+
+$SubTitleBuildNumber = "$($Global:GetRegCurrentVersion.CurrentBuild).$($Global:GetRegCurrentVersion.UBR)"
+
+$TitleMinor.Content = "$SubTitleProductName $SubTitleDisplayVersion ($SubTitleBuildNumber)"
+#=======================================================================
 #   Parameter GroupTag
 #=======================================================================
 $Global:AutopilotOOBE.GroupTagOptions | ForEach-Object {

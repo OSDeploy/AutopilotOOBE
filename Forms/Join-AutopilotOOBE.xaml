@@ -94,7 +94,8 @@
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="85"/>
+			<RowDefinition Height="65"/>
+			<RowDefinition Height="35"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="380"/>
 			<RowDefinition Height="*"/>
@@ -103,10 +104,10 @@
 		</Grid.RowDefinitions>
 
 
-        <Border Grid.Column = "0" Grid.Row = "5" Background = "Transparent"/>
-        <Border Grid.Column = "4" Grid.Row = "5" Background = "Transparent"/>
+        <Border Grid.Column = "0" Grid.Row = "6" Background = "Transparent"/>
+        <Border Grid.Column = "4" Grid.Row = "6" Background = "Transparent"/>
 
-		<StackPanel Grid.Column = "0" Grid.Row = "5" VerticalAlignment = "Bottom">
+		<StackPanel Grid.Column = "0" Grid.Row = "6" VerticalAlignment = "Bottom">
             <Label Name = "SidebarModuleVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
@@ -116,7 +117,7 @@
             />
 		</StackPanel>
 
-		<StackPanel Grid.Column = "4" Grid.Row = "5" VerticalAlignment = "Bottom" HorizontalAlignment = "Right">
+		<StackPanel Grid.Column = "4" Grid.Row = "6" VerticalAlignment = "Bottom" HorizontalAlignment = "Right">
 			<Label Name = "SidebarManufacturer"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
@@ -162,7 +163,16 @@
             />
 		</StackPanel>
 
-		<StackPanel Grid.Column = "2" Grid.Row = "3">
+		<StackPanel Grid.Column = "0" Grid.ColumnSpan = "5" Grid.Row = "2">
+			<Label Name = "TitleMinor"
+            Content = ""
+            FontFamily = "Segoe UI" FontSize = "15"
+            Foreground = "White"
+            HorizontalAlignment = "Center"
+            />
+		</StackPanel>
+
+		<StackPanel Grid.Column = "2" Grid.Row = "4">
 			<StackPanel x:Name = "StackPanelGroupTag" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<Label
                 Name = "GroupTagLabel"
@@ -302,7 +312,7 @@
 			</StackPanel>
 		</StackPanel>
 
-		<StackPanel Grid.Column = "2" Grid.Row = "5" VerticalAlignment = "Bottom">
+		<StackPanel Grid.Column = "2" Grid.Row = "6" VerticalAlignment = "Bottom">
 
 			<StackPanel x:Name = "StackPanelRun" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<Button Name = "RunButton"
