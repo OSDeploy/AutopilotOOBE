@@ -132,10 +132,10 @@ function Start-AutopilotOOBE {
         $GroupTagOptions = 'Development','Enterprise'
         $Run = 'NetworkingWireless'
 
-        if (-NOT (Get-Module -Name OSD -ListAvailable)) {
-            Install-Module OSD -Force
-            Import-Module OSD -Force
-        }
+        #Force an update of the latest OSD Module
+        Install-Module OSD -Force
+        Import-Module OSD -Force
+
         if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
             Update-MyDellBios
             Start-Sleep -Seconds 2
