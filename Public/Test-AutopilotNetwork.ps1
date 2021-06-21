@@ -34,13 +34,13 @@ function Test-AutopilotNetwork {
     foreach ($Uri in $Urls){
         try {
             if ($null = Invoke-WebRequest -Uri $Uri -Method Head -UseBasicParsing -ErrorAction Stop) {
-                Write-Host -ForegroundColor DarkCyan $Uri
+                Write-Host -ForegroundColor DarkCyan "PASS: $Uri"
             }
             else {
             }
         }
         catch {
-            Write-Host -ForegroundColor Yellow $Uri
+            Write-Host -ForegroundColor Yellow "FAIL: $Uri"
         }
     }
     #=======================================================================
@@ -107,13 +107,13 @@ function Test-AutopilotNetwork {
     foreach ($Uri in $Urls){
         try {
             if ($null = Invoke-WebRequest -Uri $Uri -Method Head -UseBasicParsing -ErrorAction Stop) {
-                Write-Host -ForegroundColor DarkCyan $Uri
+                Write-Host -ForegroundColor DarkCyan "PASS: $Uri"
             }
             else {
             }
         }
         catch {
-            Write-Host -ForegroundColor Yellow $Uri
+            Write-Host -ForegroundColor Yellow "FAIL: $Uri"
         }
     }
 
@@ -159,13 +159,13 @@ function Test-AutopilotNetwork {
     foreach ($Uri in $Urls){
         try {
             if ($null = Invoke-WebRequest -Uri $Uri -Method Head -UseBasicParsing -ErrorAction Stop) {
-                Write-Host -ForegroundColor DarkCyan $Uri
+                Write-Host -ForegroundColor DarkCyan "PASS: $Uri"
             }
             else {
             }
         }
         catch {
-            Write-Host -ForegroundColor Yellow $Uri
+            Write-Host -ForegroundColor Yellow "FAIL: $Uri"
         }
     }
 
