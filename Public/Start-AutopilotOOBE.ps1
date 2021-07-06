@@ -142,6 +142,17 @@ function Start-AutopilotOOBE {
         }
     }
     #=======================================================================
+    #   Profile SoCal
+    #=======================================================================
+    if ($CustomProfile -eq 'SoCal') {
+        $Title = 'SoCal PS User Group Autopilot Enrollment'
+        $Assign = $true
+        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
+        $GroupTag = 'Enterprise'
+        $GroupTagOptions = 'Development','Enterprise','Master'
+        $Run = 'NetworkingWireless'
+    }
+    #=======================================================================
     #   Profile HalfMan
     #=======================================================================
     if ($CustomProfile -eq 'HalfMan') {
