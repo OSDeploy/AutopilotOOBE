@@ -274,6 +274,10 @@ $RunComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
 $RunComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
 $RunComboBox.Items.Add('Sysprep /audit /reboot') | Out-Null
 $RunComboBox.Items.Add('Event Viewer') | Out-Null
+$RunComboBox.Items.Add('Enable Windows Security Appx') | Out-Null
+$RunComboBox.Items.Add('Get-TPM') | Out-Null
+$RunComboBox.Items.Add('Clear-TPM') | Out-Null
+$RunComboBox.Items.Add('Initialize-TPM') | Out-Null
 $RunComboBox.Items.Add('Get-AutopilotDiagnostics') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -out C:\Temp') | Out-Null
 $RunComboBox.Items.Add('MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') | Out-Null
@@ -314,8 +318,20 @@ $RunButton.add_Click( {
     if ($RunComboBox.SelectedValue -eq 'Sysprep /audit /reboot') {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/audit", "/reboot"}
     if ($RunComboBox.SelectedValue -eq 'Event Viewer') {
         $MDMEventLog | Set-Content -Path "$env:ProgramData\Microsoft\Event Viewer\Views\MDMDiagnosticsTool.xml"
-        Start-Sleep -Seconds 2
+        Restart-Service -Name EventLog -Force -ErrorAction Ignore
         Show-EventLog
+    }
+    if ($RunComboBox.SelectedValue -eq 'Enable Windows Security Appx') {
+        Start-Process PowerShell.exe -ArgumentList "Add-AppxPackage -Register -DisableDevelopmentMode 'C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\AppXManifest.xml';start windowsdefender:"
+    }
+    if ($RunComboBox.SelectedValue -eq 'Get-TPM') {
+        Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Get-TPM"
+    }
+    if ($RunComboBox.SelectedValue -eq 'Clear-TPM') {
+        Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Clear-TPM;Write-Warning 'You should restart the computer at this time'"
+    }
+    if ($RunComboBox.SelectedValue -eq 'Initialize-TPM') {
+        Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Initialize-Tpm -AllowClear -AllowPhysicalPresence;Write-Warning 'You should restart the computer at this time'"
     }
     if ($RunComboBox.SelectedValue -eq 'Get-AutopilotDiagnostics') {
         Show-PowershellWindow
