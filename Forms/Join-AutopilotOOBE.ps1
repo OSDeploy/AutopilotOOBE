@@ -96,7 +96,7 @@ $MDMEventLog = @'
 #   Sidebar
 #=======================================================================
 $ModuleVersion = (Get-Module -Name AutopilotOOBE | Sort-Object Version | Select-Object Version -Last 1).Version
-$SidebarModuleVersion.Content = "$ModuleVersion"
+$SidebarModuleVersion.Content = "ver $ModuleVersion"
 
 try {
     $Tpm = (Get-CimInstance -Namespace "root\CIMV2\Security\MicrosoftTPM" -ClassName Win32_Tpm).SpecVersion
@@ -261,21 +261,50 @@ if ($Hidden -contains 'Register') {
     $StackPanelRegister = $Global:xamGUI.FindName("StackPanelRegister")
     $StackPanelRegister.Visibility = 'Collapsed'
 
+    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
+        $CloudAssignedForcedEnrollment = 'Yes'
+    }
+    else {
+        $CloudAssignedForcedEnrollment = 'No'
+    }
+
+    if ($Global:RegAutoPilot.IsDevicePersonalized -eq 1) {
+        $IsDevicePersonalized = 'Yes'
+    }
+    else {
+        $IsDevicePersonalized = 'No'
+    }
+
+    if ($Global:RegAutoPilot.CloudAssignedLanguage) {
+        $CloudAssignedLanguage = $Global:RegAutoPilot.CloudAssignedLanguage
+    }
+    else {
+        $CloudAssignedLanguage = 'Operating System Default'
+    }
+    
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 512) -gt 0) {$PatchDownload = 'Yes'} else {$PatchDownload = 'No'}
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 128) -gt 0) {$TPMRequired = 'Yes'} else {$TPMRequired = 'No'}
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 64) -gt 0) {$DeviceAuth = 'Yes'} else {$DeviceAuth = 'No'}
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 32) -gt 0) {$TPMAttestation = 'Yes'} else {$TPMAttestation = 'No'}
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 4) -gt 0) {$SkipExpress = 'Yes'} else {$SkipExpress = 'No'}
+    if (($Global:RegAutoPilot.CloudAssignedOobeConfig -band 2) -gt 0) {$DisallowAdmin = 'Yes'} else {$DisallowAdmin = 'No'}
+
     $InformationLabel.Content = @"
-    IsAutoPilotDisabled: $($Global:RegAutoPilot.IsAutoPilotDisabled)
-    CloudAssignedForcedEnrollment: $($Global:RegAutoPilot.CloudAssignedForcedEnrollment)
-    CloudAssignedTenantDomain: $($Global:RegAutoPilot.CloudAssignedTenantDomain)
-    CloudAssignedTenantId: $($Global:RegAutoPilot.CloudAssignedTenantId)
-    CloudAssignedTenantUpn: $($Global:RegAutoPilot.CloudAssignedTenantUpn)
-    CloudAssignedLanguage: $($Global:RegAutoPilot.CloudAssignedLanguage)
-    TenantId: $($Global:RegAutoPilot.TenantId)
-    CloudAssignedMdmId: $($Global:RegAutoPilot.CloudAssignedMdmId)
-    AutopilotServiceCorrelationId: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)
-    CloudAssignedOobeConfig: $($Global:RegAutoPilot.CloudAssignedOobeConfig)
-    CloudAssignedTelemetryLevel: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)
-    IsDevicePersonalized: $($Global:RegAutoPilot.IsDevicePersonalized)
-    SetTelemetryLevel_Succeeded_With_Level: $($Global:RegAutoPilot.SetTelemetryLevel_Succeeded_With_Level)
-    IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)
+    Azure AD Tenant: $($Global:RegAutoPilot.CloudAssignedTenantDomain)
+    Azure AD Tenant ID: $($Global:RegAutoPilot.CloudAssignedTenantId)
+    MDM ID: $($Global:RegAutoPilot.CloudAssignedMdmId)
+    Autopilot Service Correlation ID: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)
+
+    AAD Device Auth: $DeviceAuth
+    AAD TPM Required: $TPMRequired
+    Disallow Admin: $DisallowAdmin
+    Enable Patch Download: $PatchDownload
+    Forced Enrollment: $CloudAssignedForcedEnrollment
+    Is Device Personalized: $IsDevicePersonalized
+    Language: $CloudAssignedLanguage
+    Skip Express Settings: $SkipExpress
+    Telemetry Level: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)
+    TPM Attestation: $TPMAttestation
 "@
 }
 #=======================================================================

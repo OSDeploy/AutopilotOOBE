@@ -107,12 +107,12 @@
         <Border Grid.Column = "0" Grid.Row = "6" Background = "Transparent"/>
         <Border Grid.Column = "4" Grid.Row = "6" Background = "Transparent"/>
 
-		<StackPanel Grid.Column = "0" Grid.Row = "6" VerticalAlignment = "Bottom">
+		<StackPanel Grid.Column = "4" Grid.Row = "1" VerticalAlignment = "Top">
             <Label Name = "SidebarModuleVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
-            HorizontalAlignment = "Left"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
 		</StackPanel>
@@ -312,8 +312,8 @@
                 Name = "InformationLabel"
                 Content = ""
                 FontFamily = "Segoe UI"
-                FontSize = "18"
-                Foreground = "White"
+                FontSize = "17"
+                Foreground = "LightGray"
                 />
 			</StackPanel>
 		</StackPanel>

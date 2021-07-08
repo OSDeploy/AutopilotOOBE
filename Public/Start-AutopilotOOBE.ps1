@@ -84,18 +84,28 @@ function Start-AutopilotOOBE {
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
+    Write-Host -ForegroundColor DarkGray "========================================================================="
     #=======================================================================
     #   Test-AutopilotNetwork
     #=======================================================================
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
+    Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
+    Get-Date
+    Get-TimeZone
     Write-Host -ForegroundColor DarkGray "========================================================================="
+    Start-Sleep -Seconds 2
+    #=======================================================================
+    #   Test-AutopilotNetwork
+    #=======================================================================
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotNetwork"
     Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
     Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view progress'
     Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Start-Sleep -Seconds 2
     #=======================================================================
     #   Autopilot Registry
     #=======================================================================
-    Write-Host -ForegroundColor DarkGray "========================================================================="
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
     Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
     $Global:RegAutoPilot = Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\AutoPilot'
@@ -118,13 +128,18 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
         Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
     }
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Start-Sleep -Seconds 2
     #=======================================================================
     #   Custom Profile
     #=======================================================================
     if ($CustomProfile) {
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Custom Profile $CustomProfile"
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
     }
+    else {
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Default Profile"
+    }
+    Write-Host -ForegroundColor DarkGray "========================================================================="
     #=======================================================================
     #   Profile OSDeploy
     #=======================================================================
@@ -164,10 +179,10 @@ function Start-AutopilotOOBE {
         $Run = 'NetworkingWireless'
 
         if (!(Get-Module -ListAvailable -Name OSD)) {
-            Write-Host -ForegroundColor DarkGray "========================================================================="
             Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Installing OSD PowerShell Module"
             Install-Module OSD -Force -Verbose
             Import-Module OSD -Force
+            Write-Host -ForegroundColor DarkGray "========================================================================="
         }
         #if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
             #Update-MyDellBios
@@ -227,6 +242,8 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Launch
     #=======================================================================
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
+    Write-Host -ForegroundColor DarkGray "========================================================================="
     Start-Sleep -Seconds 2
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
 }
