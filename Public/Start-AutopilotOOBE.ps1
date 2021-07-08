@@ -22,6 +22,7 @@ function Start-AutopilotOOBE {
             'AssignedComputerName',
             'PostAction',
             'Assign',
+            'Register',
             'Run',
             'Docs'
         )]
@@ -69,7 +70,7 @@ function Start-AutopilotOOBE {
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
-        [string]$Title = 'Autopilot Manual Enrollment'
+        [string]$Title = 'Autopilot Manual Registration'
     )
     #=======================================================================
     #   Header
@@ -77,16 +78,46 @@ function Start-AutopilotOOBE {
     Write-Host -ForegroundColor DarkGray "========================================================================="
     Write-Host -ForegroundColor Green "Start-AutopilotOOBE"
     #=======================================================================
-    #   Test-AutopilotNetwork
-    #=======================================================================
-    Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
-    #=======================================================================
     #   Transcript
     #=======================================================================
     Write-Host -ForegroundColor DarkGray "========================================================================="
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
+    #=======================================================================
+    #   Test-AutopilotNetwork
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotNetwork"
+    Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
+    Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view progress'
+    Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
+    #=======================================================================
+    #   Autopilot Registry
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
+    Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
+    $Global:RegAutoPilot = Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\AutoPilot'
+    
+    Write-Host -ForegroundColor Gray "IsAutoPilotDisabled: $($Global:RegAutoPilot.IsAutoPilotDisabled)"
+    Write-Host -ForegroundColor Gray "CloudAssignedForcedEnrollment: $($Global:RegAutoPilot.CloudAssignedForcedEnrollment)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantDomain: $($Global:RegAutoPilot.CloudAssignedTenantDomain)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantId: $($Global:RegAutoPilot.CloudAssignedTenantId)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantUpn: $($Global:RegAutoPilot.CloudAssignedTenantUpn)"
+    Write-Host -ForegroundColor Gray "CloudAssignedLanguage: $($Global:RegAutoPilot.CloudAssignedLanguage)"
+
+    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
+        Write-Host -ForegroundColor Gray "TenantId: $($Global:RegAutoPilot.TenantId)"
+        Write-Host -ForegroundColor Gray "CloudAssignedMdmId: $($Global:RegAutoPilot.CloudAssignedMdmId)"
+        Write-Host -ForegroundColor Gray "AutopilotServiceCorrelationId: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)"
+        Write-Host -ForegroundColor Gray "CloudAssignedOobeConfig: $($Global:RegAutoPilot.CloudAssignedOobeConfig)"
+        Write-Host -ForegroundColor Gray "CloudAssignedTelemetryLevel: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)"
+        Write-Host -ForegroundColor Gray "IsDevicePersonalized: $($Global:RegAutoPilot.IsDevicePersonalized)"
+        Write-Host -ForegroundColor Gray "SetTelemetryLevel_Succeeded_With_Level: $($Global:RegAutoPilot.SetTelemetryLevel_Succeeded_With_Level)"
+        Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
+        Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
+    }
     #=======================================================================
     #   Custom Profile
     #=======================================================================
@@ -98,7 +129,7 @@ function Start-AutopilotOOBE {
     #   Profile OSDeploy
     #=======================================================================
     if ($CustomProfile -in 'OSD','OSDeploy','OSDeploy.com') {
-        $Title = 'OSDeploy Autopilot Enrollment'
+        $Title = 'OSDeploy Autopilot Registration'
         $AddToGroup = 'Administrators'
         $AssignedUserExample = 'someone@osdeploy.com'
         $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
@@ -112,7 +143,7 @@ function Start-AutopilotOOBE {
     #   Profile SeguraOSD
     #=======================================================================
     if ($CustomProfile -match 'SeguraOSD') {
-        $Title = 'SeguraOSD Autopilot Enrollment'
+        $Title = 'SeguraOSD Autopilot Registration'
         $GroupTag = 'Twitter'
         $AssignedComputerName = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
         $PostAction = 'Restart'
@@ -125,27 +156,29 @@ function Start-AutopilotOOBE {
     #   Profile Baker Hughes
     #=======================================================================
     if ($CustomProfile -eq 'BH') {
-        $Title = 'Baker Hughes Autopilot Enrollment'
+        $Title = 'Baker Hughes Autopilot Registration'
         $Assign = $true
         $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
         $Run = 'NetworkingWireless'
 
-        #Force an update of the latest OSD Module
-        Install-Module OSD -Force
-        Import-Module OSD -Force
-
-        if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
-            Update-MyDellBios
-            Start-Sleep -Seconds 2
+        if (!(Get-Module -ListAvailable -Name OSD)) {
+            Write-Host -ForegroundColor DarkGray "========================================================================="
+            Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Installing OSD PowerShell Module"
+            Install-Module OSD -Force -Verbose
+            Import-Module OSD -Force
         }
+        #if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
+            #Update-MyDellBios
+            #Start-Sleep -Seconds 2
+        #}
     }
     #=======================================================================
     #   Profile SoCal
     #=======================================================================
     if ($CustomProfile -eq 'SoCal') {
-        $Title = 'SoCal PS User Group Autopilot Enrollment'
+        $Title = 'SoCal PS User Group Autopilot Registration'
         $Assign = $true
         $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
         $GroupTag = 'Enterprise'
@@ -156,10 +189,19 @@ function Start-AutopilotOOBE {
     #   Profile HalfMan
     #=======================================================================
     if ($CustomProfile -eq 'HalfMan') {
-        $Title = 'Autopilot Enrollment'
+        $Title = 'Autopilot Registration'
         $Hidden = 'GroupTag'
         $AddToGroup = 'Azr_crp_ent_modern_workplace_devices'
         $AddToGroupOptions = 'Azr_crp_ent_modern_workplace_devices'
+    }
+    #=======================================================================
+    #   Support
+    #=======================================================================
+    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
+        $Title = 'Autopilot Registration Information'
+        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
+        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
+        $Run = 'MDMDiagAutopilotTPM'
     }
     #=======================================================================
     #   Set Global Variable
@@ -185,5 +227,6 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Launch
     #=======================================================================
+    Start-Sleep -Seconds 2
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
 }

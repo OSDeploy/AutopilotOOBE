@@ -255,6 +255,30 @@ if ($Hidden -contains 'Assign') {
     $StackPanelAssign.Visibility = 'Collapsed'
 }
 #=======================================================================
+#   Register
+#=======================================================================
+if ($Hidden -contains 'Register') {
+    $StackPanelRegister = $Global:xamGUI.FindName("StackPanelRegister")
+    $StackPanelRegister.Visibility = 'Collapsed'
+
+    $InformationLabel.Content = @"
+    IsAutoPilotDisabled: $($Global:RegAutoPilot.IsAutoPilotDisabled)
+    CloudAssignedForcedEnrollment: $($Global:RegAutoPilot.CloudAssignedForcedEnrollment)
+    CloudAssignedTenantDomain: $($Global:RegAutoPilot.CloudAssignedTenantDomain)
+    CloudAssignedTenantId: $($Global:RegAutoPilot.CloudAssignedTenantId)
+    CloudAssignedTenantUpn: $($Global:RegAutoPilot.CloudAssignedTenantUpn)
+    CloudAssignedLanguage: $($Global:RegAutoPilot.CloudAssignedLanguage)
+    TenantId: $($Global:RegAutoPilot.TenantId)
+    CloudAssignedMdmId: $($Global:RegAutoPilot.CloudAssignedMdmId)
+    AutopilotServiceCorrelationId: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)
+    CloudAssignedOobeConfig: $($Global:RegAutoPilot.CloudAssignedOobeConfig)
+    CloudAssignedTelemetryLevel: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)
+    IsDevicePersonalized: $($Global:RegAutoPilot.IsDevicePersonalized)
+    SetTelemetryLevel_Succeeded_With_Level: $($Global:RegAutoPilot.SetTelemetryLevel_Succeeded_With_Level)
+    IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)
+"@
+}
+#=======================================================================
 #   Parameter Run
 #=======================================================================
 #$AutopilotOOBEParams["Run"].Attributes.ValidValues | ForEach-Object {
@@ -374,7 +398,14 @@ $DocsComboBox.Items.Add('Sysprep Overview') | Out-Null
 $DocsComboBox.Items.Add('Sysprep Audit Mode Overview') | Out-Null
 $DocsComboBox.Items.Add('Sysprep Command-Line Options') | Out-Null
 
-$DocsComboBox.SelectedValue = 'Windows Autopilot Documentation'
+
+if ($Hidden -contains 'Register') {
+    $DocsComboBox.SelectedValue = 'Troubleshoot Autopilot OOBE Issues'
+}
+else {
+    $DocsComboBox.SelectedValue = 'Windows Autopilot Documentation'
+}
+
 
 if ($Global:AutopilotOOBE.Docs) {
     $DocsComboBox.Items.Add($Global:AutopilotOOBE.Docs) | Out-Null
