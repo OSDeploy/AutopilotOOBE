@@ -387,10 +387,10 @@ $RunButton.add_Click( {
         Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Initialize-Tpm -AllowClear -AllowPhysicalPresence;Write-Warning 'You should restart the computer at this time'"
     }
     if ($RunComboBox.SelectedValue -eq 'Get-AutopilotDiagnostics') {
+        $xamGUI.Close()
         Show-PowershellWindow
         Install-Script Get-AutopilotDiagnostics -Force -Verbose
         Get-AutopilotDiagnostics -Online
-        Pause
     }
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -out C:\Temp') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
     if ($RunComboBox.SelectedValue -eq 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab') {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
