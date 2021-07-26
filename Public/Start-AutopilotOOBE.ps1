@@ -86,6 +86,15 @@ function Start-AutopilotOOBE {
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     Write-Host -ForegroundColor DarkGray "========================================================================="
     #=======================================================================
+    #   PSGallery
+    #=======================================================================
+    $PSGalleryIP = (Get-PSRepository -Name PSGallery).InstallationPolicy
+    if ($PSGalleryIP -eq 'Untrusted') {
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+        Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+        Write-Host -ForegroundColor DarkGray "========================================================================="
+    }
+    #=======================================================================
     #   Test-AutopilotNetwork
     #=======================================================================
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
