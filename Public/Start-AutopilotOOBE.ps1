@@ -103,8 +103,8 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Custom Profile
     #=======================================================================
-    Write-Host -ForegroundColor DarkGray "========================================================================="
     if ($CustomProfile) {
+        Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
 
         $CustomProfileJson = Get-ChildItem "$($MyInvocation.MyCommand.Module.ModuleBase)\CustomProfile" *.json | Where-Object {$_.BaseName -eq $CustomProfile} | Select-Object -First 1
