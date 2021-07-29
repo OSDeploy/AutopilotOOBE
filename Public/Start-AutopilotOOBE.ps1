@@ -70,10 +70,11 @@ function Start-AutopilotOOBE {
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
-        [string]$Title = 'Autopilot Manual Registration'
+        [string]$Title = 'Autopilot Manual Registration',
+        [string]$JsonPath = "$env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
     )
     #=======================================================================
-    #   Header
+    #   Header and Json Import
     #=======================================================================
     Write-Host -ForegroundColor DarkGray "========================================================================="
     Write-Host -ForegroundColor Green "Start-AutopilotOOBE"
@@ -84,71 +85,45 @@ function Start-AutopilotOOBE {
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
-    Write-Host -ForegroundColor DarkGray "========================================================================="
+    #=======================================================================
+    #   Import Json
+    #=======================================================================
+    if (Test-Path $JsonPath) {
+        Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
+        $ImportAutopilotOOBE = @()
+        $ImportAutopilotOOBE = Get-Content -Raw -Path $JsonPath | ConvertFrom-Json
+    
+        $ImportAutopilotOOBE.PSObject.Properties | ForEach-Object {
+    
+            if ($_.Value -match 'IsPresent=True') {
+                $_.Value = $true
+            }
+            if ($_.Value -match 'IsPresent=False') {
+                $_.Value = $false
+            }
+    
+            Set-Variable -Name $_.Name -Value $_.Value -Force
+        }
+    }
     #=======================================================================
     #   PSGallery
     #=======================================================================
     $PSGalleryIP = (Get-PSRepository -Name PSGallery).InstallationPolicy
     if ($PSGalleryIP -eq 'Untrusted') {
+        Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-        Write-Host -ForegroundColor DarkGray "========================================================================="
     }
-    #=======================================================================
-    #   Test-AutopilotNetwork
-    #=======================================================================
-    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
-    Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
-    Get-Date
-    Get-TimeZone
-    Write-Host -ForegroundColor DarkGray "========================================================================="
-    Start-Sleep -Seconds 2
-    #=======================================================================
-    #   Test-AutopilotNetwork
-    #=======================================================================
-    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotNetwork"
-    Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
-    Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view progress'
-    Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
-    Write-Host -ForegroundColor DarkGray "========================================================================="
-    Start-Sleep -Seconds 2
-    #=======================================================================
-    #   Autopilot Registry
-    #=======================================================================
-    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
-    Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
-    $Global:RegAutoPilot = Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\AutoPilot'
-    
-    Write-Host -ForegroundColor Gray "IsAutoPilotDisabled: $($Global:RegAutoPilot.IsAutoPilotDisabled)"
-    Write-Host -ForegroundColor Gray "CloudAssignedForcedEnrollment: $($Global:RegAutoPilot.CloudAssignedForcedEnrollment)"
-    Write-Host -ForegroundColor Gray "CloudAssignedTenantDomain: $($Global:RegAutoPilot.CloudAssignedTenantDomain)"
-    Write-Host -ForegroundColor Gray "CloudAssignedTenantId: $($Global:RegAutoPilot.CloudAssignedTenantId)"
-    Write-Host -ForegroundColor Gray "CloudAssignedTenantUpn: $($Global:RegAutoPilot.CloudAssignedTenantUpn)"
-    Write-Host -ForegroundColor Gray "CloudAssignedLanguage: $($Global:RegAutoPilot.CloudAssignedLanguage)"
-
-    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
-        Write-Host -ForegroundColor Gray "TenantId: $($Global:RegAutoPilot.TenantId)"
-        Write-Host -ForegroundColor Gray "CloudAssignedMdmId: $($Global:RegAutoPilot.CloudAssignedMdmId)"
-        Write-Host -ForegroundColor Gray "AutopilotServiceCorrelationId: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)"
-        Write-Host -ForegroundColor Gray "CloudAssignedOobeConfig: $($Global:RegAutoPilot.CloudAssignedOobeConfig)"
-        Write-Host -ForegroundColor Gray "CloudAssignedTelemetryLevel: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)"
-        Write-Host -ForegroundColor Gray "IsDevicePersonalized: $($Global:RegAutoPilot.IsDevicePersonalized)"
-        Write-Host -ForegroundColor Gray "SetTelemetryLevel_Succeeded_With_Level: $($Global:RegAutoPilot.SetTelemetryLevel_Succeeded_With_Level)"
-        Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
-        Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
-    }
-    Write-Host -ForegroundColor DarkGray "========================================================================="
-    Start-Sleep -Seconds 2
     #=======================================================================
     #   Custom Profile
     #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
     if ($CustomProfile) {
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
     }
     else {
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Default Profile"
     }
-    Write-Host -ForegroundColor DarkGray "========================================================================="
     #=======================================================================
     #   Profile OSDeploy
     #=======================================================================
@@ -186,17 +161,6 @@ function Start-AutopilotOOBE {
         $GroupTag = 'Enterprise'
         $GroupTagOptions = 'Development','Enterprise'
         $Run = 'NetworkingWireless'
-
-        if (!(Get-Module -ListAvailable -Name OSD)) {
-            Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Installing OSD PowerShell Module"
-            Install-Module OSD -Force -Verbose
-            Import-Module OSD -Force
-            Write-Host -ForegroundColor DarkGray "========================================================================="
-        }
-        #if ((Get-MyComputerManufacturer -Brief) -eq 'Dell') {
-            #Update-MyDellBios
-            #Start-Sleep -Seconds 2
-        #}
     }
     #=======================================================================
     #   Profile SoCal
@@ -228,9 +192,9 @@ function Start-AutopilotOOBE {
         $Run = 'MDMDiagAutopilotTPM'
     }
     #=======================================================================
-    #   Set Global Variable
+    #   Initialize Global Variable
     #=======================================================================
-    $Global:AutopilotOOBE = @{
+    $Global:AutopilotOOBE = [ordered]@{
         AddToGroup = $AddToGroup
         AddToGroupOptions = $AddToGroupOptions
         Assign = $Assign
@@ -248,11 +212,57 @@ function Start-AutopilotOOBE {
         Docs = $Docs
         Title = $Title
     }
+    Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
+    $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
+    #=======================================================================
+    #   Date Time
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
+    Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
+    Get-Date
+    Get-TimeZone
+    #=======================================================================
+    #   Test-AutopilotNetwork
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotNetwork"
+    Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
+    Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view progress'
+    Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
+    #=======================================================================
+    #   Test-AutopilotRegistry
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
+    Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
+    $Global:RegAutoPilot = Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\AutoPilot'
+    
+    Write-Host -ForegroundColor Gray "IsAutoPilotDisabled: $($Global:RegAutoPilot.IsAutoPilotDisabled)"
+    Write-Host -ForegroundColor Gray "CloudAssignedForcedEnrollment: $($Global:RegAutoPilot.CloudAssignedForcedEnrollment)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantDomain: $($Global:RegAutoPilot.CloudAssignedTenantDomain)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantId: $($Global:RegAutoPilot.CloudAssignedTenantId)"
+    Write-Host -ForegroundColor Gray "CloudAssignedTenantUpn: $($Global:RegAutoPilot.CloudAssignedTenantUpn)"
+    Write-Host -ForegroundColor Gray "CloudAssignedLanguage: $($Global:RegAutoPilot.CloudAssignedLanguage)"
+
+    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
+        Write-Host -ForegroundColor Gray "TenantId: $($Global:RegAutoPilot.TenantId)"
+        Write-Host -ForegroundColor Gray "CloudAssignedMdmId: $($Global:RegAutoPilot.CloudAssignedMdmId)"
+        Write-Host -ForegroundColor Gray "AutopilotServiceCorrelationId: $($Global:RegAutoPilot.AutopilotServiceCorrelationId)"
+        Write-Host -ForegroundColor Gray "CloudAssignedOobeConfig: $($Global:RegAutoPilot.CloudAssignedOobeConfig)"
+        Write-Host -ForegroundColor Gray "CloudAssignedTelemetryLevel: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)"
+        Write-Host -ForegroundColor Gray "IsDevicePersonalized: $($Global:RegAutoPilot.IsDevicePersonalized)"
+        Write-Host -ForegroundColor Gray "SetTelemetryLevel_Succeeded_With_Level: $($Global:RegAutoPilot.SetTelemetryLevel_Succeeded_With_Level)"
+        Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
+        Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
+        Start-Sleep -Seconds 2
+    }
     #=======================================================================
     #   Launch
     #=======================================================================
-    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
     Write-Host -ForegroundColor DarkGray "========================================================================="
+    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
     Start-Sleep -Seconds 2
     & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
+    #=======================================================================
 }

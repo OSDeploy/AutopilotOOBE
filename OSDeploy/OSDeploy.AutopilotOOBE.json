@@ -1,0 +1,29 @@
+{
+    "AddToGroup":  "",
+    "AddToGroupOptions":  null,
+    "Assign":  {
+                   "IsPresent":  true
+               },
+    "AssignedUser":  "",
+    "AssignedUserExample":  "someone@example.com",
+    "AssignedComputerName":  "",
+    "AssignedComputerNameExample":  "Azure AD Join Only",
+    "Disabled":  null,
+    "Demo":  {
+                 "IsPresent":  false
+             },
+    "GroupTag":  "Enterprise",
+    "GroupTagOptions":  [
+                            "Development",
+                            "Enterprise"
+                        ],
+    "Hidden":  [
+                   "AddToGroup",
+                   "AssignedComputerName",
+                   "AssignedUser"
+               ],
+    "PostAction":  "Quit",
+    "Run":  "NetworkingWireless",
+    "Docs":  "",
+    "Title":  "Autopilot Manual Registration"
+}
