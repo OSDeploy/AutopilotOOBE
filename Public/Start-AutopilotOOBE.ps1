@@ -101,8 +101,9 @@ function Start-AutopilotOOBE {
             if ($_.Value -match 'IsPresent=False') {
                 $_.Value = $false
             }
-    
-            Set-Variable -Name $_.Name -Value $_.Value -Force
+            if ($null -ne $_.Value) {
+                Set-Variable -Name $_.Name -Value $_.Value -Force
+            }
         }
     }
     #=======================================================================
