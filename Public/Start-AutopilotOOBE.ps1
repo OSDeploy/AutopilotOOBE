@@ -64,8 +64,7 @@ function Start-AutopilotOOBE {
             'GetAutopilotDiagnostics',
             'MDMDiag',
             'MDMDiagAutopilot',
-            'MDMDiagAutopilotTPM',
-            'UpdateMyDellBios'
+            'MDMDiagAutopilotTPM'
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
