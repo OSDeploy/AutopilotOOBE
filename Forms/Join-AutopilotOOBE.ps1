@@ -505,18 +505,14 @@ $RegisterButton.add_Click( {
     }
 
     Write-Host -ForegroundColor Cyan "Install-Script Get-WindowsAutoPilotInfo"
-    if ($Global:AutopilotOOBE.Demo -ne $true) {
-        Start-Sleep -Seconds 3
-        Install-Script Get-WindowsAutoPilotInfo -Force -Verbose
-    }
+    Start-Sleep -Seconds 3
+    Install-Script Get-WindowsAutoPilotInfo -Force -Verbose
 
     Write-Host ($Params | Out-String)
     Write-Host -ForegroundColor Cyan "Get-WindowsAutoPilotInfo @Params"
 
-    if ($Global:AutopilotOOBE.Demo -ne $true) {
-        Start-Sleep -Seconds 3
-        Get-WindowsAutoPilotInfo @Params
-    }
+    Start-Sleep -Seconds 3
+    Get-WindowsAutoPilotInfo @Params
 
 
     if ($PostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
@@ -525,29 +521,27 @@ $RegisterButton.add_Click( {
     if ($PostActionComboBox.SelectedValue -match 'Sysprep') {
         Write-Host -ForegroundColor Cyan "Executing Sysprep"
 
-        if ($Global:AutopilotOOBE.Demo -ne $true) {
-            if ($PostActionComboBox.SelectedValue -match 'quit') {
-                Start-Sleep -Seconds 3
-                Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
-            }
-            
-            elseif (($PostActionComboBox.SelectedValue -match 'reboot') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
-                Start-Sleep -Seconds 3
-                Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
-            }
-            elseif (($PostActionComboBox.SelectedValue -match 'shutdown') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
-                Start-Sleep -Seconds 3
-                Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
-            }
+        if ($PostActionComboBox.SelectedValue -match 'quit') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit" -Wait
+        }
+        
+        elseif (($PostActionComboBox.SelectedValue -match 'reboot') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
+        }
+        elseif (($PostActionComboBox.SelectedValue -match 'shutdown') -and ($PostActionComboBox.SelectedValue -match 'generalize')) {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "generalize", "/oobe", "/reboot" -Wait
+        }
 
-            elseif ($PostActionComboBox.SelectedValue -match 'reboot') {
-                Start-Sleep -Seconds 3
-                Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
-            }
-            elseif ($PostActionComboBox.SelectedValue -match 'shutdown') {
-                Start-Sleep -Seconds 3
-                Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
-            }
+        elseif ($PostActionComboBox.SelectedValue -match 'reboot') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot" -Wait
+        }
+        elseif ($PostActionComboBox.SelectedValue -match 'shutdown') {
+            Start-Sleep -Seconds 3
+            Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
         }
     }
 

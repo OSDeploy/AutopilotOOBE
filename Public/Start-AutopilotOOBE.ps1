@@ -3,7 +3,6 @@ function Start-AutopilotOOBE {
     param (
         [Parameter(ValueFromPipeline = $true)]
         [string]$CustomProfile,
-        [switch]$Demo,
 
         [ValidateSet (
             'GroupTag',
@@ -70,8 +69,7 @@ function Start-AutopilotOOBE {
         )]
         [string]$Run = 'PowerShell',
         [string]$Docs,
-        [string]$Title = 'Autopilot Manual Registration',
-        [string]$JsonPath = "$env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
+        [string]$Title = 'Autopilot Manual Registration'
     )
     #=======================================================================
     #   Header and Json Import
@@ -88,6 +86,7 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Import Json
     #=======================================================================
+    $JsonPath = "$env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
     if (Test-Path $JsonPath) {
         Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
@@ -101,9 +100,10 @@ function Start-AutopilotOOBE {
             if ($_.Value -match 'IsPresent=False') {
                 $_.Value = $false
             }
-            if ($null -ne $_.Value) {
-                Set-Variable -Name $_.Name -Value $_.Value -Force
+            if ($null -eq $_.Value) {
+                Continue
             }
+            Set-Variable -Name $_.Name -Value $_.Value -Force
         }
     }
     #=======================================================================
@@ -204,7 +204,6 @@ function Start-AutopilotOOBE {
         AssignedComputerName = $AssignedComputerName
         AssignedComputerNameExample = $AssignedComputerNameExample
         Disabled = $Disabled
-        Demo = $Demo
         GroupTag = $GroupTag
         GroupTagOptions = $GroupTagOptions
         Hidden = $Hidden
@@ -215,7 +214,7 @@ function Start-AutopilotOOBE {
     }
     Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
     @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
-        if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) } 
+        if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
     }
     $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
     #=======================================================================
