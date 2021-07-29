@@ -77,6 +77,10 @@ function Start-AutopilotOOBE {
     Write-Host -ForegroundColor DarkGray "========================================================================="
     Write-Host -ForegroundColor Green "Start-AutopilotOOBE"
     #=======================================================================
+    #   Variables
+    #=======================================================================
+    $JsonPath = "$env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
+    #=======================================================================
     #   Transcript
     #=======================================================================
     Write-Host -ForegroundColor DarkGray "========================================================================="
@@ -84,9 +88,37 @@ function Start-AutopilotOOBE {
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     #=======================================================================
+    #   Custom Profile Variables
+    #=======================================================================
+    if ($CustomProfile -eq 'Sample') {
+        $Title = 'Sample Autopilot Registration'
+        $AddToGroup = 'Administrators'
+        $AssignedUserExample = 'someone@osdeploy.com'
+        $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
+        $PostAction = 'Shutdown'
+        $Assign = $true
+        $Run = 'PowerShell'
+        $Docs = 'https://www.osdeploy.com/'
+        $Hidden = 'GroupTag'
+    }
+    #=======================================================================
+    #   Custom Profile
+    #=======================================================================
+    Write-Host -ForegroundColor DarkGray "========================================================================="
+    if ($CustomProfile) {
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
+
+        $CustomProfileJson = Get-ChildItem "$($MyInvocation.MyCommand.Module.ModuleBase)\CustomProfile" *.json | Where-Object {$_.BaseName -eq $CustomProfile} | Select-Object -First 1
+
+        if ($CustomProfileJson) {
+            Write-Host -ForegroundColor DarkGray "Saving CustomProfile to $JsonPath"
+            if (!(Test-Path "$env:ProgramData\OSDeploy")) {New-Item "$env:ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null}
+            Copy-Item -Path $CustomProfileJson.FullName -Destination $JsonPath -Force -ErrorAction Ignore
+        }
+    }
+    #=======================================================================
     #   Import Json
     #=======================================================================
-    $JsonPath = "$env:ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
     if (Test-Path $JsonPath) {
         Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
@@ -114,74 +146,6 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    }
-    #=======================================================================
-    #   Custom Profile
-    #=======================================================================
-    Write-Host -ForegroundColor DarkGray "========================================================================="
-    if ($CustomProfile) {
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
-    }
-    else {
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Default Profile"
-    }
-    #=======================================================================
-    #   Profile OSDeploy
-    #=======================================================================
-    if ($CustomProfile -in 'OSD','OSDeploy','OSDeploy.com') {
-        $Title = 'OSDeploy Autopilot Registration'
-        $AddToGroup = 'Administrators'
-        $AssignedUserExample = 'someone@osdeploy.com'
-        $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $PostAction = 'Shutdown'
-        $Assign = $true
-        $Run = 'PowerShell'
-        $Docs = 'https://www.osdeploy.com/'
-        $Hidden = 'GroupTag'
-    }
-    #=======================================================================
-    #   Profile SeguraOSD
-    #=======================================================================
-    if ($CustomProfile -match 'SeguraOSD') {
-        $Title = 'SeguraOSD Autopilot Registration'
-        $GroupTag = 'Twitter'
-        $AssignedComputerName = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-        $PostAction = 'Restart'
-        $Assign = $true
-        $Run = 'WindowsSettings'
-        $Docs = 'https://twitter.com/SeguraOSD'
-        $Hidden = 'AddToGroup','AssignedUser'
-    }
-    #=======================================================================
-    #   Profile Baker Hughes
-    #=======================================================================
-    if ($CustomProfile -eq 'BH') {
-        $Title = 'Baker Hughes Autopilot Registration'
-        $Assign = $true
-        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
-        $GroupTag = 'Enterprise'
-        $GroupTagOptions = 'Development','Enterprise'
-        $Run = 'NetworkingWireless'
-    }
-    #=======================================================================
-    #   Profile SoCal
-    #=======================================================================
-    if ($CustomProfile -eq 'SoCal') {
-        $Title = 'SoCal PS User Group Autopilot Registration'
-        $Assign = $true
-        $Hidden = 'AddToGroup','AssignedComputerName','AssignedUser'
-        $GroupTag = 'Enterprise'
-        $GroupTagOptions = 'Development','Enterprise','Master'
-        $Run = 'NetworkingWireless'
-    }
-    #=======================================================================
-    #   Profile HalfMan
-    #=======================================================================
-    if ($CustomProfile -eq 'HalfMan') {
-        $Title = 'Autopilot Registration'
-        $Hidden = 'GroupTag'
-        $AddToGroup = 'Azr_crp_ent_modern_workplace_devices'
-        $AddToGroupOptions = 'Azr_crp_ent_modern_workplace_devices'
     }
     #=======================================================================
     #   Support

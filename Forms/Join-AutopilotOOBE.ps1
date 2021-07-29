@@ -96,7 +96,7 @@ $MDMEventLog = @'
 #   Sidebar
 #=======================================================================
 $ModuleVersion = (Get-Module -Name AutopilotOOBE | Sort-Object Version | Select-Object Version -Last 1).Version
-$SidebarModuleVersion.Content = "ver $ModuleVersion"
+$SidebarModuleVersion.Content = "$ModuleVersion"
 
 try {
     $Tpm = (Get-CimInstance -Namespace "root\CIMV2\Security\MicrosoftTPM" -ClassName Win32_Tpm).SpecVersion

@@ -7,15 +7,22 @@
     xmlns:Controls = "clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 
     Title = ""
-    BorderBrush = "{DynamicResource AccentColorBrush}"
-    BorderThickness = "2"
+    Background = "#F7FAFC"
+    BorderBrush = "{DynamicResource MahApps.Brushes.Accent}"
+    BorderThickness = "0"
+
+    GlowBrush = "Black"
+    NonActiveGlowBrush = "Black"
+    
     Width = "980"
     Height = "670"
-    Background = "#004275"
-
+    OverrideDefaultWindowCommandsBrush = "LightGray"
     ResizeMode = "CanResizeWithGrip"
+    TitleForeground = "Black"
     WindowStartupLocation = "CenterScreen"
-    WindowStyle = "None">
+    WindowTitleBrush = "#F7FAFC"
+    NonActiveWindowTitleBrush = "#F7FAFC"
+    WindowTransitionsEnabled = "False">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -24,13 +31,15 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Cobalt.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="{x:Type Window}">
 				<Setter Property="FontFamily" Value="Segoe UI" />
 				<Setter Property="FontWeight" Value="Light" />
 				<Setter Property="Background" Value="#1f1f1f" />
-				<Setter Property="Foreground" Value="white" />
+				<Setter Property="Foreground" Value="black" />
 			</Style>
 
 			<Style TargetType="{x:Type Button}">
@@ -43,21 +52,21 @@
 					<Setter.Value>
 						<ControlTemplate TargetType="Button" >
 							<Border Name = "Border"
-                                BorderThickness = "1"
+                                BorderThickness = "2"
                                 Padding = "4,2" 
-                                BorderBrush = "#336891" 
-                                CornerRadius = "1" 
-                                Background = "#0078d7">
+                                BorderBrush = "#003E92" 
+                                CornerRadius = "5" 
+                                Background = "#0067C0">
 								<ContentPresenter HorizontalAlignment = "Center" VerticalAlignment = "Center" TextBlock.TextAlignment = "Center" />
 							</Border>
 
 							<ControlTemplate.Triggers>
 								<Trigger Property = "IsFocused" Value = "False">
-									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#336891" />
-									<Setter Property = "Button.Background" Value = "#336891" />
+									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#0078d7" />
+									<Setter Property = "Button.Background" Value = "#0078d7" />
 								</Trigger>
 								<Trigger Property = "IsMouseOver" Value="True">
-									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#FFE8EDF9" />
+									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#FF003E92" />
 								</Trigger>
 								<Trigger Property = "IsEnabled" Value = "False">
 									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#336891" />
@@ -111,7 +120,7 @@
             <Label Name = "SidebarModuleVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
+            Foreground = "Black"
             HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
@@ -121,28 +130,28 @@
 			<Label Name = "SidebarManufacturer"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
+            Foreground = "Black"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "SidebarModel"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
+            Foreground = "Black"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "SidebarSerialNumber"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
+            Foreground = "Black"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "SidebarBiosVersion"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "11"
-            Foreground = "White"
+            Foreground = "Black"
             Padding = "10,1,10,0"
             />
 
@@ -157,8 +166,8 @@
 		<StackPanel Grid.Column = "0" Grid.ColumnSpan = "5" Grid.Row = "1">
 			<Label Name = "TitleMain"
             Content = "Autopilot Manual Enrollment"
-            FontFamily = "Segoe UI Light" FontSize = "46"
-            Foreground = "White"
+            FontFamily = "Segoe UI" FontSize = "44"
+            Foreground = "Black"
             HorizontalAlignment = "Center"
             />
 		</StackPanel>
@@ -167,7 +176,7 @@
 			<Label Name = "TitleMinor"
             Content = ""
             FontFamily = "Segoe UI" FontSize = "15"
-            Foreground = "White"
+            Foreground = "Black"
             HorizontalAlignment = "Center"
             />
 		</StackPanel>
@@ -178,12 +187,11 @@
                 Name = "GroupTagLabel"
                 Content = "GroupTag:"
                 FontFamily = "Segoe UI" FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 />
 
 				<ComboBox
                 Name = "GroupTagComboBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
@@ -202,12 +210,11 @@
                 Content = "AddToGroup:"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 />
 
 				<ComboBox
                 Name = "AddToGroupComboBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
@@ -225,16 +232,15 @@
                 Content = "AssignedUser:"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 />
 
 				<TextBox Name = "AssignedUserTextBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 FontWeight = "Normal"
-                Foreground = "White"
+                Foreground = "Black"
                 Height = "40"
                 Width = "380"
                 Padding = "8"
@@ -246,16 +252,15 @@
                 Content = "AssignedComputerName:"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 />
 
 				<TextBox Name = "AssignedComputerNameTextBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 FontWeight = "Normal"
-                Foreground = "White"
+                Foreground = "Black"
                 Height = "40"
                 Text = "Azure AD Join Only"
                 Width = "380"
@@ -269,7 +274,7 @@
                 Content = "PostAction:"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 />
 
 				<ComboBox
@@ -288,11 +293,10 @@
 			<StackPanel x:Name = "StackPanelAssign" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<CheckBox
                 Name = "AssignCheckbox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
-                Foreground = "White"
+                Foreground = "Black"
                 >Assign: Wait for Intune to assign an Autopilot profile for this device
 				</CheckBox>
 			</StackPanel>
@@ -331,7 +335,6 @@
 
 				<ComboBox
                 Name = "RunComboBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontSize = "15"
                 FontWeight = "Normal"
@@ -342,7 +345,8 @@
                 />
 			</StackPanel>
 			<StackPanel x:Name = "StackPanelDocs" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<Button Name = "DocsButton"
+				<Button
+                Name = "DocsButton"
                 Content = "Docs"
                 FontSize = "15"
                 FontWeight = "Normal"
@@ -352,7 +356,6 @@
 
 				<ComboBox
                 Name = "DocsComboBox"
-                Background = "#002846"
                 BorderThickness = "2"
                 FontSize = "15"
                 FontWeight = "Normal"

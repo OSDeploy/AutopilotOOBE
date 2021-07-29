@@ -1,0 +1,20 @@
+{
+    "Assign":  {
+                   "IsPresent":  true
+               },
+    "AssignedUserExample":  "someone@example.com",
+    "AssignedComputerNameExample":  "Azure AD Join Only",
+    "GroupTag":  "Enterprise",
+    "GroupTagOptions":  [
+                            "Development",
+                            "Enterprise"
+                        ],
+    "Hidden":  [
+                   "AddToGroup",
+                   "AssignedComputerName",
+                   "AssignedUser"
+               ],
+    "PostAction":  "Quit",
+    "Run":  "NetworkingWireless",
+    "Title":  "Baker Hughes Autopilot Registration"
+}
