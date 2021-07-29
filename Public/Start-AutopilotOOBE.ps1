@@ -214,6 +214,9 @@ function Start-AutopilotOOBE {
         Title = $Title
     }
     Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
+    @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
+        if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) } 
+    }
     $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
     #=======================================================================
     #   Date Time
