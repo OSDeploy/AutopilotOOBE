@@ -87,7 +87,7 @@ function Start-AutopilotOOBE {
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
     Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     #=======================================================================
-    #   Custom Profile Variables
+    #   Custom Profile Sample Variables
     #=======================================================================
     if ($CustomProfile -eq 'Sample') {
         $Title = 'Sample Autopilot Registration'
@@ -110,7 +110,7 @@ function Start-AutopilotOOBE {
         $CustomProfileJson = Get-ChildItem "$($MyInvocation.MyCommand.Module.ModuleBase)\CustomProfile" *.json | Where-Object {$_.BaseName -eq $CustomProfile} | Select-Object -First 1
 
         if ($CustomProfileJson) {
-            Write-Host -ForegroundColor DarkGray "Saving CustomProfile to $JsonPath"
+            Write-Host -ForegroundColor DarkGray "Saving Module CustomProfile to $JsonPath"
             if (!(Test-Path "$env:ProgramData\OSDeploy")) {New-Item "$env:ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null}
             Copy-Item -Path $CustomProfileJson.FullName -Destination $JsonPath -Force -ErrorAction Ignore
         }
@@ -124,7 +124,6 @@ function Start-AutopilotOOBE {
         $ImportAutopilotOOBE = Get-Content -Raw -Path $JsonPath | ConvertFrom-Json
     
         $ImportAutopilotOOBE.PSObject.Properties | ForEach-Object {
-    
             if ($_.Value -match 'IsPresent=True') {
                 $_.Value = $true
             }

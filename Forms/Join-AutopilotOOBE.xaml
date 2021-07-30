@@ -7,15 +7,14 @@
     xmlns:Controls = "clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 
     Title = ""
+    Width = "980"
+    Height = "670"
     Background = "#F7FAFC"
     BorderBrush = "{DynamicResource MahApps.Brushes.Accent}"
     BorderThickness = "0"
 
     GlowBrush = "Black"
     NonActiveGlowBrush = "Black"
-    
-    Width = "980"
-    Height = "670"
     OverrideDefaultWindowCommandsBrush = "LightGray"
     ResizeMode = "CanResizeWithGrip"
     TitleForeground = "Black"
@@ -31,53 +30,67 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Cobalt.xaml" />
+                <!-- Accent and AppTheme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
-			<Style TargetType="{x:Type Window}">
-				<Setter Property="FontFamily" Value="Segoe UI" />
-				<Setter Property="FontWeight" Value="Light" />
-				<Setter Property="Background" Value="#1f1f1f" />
-				<Setter Property="Foreground" Value="black" />
-			</Style>
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="FontFamily" Value="Segoe UI" />
+                <Setter Property="FontWeight" Value="Light" />
+                <Setter Property="Background" Value="#1F1F1F" />
+                <Setter Property="Foreground" Value="Black" />
+            </Style>
 
-			<Style TargetType="{x:Type Button}">
-				<Setter Property="Background" Value="#FF1D3245" />
-				<Setter Property="Foreground" Value="#FFE8EDF9" />
-				<Setter Property="FontSize" Value="15" />
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="Button" >
-							<Border Name = "Border"
-                                BorderThickness = "2"
-                                Padding = "4,2" 
-                                BorderBrush = "#003E92" 
-                                CornerRadius = "5" 
-                                Background = "#0067C0">
-								<ContentPresenter HorizontalAlignment = "Center" VerticalAlignment = "Center" TextBlock.TextAlignment = "Center" />
-							</Border>
-
-							<ControlTemplate.Triggers>
-								<Trigger Property = "IsFocused" Value = "False">
-									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#0078d7" />
-									<Setter Property = "Button.Background" Value = "#0078d7" />
-								</Trigger>
-								<Trigger Property = "IsMouseOver" Value="True">
-									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#FF003E92" />
-								</Trigger>
-								<Trigger Property = "IsEnabled" Value = "False">
-									<Setter TargetName = "Border" Property = "BorderBrush" Value = "#336891" />
-									<Setter Property = "Button.Foreground" Value = "#336891" />
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
-
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="{DynamicResource FlatButtonBackgroundBrush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="FontSize" Value="{DynamicResource FlatButtonFontSize}" />
+                <Setter Property="Foreground" Value="{DynamicResource FlatButtonForegroundBrush}" />
+                <Setter Property="Padding" Value="10 5 10 5" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}" xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+                            <Border x:Name="Border"
+                                Margin="0"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius = "5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <Controls:ContentControlEx x:Name="PART_ContentPresenter"
+                                    Padding="{TemplateBinding Padding}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Content="{TemplateBinding Content}"
+                                    ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Controls:ControlsHelper.ContentCharacterCasing)}"
+                                    ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <!-- Windows 11 Theme Dark Blue -->
+                        <Setter Property="Background" Value="#003E92" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <!-- Windows 11 Theme Blue -->
+                        <Setter Property="Background" Value="#0067C0" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource FlatButtonPressedBackgroundBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource FlatButtonPressedForegroundBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource GrayBrush2}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 			<Style TargetType="{x:Type Label}">
 				<Setter Property = "FontFamily" Value = "Segoe UI" />
 			</Style>
@@ -89,11 +102,18 @@
 			<Style TargetType="{x:Type ComboBox}">
 				<Setter Property = "FontFamily" Value = "Segoe UI" />
 			</Style>
-
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint = "0,0" EndPoint = "1,1">
+            <GradientStop Color = "White" Offset = "0.0" />
+            <GradientStop Color = "#EDF1FA" Offset = "0.3" />
+            <GradientStop Color = "#EDF3FE" Offset = "0.7" />
+            <GradientStop Color = "#F7FAFC" Offset = "1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="140"/>
 			<ColumnDefinition Width="*"/>
@@ -302,12 +322,14 @@
 			</StackPanel>
 
 			<StackPanel x:Name = "StackPanelRegister" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<Button Name = "RegisterButton"
+				<Button
+                Name = "RegisterButton"
                 Content = "Register"
+                Foreground = "White"
                 FontFamily = "Segoe UI"
                 FontSize = "15"
                 Height = "40"
-                Width = "170"
+                Width = "130"
                 />
 			</StackPanel>
 
@@ -325,14 +347,6 @@
 		<StackPanel Grid.Column = "2" Grid.Row = "6" VerticalAlignment = "Bottom">
 
 			<StackPanel x:Name = "StackPanelRun" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<Button Name = "RunButton"
-                Content = "Run"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Height = "40"
-                Width = "60"
-                />
-
 				<ComboBox
                 Name = "RunComboBox"
                 BorderThickness = "2"
@@ -341,19 +355,19 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "500"
+                Width = "495"
                 />
-			</StackPanel>
-			<StackPanel x:Name = "StackPanelDocs" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<Button
-                Name = "DocsButton"
-                Content = "Docs"
+
+				<Button Name = "RunButton"
+                Content = "Run"
+                Foreground = "White"
                 FontSize = "15"
                 FontWeight = "Normal"
                 Height = "40"
-                Width = "60"
+                Width = "65"
                 />
-
+			</StackPanel>
+			<StackPanel x:Name = "StackPanelDocs" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<ComboBox
                 Name = "DocsComboBox"
                 BorderThickness = "2"
@@ -362,7 +376,17 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "500"
+                Width = "495"
+                />
+
+                <Button
+                Name = "DocsButton"
+                Content = "Docs"
+                Foreground = "White"
+                FontSize = "15"
+                FontWeight = "Normal"
+                Height = "40"
+                Width = "65"
                 />
 			</StackPanel>
 		</StackPanel>

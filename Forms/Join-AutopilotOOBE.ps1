@@ -11,7 +11,6 @@ function Show-PowershellWindow() {
 function Hide-PowershellWindow() {
     $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 2)
 }
-
 Hide-PowershellWindow
 #=======================================================================
 #   MahApps.Metro
@@ -59,7 +58,9 @@ function LoadForm {
 #   LoadForm
 #=======================================================================
 LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'Join-AutopilotOOBE.xaml')
-
+#=======================================================================
+#   Resources
+#=======================================================================
 $MDMEventLog = @'
 <ViewerConfig>
 	<QueryConfig>
