@@ -146,15 +146,6 @@ function Start-AutopilotOOBE {
         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
     }
     #=======================================================================
-    #   Support
-    #=======================================================================
-    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
-        $Title = 'Autopilot Registration Information'
-        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
-        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
-        $Run = 'MDMDiagAutopilotTPM'
-    }
-    #=======================================================================
     #   Initialize Global Variable
     #=======================================================================
     $Global:AutopilotOOBE = [ordered]@{
@@ -221,6 +212,11 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
         Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
         Start-Sleep -Seconds 2
+
+        $Title = 'Autopilot Registration Information'
+        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
+        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
+        $Run = 'MDMDiagAutopilotTPM'
     }
     #=======================================================================
     #   Launch
