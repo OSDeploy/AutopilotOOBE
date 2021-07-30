@@ -7,7 +7,7 @@
 RootModule = 'AutopilotOOBE.psm1'
 
 # Version number of his module.
-ModuleVersion = '21.7.29.8'
+ModuleVersion = '21.7.29.9'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

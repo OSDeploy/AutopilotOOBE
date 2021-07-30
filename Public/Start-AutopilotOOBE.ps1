@@ -148,6 +148,12 @@ function Start-AutopilotOOBE {
     #=======================================================================
     #   Initialize Global Variable
     #=======================================================================
+    if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
+        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
+        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
+        $Run = 'MDMDiagAutopilotTPM'
+        $Title = 'Autopilot Registration Information'
+    }
     $Global:AutopilotOOBE = [ordered]@{
         AddToGroup = $AddToGroup
         AddToGroupOptions = $AddToGroupOptions
@@ -212,11 +218,6 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
         Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
         Start-Sleep -Seconds 2
-
-        $Title = 'Autopilot Registration Information'
-        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
-        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
-        $Run = 'MDMDiagAutopilotTPM'
     }
     #=======================================================================
     #   Launch

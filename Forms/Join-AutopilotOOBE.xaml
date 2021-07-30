@@ -339,7 +339,7 @@
                 Content = ""
                 FontFamily = "Segoe UI"
                 FontSize = "17"
-                Foreground = "LightGray"
+                Foreground = "Black"
                 />
 			</StackPanel>
 		</StackPanel>
