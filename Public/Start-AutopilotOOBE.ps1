@@ -187,7 +187,7 @@ function Start-AutopilotOOBE {
 
     if ($env:SystemDrive -eq 'X:') {
         if (!(Test-Path "$ProgramDataOSDeploy")) {New-Item "$ProgramDataOSDeploy" -ItemType Directory -Force | Out-Null}
-        Write-Host -ForegroundColor DarkGray "Exporting Configuration $JsonPath\OSDeploy.AutopilotOOBE.json"
+        Write-Host -ForegroundColor DarkGray "Exporting Configuration $ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
         @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
             if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
         }
