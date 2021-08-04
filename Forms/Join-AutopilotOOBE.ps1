@@ -1,6 +1,6 @@
-#=======================================================================
+#================================================
 #   PowershellWindow Functions
-#=======================================================================
+#================================================
 $Script:showWindowAsync = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
 public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
@@ -12,9 +12,9 @@ function Hide-PowershellWindow() {
     $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 2)
 }
 Hide-PowershellWindow
-#=======================================================================
+#================================================
 #   MahApps.Metro
-#=======================================================================
+#================================================
 # Assign current script directory to a global variable
 $Global:MyScriptDir = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 
@@ -25,9 +25,9 @@ $Global:MyScriptDir = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand
 
 # Set console size and title
 $host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE"
-#=======================================================================
+#================================================
 #   LoadForm
-#=======================================================================
+#================================================
 function LoadForm {
     [CmdletBinding()]
     Param(
@@ -36,7 +36,7 @@ function LoadForm {
     )
 
     # Import the XAML code
-    [xml]$Global:xmlWPF = Get-Content -Path $XamlPath
+    [xml]$Global:XamlCode = Get-Content -Path $XamlPath
 
     # Add WPF and Windows Forms assemblies
     Try {
@@ -47,20 +47,20 @@ function LoadForm {
     }
 
     #Create the XAML reader using a new XML node reader
-    $Global:xamGUI = [Windows.Markup.XamlReader]::Load((new-object System.Xml.XmlNodeReader $xmlWPF))
+    $Global:XamlWindow = [Windows.Markup.XamlReader]::Load((New-Object System.Xml.XmlNodeReader $Global:XamlCode))
 
     #Create hooks to each named object in the XAML
-    $xmlWPF.SelectNodes("//*[@Name]") | foreach {
-        Set-Variable -Name ($_.Name) -Value $xamGUI.FindName($_.Name) -Scope Global
+    $Global:XamlCode.SelectNodes("//*[@Name]") | ForEach-Object {
+        Set-Variable -Name ($_.Name) -Value $Global:XamlWindow.FindName($_.Name) -Scope Global
     }
 }
-#=======================================================================
+#================================================
 #   LoadForm
-#=======================================================================
+#================================================
 LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'Join-AutopilotOOBE.xaml')
-#=======================================================================
+#================================================
 #   Resources
-#=======================================================================
+#================================================
 $MDMEventLog = @'
 <ViewerConfig>
 	<QueryConfig>
@@ -93,9 +93,9 @@ $MDMEventLog = @'
 	</QueryConfig>
 </ViewerConfig>
 '@
-#=======================================================================
+#================================================
 #   Sidebar
-#=======================================================================
+#================================================
 $ModuleVersion = (Get-Module -Name AutopilotOOBE | Sort-Object Version | Select-Object Version -Last 1).Version
 $SidebarModuleVersion.Content = "$ModuleVersion"
 
@@ -130,17 +130,17 @@ $SidebarSerialNumber.Content = $SerialNumber
 
 $BiosVersion = ((Get-CimInstance -ClassName Win32_BIOS).SMBIOSBIOSVersion).Trim()
 $SidebarBiosVersion.Content = "BIOS $BiosVersion"
-#=======================================================================
+#================================================
 #   Parameters
-#=======================================================================
+#================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
-#=======================================================================
+#================================================
 #   Parameter Title
-#=======================================================================
+#================================================
 $TitleMain.Content = $Global:AutopilotOOBE.Title
-#=======================================================================
+#================================================
 #   Windows Version Info
-#=======================================================================
+#================================================
 $Global:GetRegCurrentVersion = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 
 $SubTitleProductName = ($Global:GetRegCurrentVersion).ProductName
@@ -155,9 +155,9 @@ else {
 $SubTitleBuildNumber = "$($Global:GetRegCurrentVersion.CurrentBuild).$($Global:GetRegCurrentVersion.UBR)"
 
 $TitleMinor.Content = "$SubTitleProductName $SubTitleDisplayVersion ($SubTitleBuildNumber)"
-#=======================================================================
+#================================================
 #   Parameter GroupTag
-#=======================================================================
+#================================================
 $Global:AutopilotOOBE.GroupTagOptions | ForEach-Object {
     $GroupTagComboBox.Items.Add($_) | Out-Null
 }
@@ -169,12 +169,12 @@ if ($Global:AutopilotOOBE.GroupTag) {
 if ($Disabled -contains 'GroupTag') {$GroupTagComboBox.IsEnabled = $false}
 
 if ($Hidden -contains 'GroupTag') {
-    $StackPanelGroupTag = $Global:xamGUI.FindName("StackPanelGroupTag")
+    $StackPanelGroupTag = $Global:XamlWindow.FindName("StackPanelGroupTag")
     $StackPanelGroupTag.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter AddToGroup
-#=======================================================================
+#================================================
 $Global:AutopilotOOBE.AddToGroupOptions | ForEach-Object {
     $AddToGroupComboBox.Items.Add($_) | Out-Null
 }
@@ -186,36 +186,36 @@ if ($Global:AutopilotOOBE.AddToGroup) {
 if ($Disabled -contains 'AddToGroup') {$AddToGroupComboBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AddToGroup') {
-    $StackPanelAddToGroup = $Global:xamGUI.FindName("StackPanelAddToGroup")
+    $StackPanelAddToGroup = $Global:XamlWindow.FindName("StackPanelAddToGroup")
     $StackPanelAddToGroup.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter AssignedUser
-#=======================================================================
+#================================================
 $AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
 if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$AssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser}
 
 if ($Disabled -contains 'AssignedUser') {$AssignedUserTextBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AssignedUser') {
-    $StackPanelAssignedUser = $Global:xamGUI.FindName("StackPanelAssignedUser")
+    $StackPanelAssignedUser = $Global:XamlWindow.FindName("StackPanelAssignedUser")
     $StackPanelAssignedUser.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter AssignedComputerName
-#=======================================================================
+#================================================
 $AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
 if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$AssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName}
 
 if ($Disabled -contains 'AssignedComputerName') {$AssignedComputerNameTextBox.IsEnabled = $false}
 
 if ($Hidden -contains 'AssignedComputerName') {
-    $StackPanelAssignedComputerName = $Global:xamGUI.FindName("StackPanelAssignedComputerName")
+    $StackPanelAssignedComputerName = $Global:XamlWindow.FindName("StackPanelAssignedComputerName")
     $StackPanelAssignedComputerName.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter PostAction
-#=======================================================================
+#================================================
 #$AutopilotOOBEParams["PostAction"].Attributes.ValidValues | ForEach-Object {
 #    $PostActionComboBox.Items.Add($_) | Out-Null
 #}
@@ -241,25 +241,25 @@ if ($Global:AutopilotOOBE.PostAction -eq 'GeneralizeShutdown') {$PostActionCombo
 if ($Disabled -contains 'PostAction') {$PostActionComboBox.IsEnabled = $false}
 
 if ($Hidden -contains 'PostAction') {
-    $StackPanelPostAction = $Global:xamGUI.FindName("StackPanelPostAction")
+    $StackPanelPostAction = $Global:XamlWindow.FindName("StackPanelPostAction")
     $StackPanelPostAction.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter Assign
-#=======================================================================
+#================================================
 if ($Global:AutopilotOOBE.Assign -eq $true) {$AssignCheckBox.IsChecked = $true}
 
 if ($Disabled -contains 'Assign') {$AssignCheckBox.IsEnabled = $false}
 
 if ($Hidden -contains 'Assign') {
-    $StackPanelAssign = $Global:xamGUI.FindName("StackPanelAssign")
+    $StackPanelAssign = $Global:XamlWindow.FindName("StackPanelAssign")
     $StackPanelAssign.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Register
-#=======================================================================
+#================================================
 if ($Hidden -contains 'Register') {
-    $StackPanelRegister = $Global:xamGUI.FindName("StackPanelRegister")
+    $StackPanelRegister = $Global:XamlWindow.FindName("StackPanelRegister")
     $StackPanelRegister.Visibility = 'Collapsed'
 
     if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
@@ -308,9 +308,9 @@ if ($Hidden -contains 'Register') {
     TPM Attestation: $TPMAttestation
 "@
 }
-#=======================================================================
+#================================================
 #   Parameter Run
-#=======================================================================
+#================================================
 #$AutopilotOOBEParams["Run"].Attributes.ValidValues | ForEach-Object {
 #    $RunComboBox.Items.Add($_) | Out-Null
 #}
@@ -386,7 +386,7 @@ $RunButton.add_Click( {
         Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Initialize-Tpm -AllowClear -AllowPhysicalPresence;Write-Warning 'You should restart the computer at this time'"
     }
     if ($RunComboBox.SelectedValue -eq 'Get-AutopilotDiagnostics') {
-        $xamGUI.Close()
+        $XamlWindow.Close()
         Show-PowershellWindow
         Install-Script Get-AutopilotDiagnostics -Force -Verbose
         Get-AutopilotDiagnostics -Online
@@ -397,12 +397,12 @@ $RunButton.add_Click( {
 })
 
 if ($Hidden -contains 'Run') {
-    $StackPanelRun = $Global:xamGUI.FindName("StackPanelRun")
+    $StackPanelRun = $Global:XamlWindow.FindName("StackPanelRun")
     $StackPanelRun.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   Parameter Docs
-#=======================================================================
+#================================================
 $DocsComboBox.Items.Add('Windows Autopilot Documentation') | Out-Null
 $DocsComboBox.Items.Add('Windows Autopilot Overview') | Out-Null
 $DocsComboBox.Items.Add('Windows Autopilot User-Driven Mode') | Out-Null
@@ -462,14 +462,14 @@ $DocsButton.add_Click( {
 })
 
 if ($Hidden -contains 'Docs') {
-    $StackPanelDocs = $Global:xamGUI.FindName("StackPanelDocs")
+    $StackPanelDocs = $Global:XamlWindow.FindName("StackPanelDocs")
     $StackPanelDocs.Visibility = 'Collapsed'
 }
-#=======================================================================
+#================================================
 #   RegisterButton
-#=======================================================================
+#================================================
 $RegisterButton.add_Click( {
-    $xamGUI.Close()
+    $XamlWindow.Close()
     Show-PowershellWindow
 
     $Params = @{
@@ -541,8 +541,8 @@ $RegisterButton.add_Click( {
         & "$Global:MyScriptDir\Join-AutopilotOOBE.ps1"
     } #>
 })
-#=======================================================================
+#================================================
 #   ShowDialog
-#=======================================================================
-$xamGUI.ShowDialog() | Out-Null
-#=======================================================================
+#================================================
+$XamlWindow.ShowDialog() | Out-Null
+#================================================

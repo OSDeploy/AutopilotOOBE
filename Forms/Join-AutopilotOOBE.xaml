@@ -33,7 +33,7 @@
                 <!-- Accent and AppTheme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type Window}">
                 <Setter Property="FontFamily" Value="Segoe UI" />
