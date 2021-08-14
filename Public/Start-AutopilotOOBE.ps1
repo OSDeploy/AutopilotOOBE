@@ -248,7 +248,7 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
         Start-Sleep -Seconds 2
-        & "$($MyInvocation.MyCommand.Module.ModuleBase)\Forms\Join-AutopilotOOBE.ps1"
+        & "$($MyInvocation.MyCommand.Module.ModuleBase)\Projects\AutopilotOOBE\MainWindow.ps1"
         #=======================================================================
     }
 }

@@ -1,30 +1,44 @@
 #================================================
-#   PowershellWindow Functions
+#   Window Functions
+#   Minimize Command and PowerShell Windows
 #================================================
 $Script:showWindowAsync = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
 public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
 "@ -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
-function Show-PowershellWindow() {
-    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 10)
+function Hide-CmdWindow() {
+    $CMDProcess = Get-Process -Name cmd -ErrorAction Ignore
+    foreach ($Item in $CMDProcess) {
+        $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $Item.id).MainWindowHandle, 2)
+    }
 }
 function Hide-PowershellWindow() {
     $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 2)
 }
+function Show-PowershellWindow() {
+    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 10)
+}
+Hide-CmdWindow
 Hide-PowershellWindow
 #================================================
-#   MahApps.Metro
+#   Get MyScriptDir
 #================================================
-# Assign current script directory to a global variable
 $Global:MyScriptDir = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
-
-# Load presentationframework and Dlls for the MahApps.Metro theme
+#================================================
+#   Load Assemblies
+#================================================
 [System.Reflection.Assembly]::LoadWithPartialName("presentationframework") | Out-Null
-[System.Reflection.Assembly]::LoadFrom("$Global:MyScriptDir\assembly\MahApps.Metro.dll") | Out-Null
-[System.Reflection.Assembly]::LoadFrom("$Global:MyScriptDir\assembly\System.Windows.Interactivity.dll") | Out-Null
-
-# Set console size and title
-$host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE"
+#[System.Reflection.Assembly]::LoadFrom("$Global:MyScriptDir\assembly\System.Windows.Interactivity.dll") | Out-Null
+#================================================
+#   Set PowerShell Window Title
+#================================================
+#$host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE"
+#================================================
+#   Test-InWinPE
+#================================================
+function Test-InWinPE {
+    return Test-Path -Path Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlset\Control\MiniNT
+}
 #================================================
 #   LoadForm
 #================================================
@@ -57,7 +71,7 @@ function LoadForm {
 #================================================
 #   LoadForm
 #================================================
-LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'Join-AutopilotOOBE.xaml')
+LoadForm -XamlPath (Join-Path $Global:MyScriptDir 'MainWindow.xaml')
 #================================================
 #   Resources
 #================================================
@@ -96,8 +110,12 @@ $MDMEventLog = @'
 #================================================
 #   Sidebar
 #================================================
-$ModuleVersion = (Get-Module -Name AutopilotOOBE | Sort-Object Version | Select-Object Version -Last 1).Version
-$SidebarModuleVersion.Content = "$ModuleVersion"
+if (Test-WebConnection) {
+    $OnlineStatusControl.Background = 'Green'
+}
+else {
+    $OnlineStatusControl.Background = 'Red'
+}
 
 try {
     $Tpm = (Get-CimInstance -Namespace "root\CIMV2\Security\MicrosoftTPM" -ClassName Win32_Tpm).SpecVersion
@@ -116,20 +134,20 @@ else {
     $SidebarTpmVersion.Visibility = "Collapsed"
 }
 
-$SidebarManufacturer.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Manufacturer).Trim()
+$CSManufacturerControl.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Manufacturer).Trim()
 
-if ($SidebarManufacturer.Content -match 'Lenovo') {
-    $SidebarModel.Content = ((Get-CimInstance -ClassName Win32_ComputerSystemProduct).Version).Trim()
+if ($CSManufacturerControl.Content -match 'Lenovo') {
+    $CSModelControl.Content = ((Get-CimInstance -ClassName Win32_ComputerSystemProduct).Version).Trim()
 }
 else {
-    $SidebarModel.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Model).Trim()
+    $CSModelControl.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Model).Trim()
 }
 
 $SerialNumber = ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
-$SidebarSerialNumber.Content = $SerialNumber
+$SerialNumberControl.Content = $SerialNumber
 
 $BiosVersion = ((Get-CimInstance -ClassName Win32_BIOS).SMBIOSBIOSVersion).Trim()
-$SidebarBiosVersion.Content = "BIOS $BiosVersion"
+$BiosVersionControl.Content = "BIOS $BiosVersion"
 #================================================
 #   Parameters
 #================================================
@@ -386,7 +404,7 @@ $RunButton.add_Click( {
         Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Initialize-Tpm -AllowClear -AllowPhysicalPresence;Write-Warning 'You should restart the computer at this time'"
     }
     if ($RunComboBox.SelectedValue -eq 'Get-AutopilotDiagnostics') {
-        $XamlWindow.Close()
+        $Global:XamlWindow.Close()
         Show-PowershellWindow
         Install-Script Get-AutopilotDiagnostics -Force -Verbose
         Get-AutopilotDiagnostics -Online
@@ -469,7 +487,7 @@ if ($Hidden -contains 'Docs') {
 #   RegisterButton
 #================================================
 $RegisterButton.add_Click( {
-    $XamlWindow.Close()
+    $Global:XamlWindow.Close()
     Show-PowershellWindow
 
     $Params = @{
@@ -542,7 +560,12 @@ $RegisterButton.add_Click( {
     } #>
 })
 #================================================
-#   ShowDialog
+#   Customizations
 #================================================
-$XamlWindow.ShowDialog() | Out-Null
+[string]$ModuleVersion = Get-Module -Name AutopilotOOBE | Sort-Object -Property Version | Select-Object -ExpandProperty Version -Last 1
+$Global:XamlWindow.Title = "$ModuleVersion AutopilotOOBE"
+#================================================
+#   Launch
+#================================================
+$Global:XamlWindow.ShowDialog() | Out-Null
 #================================================
