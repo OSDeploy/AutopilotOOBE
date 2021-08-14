@@ -131,7 +131,9 @@ elseif ($Tpm -match '1.2') {
     $SidebarTpmVersion.Background = "Red"
 }
 else {
-    $SidebarTpmVersion.Visibility = "Collapsed"
+    $SidebarTpmVersion.Content = "TPM"
+    $SidebarTpmVersion.Background = "Red"
+    #$SidebarTpmVersion.Visibility = "Collapsed"
 }
 
 $CSManufacturerControl.Content = ((Get-CimInstance -ClassName CIM_ComputerSystem).Manufacturer).Trim()

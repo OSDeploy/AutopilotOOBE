@@ -6,7 +6,7 @@
         x:Name="XamlWindow"
         BorderThickness="0"
         RenderTransformOrigin="0.5,0.5"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="NoResize"
         WindowStartupLocation = "CenterScreen"
         Title="AutopilotOOBE" Height="670" Width="980">
     <Window.Resources>
@@ -122,14 +122,6 @@
         </RadialGradientBrush>
     </Window.Background>
 	<Grid>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint = "0,0" EndPoint = "1,1">
-            <GradientStop Color = "White" Offset = "0.0" />
-            <GradientStop Color = "#EDF1FA" Offset = "0.3" />
-            <GradientStop Color = "#EDF3FE" Offset = "0.7" />
-            <GradientStop Color = "#F7FAFC" Offset = "1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="140"/>
 			<ColumnDefinition Width="*"/>
@@ -148,55 +140,68 @@
 			<RowDefinition Height="10"/>
 		</Grid.RowDefinitions>
 
-
         <Border Grid.Column = "0" Grid.Row = "6" Background = "Transparent"/>
         <Border Grid.Column = "4" Grid.Row = "6" Background = "Transparent"/>
 
 		<StackPanel Grid.Column = "4" Grid.Row = "1" VerticalAlignment = "Top">
-            <Label Name = "OnlineStatusControl"
-            Content = "Internet"
-            FontFamily = "Segoe UI" FontSize = "12"
-            Foreground = "White"
-            HorizontalAlignment = "Right"
-            Padding = "10,1,10,0"
-            Width = "100"
-            />
 		</StackPanel>
 
 		<StackPanel Grid.Column = "4" Grid.Row = "6" VerticalAlignment = "Bottom" HorizontalAlignment = "Right">
 			<Label Name = "CSManufacturerControl"
             Content = ""
-            FontFamily = "Segoe UI" FontSize = "11"
+            FlowDirection="RightToLeft"
+            FontFamily = "Segoe UI"
+            FontSize = "11"
             Foreground = "Black"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "CSModelControl"
             Content = ""
+            FlowDirection="RightToLeft"
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "Black"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "SerialNumberControl"
             Content = ""
+            FlowDirection="RightToLeft"
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "Black"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
 
 			<Label Name = "BiosVersionControl"
             Content = ""
+            FlowDirection="RightToLeft"
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "Black"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
             />
 
             <Label Name = "SidebarTpmVersion"
             Content = ""
+            FlowDirection="RightToLeft"
             FontFamily = "Segoe UI" FontSize = "11"
             Foreground = "White"
+            HorizontalAlignment = "Right"
             Padding = "10,1,10,0"
+            Width = "100"
+            />
+            <Label Name = "OnlineStatusControl"
+            Content = "INTERNET"
+            FlowDirection="RightToLeft"
+            FontFamily = "Segoe UI"
+            FontSize = "11"
+            Foreground = "White"
+            HorizontalAlignment = "Right"
+            Padding = "10,1,10,0"
+            Width = "100"
             />
 		</StackPanel>
 
