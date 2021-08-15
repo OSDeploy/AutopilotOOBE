@@ -1,2 +1,2 @@
 # AutopilotOOBE
-https://www.osdeploy.com/
+https://autopilotoobe.osdeploy.com/
