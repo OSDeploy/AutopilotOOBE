@@ -137,17 +137,16 @@ foreach($x in $vx)
         $SyncClass.SyncHash.Add($cname, $SyncClass.SyncHash."form$($x)".FindName($_.Name)) #add the control directly to the hashtable
     }
 }
-
 ############################
 ## FORMS AND CONTROLS OUTPUT
 ############################
-Write-Host -ForegroundColor Cyan "The following forms were created:"
+<# Write-Host -ForegroundColor Cyan "The following forms were created:"
 $forms | %{ Write-Host -ForegroundColor Yellow "  `$$_"} #output all forms to screen
 if($controls.Count -gt 0){
     Write-Host ""
     Write-Host -ForegroundColor Cyan "The following controls were created:"
     $controls | %{ Write-Host -ForegroundColor Yellow "  `$$_"} #output all named controls to screen
-}
+} #>
 #######################
 ## DISABLE A/V AUTOPLAY
 #######################
@@ -239,41 +238,6 @@ function Start-BackgroundScriptBlock($scriptBlock){
     ) #>
 }
 #================================================
-#   Resources
-#================================================
-$MDMEventLog = @'
-<ViewerConfig>
-	<QueryConfig>
-		<QueryParams>
-			<UserQuery/>
-		</QueryParams>
-		<QueryNode>
-			<Name LanguageNeutralValue="MDMDiagnosticsTool">MDMDiagnosticsTool</Name>
-			<Description>MDMDiagnosticsTool</Description>
-			<SuppressQueryExecutionErrors>1</SuppressQueryExecutionErrors>
-			<QueryList>
-				<Query>
-					<Select Path="Microsoft-Windows-AAD/Operational">*</Select>
-					<Select Path="Microsoft-Windows-AppXDeployment-Server/Operational">*</Select>
-					<Select Path="Microsoft-Windows-AssignedAccess/Admin">*</Select>
-					<Select Path="Microsoft-Windows-AssignedAccess/Operational">*</Select>
-					<Select Path="Microsoft-Windows-AssignedAccessBroker/Admin">*</Select>
-					<Select Path="Microsoft-Windows-AssignedAccessBroker/Operational">*</Select>
-					<Select Path="Microsoft-Windows-Crypto-NCrypt/Operational">*</Select>
-					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin">*</Select>
-					<Select Path="Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Operational">*</Select>
-					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/Autopilot">*</Select>
-					<Select Path="Microsoft-Windows-ModernDeployment-Diagnostics-Provider/ManagementService">*</Select>
-					<Select Path="Microsoft-Windows-Provisioning-Diagnostics-Provider/Admin">*</Select>
-					<Select Path="Microsoft-Windows-Shell-Core/Operational">*</Select>
-					<Select Path="Microsoft-Windows-User Device Registration/Admin">*</Select>
-				</Query>
-			</QueryList>
-		</QueryNode>
-	</QueryConfig>
-</ViewerConfig>
-'@
-#================================================
 #   Sidebar
 #================================================
 if (Test-WebConnection) {
@@ -321,11 +285,11 @@ $formMainWindowControlBiosVersionLabel.Content = "BIOS $BiosVersion"
 #================================================
 $AutopilotOOBEParams = (Get-Command Start-AutopilotOOBE).Parameters
 #================================================
-#   Parameter Title
+#   Heading
 #================================================
 $formMainWindowControlHeading.Content = $Global:AutopilotOOBE.Title
 #================================================
-#   Windows Version Info
+#   SubHeading
 #================================================
 $Global:GetRegCurrentVersion = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 
@@ -342,110 +306,145 @@ $SubTitleBuildNumber = "$($Global:GetRegCurrentVersion.CurrentBuild).$($Global:G
 
 $formMainWindowControlSubHeading.Content = "$SubTitleProductName $SubTitleDisplayVersion ($SubTitleBuildNumber)"
 #================================================
-#   Parameter GroupTag
+#   GroupTag Control
 #================================================
+# Disable the Control
+if ($Disabled -contains 'GroupTag') {
+    $formMainWindowControlGroupTagComboBox.IsEnabled = $false
+}
+
+# Hide the Control
+if ($Hidden -contains 'GroupTag') {
+    $formMainWindowControlGroupTagStackPanel.Visibility = 'Collapsed'
+}
+
+# Populate the ComboBox
 $Global:AutopilotOOBE.GroupTagOptions | ForEach-Object {
     $formMainWindowControlGroupTagComboBox.Items.Add($_) | Out-Null
 }
 
+# Set the ComboBox Default
 if ($Global:AutopilotOOBE.GroupTag) {
     $formMainWindowControlGroupTagComboBox.Text = $Global:AutopilotOOBE.GroupTag
 }
-
-if ($Disabled -contains 'GroupTag') {$formMainWindowControlGroupTagComboBox.IsEnabled = $false}
-
-if ($Hidden -contains 'GroupTag') {
-    #$formMainWindowControlGroupTagStackPanel = $Global:XamlWindow.FindName("GroupTagStackPanel")
-    $formMainWindowControlGroupTagStackPanel.Visibility = 'Collapsed'
+#================================================
+#   AddToGroup Control
+#================================================
+# Disable the Control
+if ($Disabled -contains 'AddToGroup') {
+    $formMainWindowControlAddToGroupComboBox.IsEnabled = $false
 }
-#================================================
-#   Parameter AddToGroup
-#================================================
+
+# Hide the Control
+if ($Hidden -contains 'AddToGroup') {
+    $formMainWindowControlAddToGroupStackPanel.Visibility = 'Collapsed'
+}
+
+# Populate the Control
 $Global:AutopilotOOBE.AddToGroupOptions | ForEach-Object {
     $formMainWindowControlAddToGroupComboBox.Items.Add($_) | Out-Null
 }
 
+# Set the Default
 if ($Global:AutopilotOOBE.AddToGroup) {
     $formMainWindowControlAddToGroupComboBox.Text = $Global:AutopilotOOBE.AddToGroup
 }
-
-if ($Disabled -contains 'AddToGroup') {$formMainWindowControlAddToGroupComboBox.IsEnabled = $false}
-
-if ($Hidden -contains 'AddToGroup') {
-    #$formMainWindowControlAddToGroupStackPanel = $Global:XamlWindow.FindName("AddToGroupStackPanel")
-    $formMainWindowControlAddToGroupStackPanel.Visibility = 'Collapsed'
+#================================================
+#   AssignedUser Control
+#================================================
+# Disable the Control
+if ($Disabled -contains 'AssignedUser') {
+    $formMainWindowControlAssignedUserTextBox.IsEnabled = $false
 }
-#================================================
-#   Parameter AssignedUser
-#================================================
-$formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
-if ($Global:AutopilotOOBE.AssignedUser -gt 0) {$formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser}
 
-if ($Disabled -contains 'AssignedUser') {$formMainWindowControlAssignedUserTextBox.IsEnabled = $false}
-
+# Hide the Control
 if ($Hidden -contains 'AssignedUser') {
-    #$formMainWindowControlAssignedUserStackPanel = $Global:XamlWindow.FindName("AssignedUserStackPanel")
     $formMainWindowControlAssignedUserStackPanel.Visibility = 'Collapsed'
 }
-#================================================
-#   Parameter AssignedComputerName
-#================================================
-$formMainWindowControlAssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
-if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {$formMainWindowControlAssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName}
 
-if ($Disabled -contains 'AssignedComputerName') {$formMainWindowControlAssignedComputerNameTextBox.IsEnabled = $false}
+# Populate the Control
+$formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
+if ($Global:AutopilotOOBE.AssignedUser -gt 0) {
+    $formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser
+}
+#================================================
+#   AssignedComputerName Control
+#================================================
+# Disable the Control
+if ($Disabled -contains 'AssignedComputerName') {
+    $formMainWindowControlAssignedComputerNameTextBox.IsEnabled = $false
+}
 
+# Hide the Control
 if ($Hidden -contains 'AssignedComputerName') {
-    #$formMainWindowControlAssignedComputerNameStackPanel = $Global:XamlWindow.FindName("AssignedComputerNameStackPanel")
     $formMainWindowControlAssignedComputerNameStackPanel.Visibility = 'Collapsed'
 }
-#================================================
-#   Parameter PostAction
-#================================================
-#$AutopilotOOBEParams["PostAction"].Attributes.ValidValues | ForEach-Object {
-#    $formMainWindowControlPostActionComboBox.Items.Add($_) | Out-Null
-#}
-#$formMainWindowControlPostActionComboBox.SelectedValue = $Global:AutopilotOOBE.PostAction
-$formMainWindowControlPostActionComboBox.Items.Add('Quit') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Restart Computer') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Shutdown Computer') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Sysprep /oobe /quit') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Sysprep /oobe /reboot') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Sysprep /oobe /shutdown') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Sysprep /generalize /oobe /reboot') | Out-Null
-$formMainWindowControlPostActionComboBox.Items.Add('Sysprep /generalize /oobe /shutdown') | Out-Null
 
-if ($Global:AutopilotOOBE.PostAction -eq 'Quit') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Quit'}
-if ($Global:AutopilotOOBE.PostAction -eq 'Restart') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Restart Computer'}
-if ($Global:AutopilotOOBE.PostAction -eq 'Shutdown') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Shutdown Computer'}
-if ($Global:AutopilotOOBE.PostAction -eq 'Sysprep') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
-if ($Global:AutopilotOOBE.PostAction -eq 'SysprepReboot') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
-if ($Global:AutopilotOOBE.PostAction -eq 'SysprepShutdown') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
-if ($Global:AutopilotOOBE.PostAction -eq 'GeneralizeReboot') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /reboot'}
-if ($Global:AutopilotOOBE.PostAction -eq 'GeneralizeShutdown') {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /shutdown'}
-
+# Populate the Control
+$formMainWindowControlAssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerNameExample
+if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {
+    $formMainWindowControlAssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName
+}
+#================================================
+#   PostAction Control
+#================================================
+# Disable the Control
 if ($Disabled -contains 'PostAction') {$formMainWindowControlPostActionComboBox.IsEnabled = $false}
 
+# Hide the Control
 if ($Hidden -contains 'PostAction') {
-    #$formMainWindowControlPostActionStackPanel = $Global:XamlWindow.FindName("PostActionStackPanel")
     $formMainWindowControlPostActionStackPanel.Visibility = 'Collapsed'
 }
-#================================================
-#   Parameter Assign
-#================================================
-if ($Global:AutopilotOOBE.Assign -eq $true) {$formMainWindowControlAssignCheckBox.IsChecked = $true}
 
-if ($Disabled -contains 'Assign') {$formMainWindowControlAssignCheckBox.IsEnabled = $false}
+# Values
+$PostActionComboBoxValues = @(
+    'Quit',
+    'Restart Computer',
+    'Shutdown Computer',
+    'Sysprep /oobe /quit',
+    'Sysprep /oobe /reboot',
+    'Sysprep /oobe /shutdown',
+    'Sysprep /generalize /oobe /reboot',
+    'Sysprep /generalize /oobe /shutdown'
+)
 
-if ($Hidden -contains 'Assign') {
-    #$formMainWindowControlAssignStackPanel = $Global:XamlWindow.FindName("AssignStackPanel")
-    $formMainWindowControlAssignStackPanel.Visibility = 'Collapsed'
+# Populate the ComboBox
+$PostActionComboBoxValues | ForEach-Object {
+    $formMainWindowControlPostActionComboBox.Items.Add($_) | Out-Null
+}
+
+# Set the Default
+switch ($Global:AutopilotOOBE.PostAction) {
+    'Quit'                  {$formMainWindowControlPostActionComboBox.SelectedValue = 'Quit'}
+    'Restart'               {$formMainWindowControlPostActionComboBox.SelectedValue = 'Restart Computer'}
+    'Shutdown'              {$formMainWindowControlPostActionComboBox.SelectedValue = 'Shutdown Computer'}
+    'Sysprep'               {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /quit'}
+    'SysprepReboot'         {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
+    'SysprepShutdown'       {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
+    'GeneralizeReboot'      {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /reboot'}
+    'GeneralizeShutdown'    {$formMainWindowControlPostActionComboBox.SelectedValue = 'Sysprep /generalize /oobe /shutdown'}
+    Default                 {$formMainWindowControlPostActionComboBox.SelectedValue = 'Quit'}
 }
 #================================================
-#   Register
+#   Assign CheckBox
 #================================================
+# Disable the Control
+if ($Disabled -contains 'Assign') {$formMainWindowControlAssignCheckBox.IsEnabled = $false}
+
+# Hide the Control
+if ($Hidden -contains 'Assign') {
+    $formMainWindowControlAssignStackPanel.Visibility = 'Collapsed'
+}
+
+# Set the Default
+if ($Global:AutopilotOOBE.Assign -eq $true) {
+    $formMainWindowControlAssignCheckBox.IsChecked = $true
+}
+#================================================
+#   Register Control
+#================================================
+# Hide the Control
 if ($Hidden -contains 'Register') {
-    #$formMainWindowControlRegisterStackPanel = $Global:XamlWindow.FindName("RegisterStackPanel")
     $formMainWindowControlRegisterStackPanel.Visibility = 'Collapsed'
 
     if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
@@ -495,100 +494,102 @@ if ($Hidden -contains 'Register') {
 "@
 }
 #================================================
-#   Run Control
+#   Run Controls
 #================================================
-# Hide the Run StackPanel
+# Hide the Control
 if ($Hidden -contains 'Run') {
     $formMainWindowControlRunStackPanel.Visibility = 'Collapsed'
 }
 
-$RunCommands = @(
+# Values
+$RunComboBoxValues = @(
+    'Restart Computer',
+    'Shutdown Computer',
     'Command Prompt',
     'PowerShell',
     'PowerShell ISE',
+    'Open Event Viewer',
     'Open Windows Explorer',
-    'Open Windows Settings',
-    'Open Network and Wireless Settings',
-    'Restart Computer',
-    'Shutdown Computer',
+    'Show Network and Wireless Settings',
+    'Show Windows Security',
+    'Show Windows Settings',
+    'AutopilotDiagnostics',
+    'AutopilotDiagnostics Online',
+    'MDMDiagnosticsTool -out C:\Temp',
+    'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab',
+    'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab',
+    'TPM Get',
+    'TPM Clear',
+    'TPM Initialize',
     'Sysprep /oobe /quit',
     'Sysprep /oobe /reboot',
     'Sysprep /oobe /shutdown',
-    'Sysprep /audit /reboot',
-    'Event Viewer',
-    'Show Windows Security',
-    'Get-TPM',
-    'Clear-TPM',
-    'Initialize-TPM',
-    'Get-AutopilotDiagnostics',
-    'Get-AutopilotDiagnostics -Online',
-    'MDMDiagnosticsTool -out C:\Temp',
-    'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab',
-    'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'
+    'Sysprep /audit /reboot'
 )
+
 # Populate the ComboBox
-$RunCommands | ForEach-Object {
+$RunComboBoxValues | ForEach-Object {
     $formMainWindowControlRunComboBox.Items.Add($_) | Out-Null
 }
 
-# Set the Run ComboBox Default
+# Set the ComboBox Default
 switch ($Global:AutopilotOOBE.Run) {
-    'CommandPrompt'         {$formMainWindowControlRunComboBox.SelectedValue = 'Command Prompt'}
-    'PowerShell'            {$formMainWindowControlRunComboBox.SelectedValue = 'PowerShell'}
-    'PowerShellISE'         {$formMainWindowControlRunComboBox.SelectedValue = 'PowerShell ISE'}
-    'WindowsExplorer'       {$formMainWindowControlRunComboBox.SelectedValue = 'Open Windows Explorer'}
-    'WindowsSettings'       {$formMainWindowControlRunComboBox.SelectedValue = 'Open Windows Settings'}
-    'NetworkingWireless'    {$formMainWindowControlRunComboBox.SelectedValue = 'Open Network and Wireless Settings'}
-    'Restart'               {$formMainWindowControlRunComboBox.SelectedValue = 'Restart Computer'}
-    'Shutdown'              {$formMainWindowControlRunComboBox.SelectedValue = 'Shutdown Computer'}
-    'Sysprep'               {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /quit'}
-    'SysprepReboot'         {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
-    'SysprepShutdown'       {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
-    'SysprepAudit'          {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /audit /reboot'}
-    'EventViewer'           {$formMainWindowControlRunComboBox.SelectedValue = 'Event Viewer'}
-    'AutopilotDiagnostics'  {$formMainWindowControlRunComboBox.SelectedValue = 'Get-AutopilotDiagnostics'}
-    'AutopilotDiagnosticsOnline'  {$formMainWindowControlRunComboBox.SelectedValue = 'Get-AutopilotDiagnosticsOnline'}
-    'MDMDiag'               {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
-    'MDMDiagAutopilot'      {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
-    'MDMDiagAutopilotTPM'   {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'}
-    Default {}
+    'Restart'                       {$formMainWindowControlRunComboBox.SelectedValue = 'Restart Computer'}
+    'Shutdown'                      {$formMainWindowControlRunComboBox.SelectedValue = 'Shutdown Computer'}
+    'CommandPrompt'                 {$formMainWindowControlRunComboBox.SelectedValue = 'Command Prompt'}
+    'PowerShell'                    {$formMainWindowControlRunComboBox.SelectedValue = 'PowerShell'}
+    'PowerShellISE'                 {$formMainWindowControlRunComboBox.SelectedValue = 'PowerShell ISE'}
+    'EventViewer'                   {$formMainWindowControlRunComboBox.SelectedValue = 'Open Event Viewer'}
+    'NetworkingWireless'            {$formMainWindowControlRunComboBox.SelectedValue = 'Show Network and Wireless Settings'}
+    'WindowsExplorer'               {$formMainWindowControlRunComboBox.SelectedValue = 'Open Windows Explorer'}
+    'WindowsSettings'               {$formMainWindowControlRunComboBox.SelectedValue = 'Show Windows Settings'}
+    'AutopilotDiagnostics'          {$formMainWindowControlRunComboBox.SelectedValue = 'AutopilotDiagnostics'}
+    'AutopilotDiagnosticsOnline'    {$formMainWindowControlRunComboBox.SelectedValue = 'AutopilotDiagnostics Online'}
+    'MDMDiag'                       {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -out C:\Temp'}
+    'MDMDiagAutopilot'              {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'}
+    'MDMDiagAutopilotTPM'           {$formMainWindowControlRunComboBox.SelectedValue = 'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'}
+    'Sysprep'                       {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /quit'}
+    'SysprepReboot'                 {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /reboot'}
+    'SysprepShutdown'               {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /oobe /shutdown'}
+    'SysprepAudit'                  {$formMainWindowControlRunComboBox.SelectedValue = 'Sysprep /audit /reboot'}
+    Default                         {$formMainWindowControlRunComboBox.SelectedValue = 'PowerShell'}
 }
 
 # Add Click
 $formMainWindowControlRunButton.add_Click( {
     switch ($formMainWindowControlRunComboBox.SelectedValue) {
+        'Restart Computer'                  {Restart-Computer}
+        'Shutdown Computer'                 {Stop-Computer}
         'Command Prompt'                    {Start-Process Cmd.exe}
         'PowerShell'                        {Start-Process PowerShell.exe -ArgumentList "-Nologo"}
         'PowerShell ISE'                    {Start-Process PowerShell_ISE.exe}
+        'Open Event Viewer'                 {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -Window Minimized',"-Command Invoke-AutopilotOOBERunBox EventViewer"}
         'Open Windows Explorer'             {Start-Process Explorer.exe}
-        'Open Windows Settings'             {Start-Process ms-settings:}
-        'Open Network and Wireless Settings'{Start-Process ms-availablenetworks:}
-        'Restart Computer'                  {Restart-Computer}
-        'Shutdown Computer'                 {Stop-Computer}
+        'Show Network and Wireless Settings'{Start-Process ms-availablenetworks:}
+        'Show Windows Security'             {Start-Process PowerShell.exe -ArgumentList "Add-AppxPackage -Register -DisableDevelopmentMode 'C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\AppXManifest.xml';start windowsdefender:"}
+        'Show Windows Settings'             {Start-Process ms-settings:}
+        'AutopilotDiagnostics'              {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox AutopilotDiagnostics"}
+        'AutopilotDiagnostics Online'       {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox AutopilotDiagnosticsOnline"}
+        'MDMDiagnosticsTool -out C:\Temp'                                       {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
+        'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'         {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
+        'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'  {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
+        'TPM Get'                           {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox GetTpm"}
+        'TPM Clear'                         {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox ClearTpm"}
+        'TPM Initialize'                    {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox InitializeTpm"}
         'Sysprep /oobe /quit'               {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit"}
         'Sysprep /oobe /reboot'             {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot"}
         'Sysprep /oobe /shutdown'           {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown"}
         'Sysprep /audit /reboot'            {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/audit", "/reboot"}
-        'Get-AutopilotDiagnostics'          {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox Diagnostics"}
-        'Get-AutopilotDiagnostics -Online'  {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox DiagnosticsOnline"}
-        'Get-TPM'                           {Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Get-TPM"}
-        'Clear-TPM'                         {Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Clear-TPM;Write-Warning 'You should restart the computer at this time'"}
-        'Initialize-TPM'                    {Start-Process PowerShell.exe -ArgumentList "-NoExit -Command Initialize-Tpm -AllowClear -AllowPhysicalPresence;Write-Warning 'You should restart the computer at this time'"}
-        'MDMDiagnosticsTool -out C:\Temp'   {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
-        'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'         {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
-        'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\Autopilot.cab'     {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
-        'Event Viewer'                      {
-                                                $MDMEventLog | Set-Content -Path "$env:ProgramData\Microsoft\Event Viewer\Views\MDMDiagnosticsTool.xml"
-                                                Restart-Service -Name EventLog -Force -ErrorAction Ignore
-                                                Show-EventLog
-                                            }
-        'Show Windows Security'             {Start-Process PowerShell.exe -ArgumentList "Add-AppxPackage -Register -DisableDevelopmentMode 'C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\AppXManifest.xml';start windowsdefender:"}
         Default {}
     }
 })
 #================================================
 #   Parameter Docs
 #================================================
+if ($Hidden -contains 'Docs') {
+    $formMainWindowControlDocsStackPanel.Visibility = 'Collapsed'
+}
+
 $formMainWindowControlDocsComboBox.Items.Add('Windows Autopilot Documentation') | Out-Null
 $formMainWindowControlDocsComboBox.Items.Add('Windows Autopilot Overview') | Out-Null
 $formMainWindowControlDocsComboBox.Items.Add('Windows Autopilot User-Driven Mode') | Out-Null
@@ -605,14 +606,12 @@ $formMainWindowControlDocsComboBox.Items.Add('Sysprep Overview') | Out-Null
 $formMainWindowControlDocsComboBox.Items.Add('Sysprep Audit Mode Overview') | Out-Null
 $formMainWindowControlDocsComboBox.Items.Add('Sysprep Command-Line Options') | Out-Null
 
-
 if ($Hidden -contains 'Register') {
     $formMainWindowControlDocsComboBox.SelectedValue = 'Troubleshoot Autopilot OOBE Issues'
 }
 else {
     $formMainWindowControlDocsComboBox.SelectedValue = 'Windows Autopilot Documentation'
 }
-
 
 if ($Global:AutopilotOOBE.Docs) {
     $formMainWindowControlDocsComboBox.Items.Add($Global:AutopilotOOBE.Docs) | Out-Null
@@ -646,11 +645,6 @@ $formMainWindowControlDocsButton.add_Click( {
         }
     }
 })
-
-if ($Hidden -contains 'Docs') {
-    #$formMainWindowControlDocsStackPanel = $Global:XamlWindow.FindName("DocsStackPanel")
-    $formMainWindowControlDocsStackPanel.Visibility = 'Collapsed'
-}
 #================================================
 #   RegisterButton
 #================================================
