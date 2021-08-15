@@ -1,5 +1,7 @@
 # Cache objects
+Debug/
 packer_cache/
+.vs/
 
 # For built boxes
 *.box
