@@ -96,6 +96,10 @@ function Start-AutopilotOOBE {
         Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     }
     #=======================================================================
+    #   WinOS Console Disable Line Wrap
+    #=======================================================================
+    reg add HKCU\Console /v LineWrap /t REG_DWORD /d 0 /f
+    #=======================================================================
     #   Custom Profile Sample Variables
     #=======================================================================
     if ($CustomProfile -eq 'Sample') {
