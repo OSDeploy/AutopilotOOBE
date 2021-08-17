@@ -660,12 +660,12 @@ $formMainWindowControlRegisterButton.add_Click( {
         $Params.Assign = $true
     }
 
-    if ($AddToGroupComboBox.Text -gt 0) {
-        $Params.AddToGroup = $AddToGroupComboBox.Text
+    if ($formMainWindowControlAddToGroupComboBox.Text -gt 0) {
+        $Params.AddToGroup = $formMainWindowControlAddToGroupComboBox.Text
     }
 
-    if ($GroupTagComboBox.Text -gt 0) {
-        $Params.GroupTag = $GroupTagComboBox.Text
+    if ($formMainWindowControlGroupTagComboBox.Text -gt 0) {
+        $Params.GroupTag = $formMainWindowControlGroupTagComboBox.Text
     }
 
     if (($formMainWindowControlAssignedUserTextBox.Text -gt 0) -and ($formMainWindowControlAssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
