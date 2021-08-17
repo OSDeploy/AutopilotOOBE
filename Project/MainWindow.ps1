@@ -563,19 +563,19 @@ $formMainWindowControlRunButton.add_Click( {
         'Command Prompt'                    {Start-Process Cmd.exe}
         'PowerShell'                        {Start-Process PowerShell.exe -ArgumentList "-Nologo"}
         'PowerShell ISE'                    {Start-Process PowerShell_ISE.exe}
-        'Open Event Viewer'                 {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -Window Minimized',"-Command Invoke-AutopilotOOBERunBox EventViewer"}
+        'Open Event Viewer'                 {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -Window Minimized',"-Command Invoke-AutopilotOOBEruncommand EventViewer"}
         'Open Windows Explorer'             {Start-Process Explorer.exe}
         'Show Network and Wireless Settings'{Start-Process ms-availablenetworks:}
         'Show Windows Security'             {Start-Process PowerShell.exe -ArgumentList "Add-AppxPackage -Register -DisableDevelopmentMode 'C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\AppXManifest.xml';start windowsdefender:"}
         'Show Windows Settings'             {Start-Process ms-settings:}
-        'AutopilotDiagnostics'              {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox AutopilotDiagnostics"}
-        'AutopilotDiagnostics Online'       {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox AutopilotDiagnosticsOnline"}
+        'AutopilotDiagnostics'              {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand AutopilotDiagnostics"}
+        'AutopilotDiagnostics Online'       {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand AutopilotDiagnosticsOnline"}
         'MDMDiagnosticsTool -out C:\Temp'                                       {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
         'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'         {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
         'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'  {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
-        'TPM Get'                           {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox GetTpm"}
-        'TPM Clear'                         {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox ClearTpm"}
-        'TPM Initialize'                    {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBERunBox InitializeTpm"}
+        'TPM Get'                           {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand GetTpm"}
+        'TPM Clear'                         {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand ClearTpm"}
+        'TPM Initialize'                    {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand InitializeTpm"}
         'Sysprep /oobe /quit'               {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/quit"}
         'Sysprep /oobe /reboot'             {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/reboot"}
         'Sysprep /oobe /shutdown'           {Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown"}

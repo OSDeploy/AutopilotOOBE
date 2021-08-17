@@ -201,6 +201,22 @@ function Start-AutopilotOOBE {
         }
         $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
         #=======================================================================
+        #   Watch-AutopilotOOBEeventlog
+        #=======================================================================
+        Write-Host -ForegroundColor DarkGray "========================================================================="
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEeventlog"
+        Write-Host -ForegroundColor DarkCyan 'The EventLog is being monitored for MDM Diagnostic Events in a minimized window'
+        Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
+        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEeventlog"
+        #=======================================================================
+        #   Test-AutopilotOOBEnetwork
+        #=======================================================================
+        Write-Host -ForegroundColor DarkGray "========================================================================="
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotOOBEnetwork"
+        Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
+        Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
+        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotOOBEnetwork"
+        #=======================================================================
         #   Date Time
         #=======================================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
@@ -208,14 +224,7 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
         Get-Date
         Get-TimeZone
-        #=======================================================================
-        #   Test-AutopilotNetwork
-        #=======================================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotNetwork"
-        Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
-        Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view progress'
-        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotNetwork"
+        Start-Sleep -Seconds 5
         #=======================================================================
         #   Test-AutopilotRegistry
         #=======================================================================

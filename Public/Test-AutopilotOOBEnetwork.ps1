@@ -1,18 +1,23 @@
-function Test-AutopilotNetwork {
+function Test-AutopilotOOBEnetwork {
     [CmdletBinding()]
     param ()
-    #=======================================================================
-    #   Header
-    #=======================================================================
-    Write-Host -ForegroundColor DarkGray '========================================================================='
-    Write-Host -ForegroundColor Green 'Test-AutopilotNetwork'
-    #=======================================================================
+    #================================================
+    #   Initialize
+    #================================================
+    $Title = 'Test-AutopilotOOBEnetwork'
+    $host.ui.RawUI.WindowTitle = $Title
+    $host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.size(2000,2000)
+    #================================================
+    #   Temp
+    #================================================
+    if (!(Test-Path "$env:SystemDrive\Temp")) {
+        New-Item -Path "$env:SystemDrive\Temp" -ItemType Directory -Force
+    }
+    #================================================
     #   Transcript
-    #=======================================================================
-    Write-Host -ForegroundColor DarkGray '========================================================================='
-    Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
-    $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Test-AutopilotNetwork.log"
-    Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
+    #================================================
+    $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$Title.log"
+    Start-Transcript -Path (Join-Path "$env:SystemDrive\Temp" $Transcript) -ErrorAction Ignore
     #=======================================================================
     #   Networking Requirements
     #=======================================================================
