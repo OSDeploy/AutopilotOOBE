@@ -150,60 +150,18 @@ function Start-AutopilotOOBE {
         }
     }
     #=======================================================================
-    #   WinOS PSGallery
+    #   WinOS
     #=======================================================================
     if ($env:SystemDrive -ne 'X:') {
+        #=======================================================================
+        #   Set-PSRepository
+        #=======================================================================
         $PSGalleryIP = (Get-PSRepository -Name PSGallery).InstallationPolicy
         if ($PSGalleryIP -eq 'Untrusted') {
             Write-Host -ForegroundColor DarkGray "========================================================================="
             Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
             Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
         }
-    }
-    #=======================================================================
-    #   WinOS Autopilot Registered
-    #=======================================================================
-    if (($env:SystemDrive -ne 'X:') -and ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1)) {
-        $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
-        $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
-        $Run = 'MDMDiagAutopilotTPM'
-        $Title = 'Autopilot Registration Information'
-    }
-    #=======================================================================
-    #   WinPE and WinOS Configuration Json
-    #=======================================================================
-    $Global:AutopilotOOBE = [ordered]@{
-        AddToGroup = $AddToGroup
-        AddToGroupOptions = $AddToGroupOptions
-        Assign = $Assign
-        AssignedUser = $AssignedUser
-        AssignedUserExample = $AssignedUserExample
-        AssignedComputerName = $AssignedComputerName
-        AssignedComputerNameExample = $AssignedComputerNameExample
-        Disabled = $Disabled
-        GroupTag = $GroupTag
-        GroupTagOptions = $GroupTagOptions
-        Hidden = $Hidden
-        PostAction = $PostAction
-        Run = $Run
-        Docs = $Docs
-        Title = $Title
-    }
-
-    if ($env:SystemDrive -eq 'X:') {
-        if (!(Test-Path "$ProgramDataOSDeploy")) {New-Item "$ProgramDataOSDeploy" -ItemType Directory -Force | Out-Null}
-        Write-Host -ForegroundColor DarkGray "Exporting Configuration $ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
-        @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
-            if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
-        }
-        $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json" -Force
-    }
-    else {
-        Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
-        @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
-            if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
-        }
-        $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
         #=======================================================================
         #   Watch-AutopilotOOBEeventlog
         #=======================================================================
@@ -220,15 +178,6 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
         Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotOOBEnetwork"
-        #=======================================================================
-        #   Date Time
-        #=======================================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
-        Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
-        Get-Date
-        Get-TimeZone
-        Start-Sleep -Seconds 5
         #=======================================================================
         #   Test-AutopilotRegistry
         #=======================================================================
@@ -255,7 +204,55 @@ function Start-AutopilotOOBE {
             Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
             Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
             Start-Sleep -Seconds 2
+            $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
+            $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
+            $Run = 'MDMDiagAutopilotTPM'
+            $Title = 'Autopilot Registration Information'
         }
+        #=======================================================================
+        #   Date Time
+        #=======================================================================
+        Write-Host -ForegroundColor DarkGray "========================================================================="
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
+        Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
+        Get-Date
+        Get-TimeZone
+        Start-Sleep -Seconds 5
+    }
+    #=======================================================================
+    #   WinPE and WinOS Configuration Json
+    #=======================================================================
+    $Global:AutopilotOOBE = [ordered]@{
+        AddToGroup = $AddToGroup
+        AddToGroupOptions = $AddToGroupOptions
+        Assign = $Assign
+        AssignedUser = $AssignedUser
+        AssignedUserExample = $AssignedUserExample
+        AssignedComputerName = $AssignedComputerName
+        AssignedComputerNameExample = $AssignedComputerNameExample
+        Disabled = $Disabled
+        GroupTag = $GroupTag
+        GroupTagOptions = $GroupTagOptions
+        Hidden = $Hidden
+        PostAction = $PostAction
+        Run = $Run
+        Docs = $Docs
+        Title = $Title
+    }
+    if ($env:SystemDrive -eq 'X:') {
+        if (!(Test-Path "$ProgramDataOSDeploy")) {New-Item "$ProgramDataOSDeploy" -ItemType Directory -Force | Out-Null}
+        Write-Host -ForegroundColor DarkGray "Exporting Configuration $ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
+        @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
+            if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
+        }
+        $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json" -Force
+    }
+    else {
+        Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
+        @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
+            if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
+        }
+        $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
         #=======================================================================
         #   Launch
         #=======================================================================
