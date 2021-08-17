@@ -124,11 +124,11 @@
     </Window.Background>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="140"/>
+			<ColumnDefinition Width="170"/>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="600"/>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="140"/>
+			<ColumnDefinition Width="170"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
@@ -147,7 +147,7 @@
 		<StackPanel Grid.Column = "4" Grid.Row = "1" VerticalAlignment = "Top">
 		</StackPanel>
 
-		<StackPanel Grid.Column = "4" Grid.Row = "6" VerticalAlignment = "Bottom" HorizontalAlignment = "Right">
+		<StackPanel Grid.Column = "4" Grid.ColumnSpan="2" Grid.Row = "6" VerticalAlignment = "Bottom" HorizontalAlignment = "Right">
 			<Label Name = "CSManufacturerControl"
             Content = "Computer Manufacturer"
             FlowDirection="RightToLeft"
@@ -380,7 +380,7 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "495"
+                Width = "520"
                 />
 
 				<Button Name = "RunButton"
@@ -401,7 +401,7 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "495"
+                Width = "520"
                 />
 
                 <Button
