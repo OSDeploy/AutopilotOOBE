@@ -92,7 +92,7 @@ function Start-AutopilotOOBE {
     if ($env:SystemDrive -ne 'X:') {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
-        $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
+        $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Start-AutopilotOOBE.log"
         Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
     }
     #=======================================================================
@@ -163,13 +163,13 @@ function Start-AutopilotOOBE {
             Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
         }
         #=======================================================================
-        #   Watch-AutopilotOOBEeventlog
+        #   Watch-AutopilotOOBEevents
         #=======================================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEeventlog"
+        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEevents"
         Write-Host -ForegroundColor DarkCyan 'The EventLog is being monitored for MDM Diagnostic Events in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
-        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEeventlog"
+        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEevents -Denoise"
         #=======================================================================
         #   Test-AutopilotOOBEnetwork
         #=======================================================================

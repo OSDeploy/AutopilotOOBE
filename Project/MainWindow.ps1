@@ -676,6 +676,9 @@ $formMainWindowControlRegisterButton.add_Click( {
         $Params.AssignedComputerName = $formMainWindowControlAssignedComputerNameTextBox.Text
     }
 
+    $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
+    Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
+
     Write-Host -ForegroundColor Cyan "Install-Script Get-WindowsAutoPilotInfo"
     Start-Sleep -Seconds 3
     Install-Script Get-WindowsAutoPilotInfo -Force -Verbose
