@@ -689,7 +689,6 @@ $formMainWindowControlRegisterButton.add_Click( {
     Start-Sleep -Seconds 3
     Get-WindowsAutoPilotInfo @Params
 
-
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}
 
@@ -719,10 +718,6 @@ $formMainWindowControlRegisterButton.add_Click( {
             Start-Process "$env:SystemRoot\System32\Sysprep\Sysprep.exe" -ArgumentList "/oobe", "/shutdown" -Wait
         }
     }
-
-<#     if ($formMainWindowControlPostActionComboBox.SelectedValue -match 'None') {
-        & "$Global:MyScriptDir\Join-AutopilotOOBE.ps1"
-    } #>
 })
 #================================================
 #   Customizations

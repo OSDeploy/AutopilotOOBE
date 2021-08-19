@@ -134,7 +134,7 @@ function Start-AutopilotOOBE {
     if (Test-Path $JsonPath) {
         Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
-        $ImportAutopilotOOBE = Get-Content -Raw -Path $JsonPath | ConvertFrom-Json
+        $ImportAutopilotOOBE = Get-Content -Full -Path $JsonPath | ConvertFrom-Json
     
         $ImportAutopilotOOBE.PSObject.Properties | ForEach-Object {
             if ($_.Value -match 'IsPresent=True') {
@@ -169,7 +169,7 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEevents"
         Write-Host -ForegroundColor DarkCyan 'The EventLog is being monitored for MDM Diagnostic Events in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
-        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEevents -Denoise"
+        Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEevents"
         #=======================================================================
         #   Test-AutopilotOOBEnetwork
         #=======================================================================

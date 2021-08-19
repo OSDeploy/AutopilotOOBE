@@ -1,0 +1,16 @@
+{
+    "Assign":  {
+                   "IsPresent":  true
+               },
+    "AssignedUserExample":  "someone@example.com",
+    "AssignedComputerNameExample":  "Azure AD Join Only",
+    "Hidden":  [
+                   "AddToGroup",
+                   "AssignedComputerName",
+                   "GroupTag",
+                   "AssignedUser"
+               ],
+    "PostAction":  "Restart",
+    "Run":  "NetworkingWireless",
+    "Title":  "Brasfield \u0026 Gorrie Autopilot Registration"
+}

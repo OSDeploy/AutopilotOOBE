@@ -7,6 +7,8 @@ function Test-AutopilotOOBEnetwork {
     $Title = 'Test-AutopilotOOBEnetwork'
     $host.ui.RawUI.WindowTitle = $Title
     $host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.size(2000,2000)
+    $host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
+    Clear-Host
     #================================================
     #   Temp
     #================================================
