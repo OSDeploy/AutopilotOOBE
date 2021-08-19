@@ -167,7 +167,7 @@
 			<Label Name = "SerialNumberLabel"
             Content = "Serial Number"
             FlowDirection="RightToLeft"
-            FontFamily = "Segoe UI" FontSize = "11"
+            FontFamily = "Segoe UI" FontSize = "10"
             Foreground = "Black"
             HorizontalAlignment = "Right"
             Padding = "5,1,5,0"

@@ -131,10 +131,11 @@ function Watch-AutopilotOOBEevents {
             #================================================
             #   Get-WinEvent NewResults
             #================================================
+            $NewResults = @()
             $NewResults = Get-WinEvent -FilterHashtable $FilterHashtable -ErrorAction Ignore | Sort-Object TimeCreated | Where-Object {$_.Id -notin $ExcludeEventId} | Where-Object {$_.TimeCreated -notin $Results.TimeCreated}
             if ($NewResults) {
-                $Results += $NewResults
-                $Results | Export-Clixml -Path $Clixml
+                [array]$Results += [array]$NewResults
+                [array]$Results | Export-Clixml -Path $Clixml
             }
             $NewResults = $NewResults | Select-Object TimeCreated,LevelDisplayName,LogName,Id, @{Name='Message';Expression={ ($_.Message -Split '\n')[0]}}
             #================================================
