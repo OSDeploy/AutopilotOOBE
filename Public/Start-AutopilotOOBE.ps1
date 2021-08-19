@@ -134,7 +134,7 @@ function Start-AutopilotOOBE {
     if (Test-Path $JsonPath) {
         Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
-        $ImportAutopilotOOBE = Get-Content -Full -Path $JsonPath | ConvertFrom-Json
+        $ImportAutopilotOOBE = Get-Content -Raw -Path $JsonPath | ConvertFrom-Json
     
         $ImportAutopilotOOBE.PSObject.Properties | ForEach-Object {
             if ($_.Value -match 'IsPresent=True') {
