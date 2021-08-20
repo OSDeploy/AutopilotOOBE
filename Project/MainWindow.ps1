@@ -728,9 +728,9 @@ $formMainWindowControlRegisterButton.add_Click( {
 
     if ((Get-Process -Name powershell -ErrorAction Ignore).MainWindowTitle -match 'Running Start-OOBEDeploy') {
         Write-Warning "Waiting on OOBEDeploy to finish"
-        Break
+        Start-Sleep -Seconds 10
+        #Break
     }
-
 
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}

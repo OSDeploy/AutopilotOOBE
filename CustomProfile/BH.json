@@ -14,7 +14,7 @@
                    "AssignedComputerName",
                    "AssignedUser"
                ],
-    "PostAction":  "Quit",
+    "PostAction":  "Restart",
     "Run":  "NetworkingWireless",
     "Title":  "Baker Hughes Autopilot Registration"
 }
