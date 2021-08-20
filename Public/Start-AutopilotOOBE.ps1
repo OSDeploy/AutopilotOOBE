@@ -94,6 +94,7 @@ function Start-AutopilotOOBE {
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
         $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Start-AutopilotOOBE.log"
         Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
+        $host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE $env:SystemRoot\Temp\$Transcript"
     }
     #=======================================================================
     #   WinOS Console Disable Line Wrap
@@ -218,6 +219,13 @@ function Start-AutopilotOOBE {
         Get-Date
         Get-TimeZone
         Start-Sleep -Seconds 5
+        #================================================
+        #   RegisterButton
+        #================================================
+        if ($env:UserName -ne 'defaultuser0') {
+            Write-Warning 'The register button is disabled when the UserName is not defaultuser0'
+            Start-Sleep -Seconds 5
+        }
     }
     #=======================================================================
     #   WinPE and WinOS Configuration Json

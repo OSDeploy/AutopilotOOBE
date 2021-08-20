@@ -238,6 +238,30 @@ function Start-BackgroundScriptBlock($scriptBlock){
     ) #>
 }
 #================================================
+#   Customizations
+#================================================
+[string]$ModuleVersion = Get-Module -Name AutopilotOOBE | Sort-Object -Property Version | Select-Object -ExpandProperty Version -Last 1
+#================================================
+#   Window Functions
+#   Minimize Command and PowerShell Windows
+#================================================
+$Script:showWindowAsync = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+"@ -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
+function Hide-CmdWindow() {
+    $CMDProcess = Get-Process -Name cmd -ErrorAction Ignore
+    foreach ($Item in $CMDProcess) {
+        $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $Item.id).MainWindowHandle, 2)
+    }
+}
+function Hide-PowershellWindow() {
+    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 2)
+}
+function Show-PowershellWindow() {
+    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 10)
+}
+#================================================
 #   Sidebar
 #================================================
 if (Test-WebConnection) {
@@ -449,9 +473,11 @@ if ($Hidden -contains 'Register') {
 
     if ($Global:RegAutoPilot.CloudAssignedForcedEnrollment -eq 1) {
         $CloudAssignedForcedEnrollment = 'Yes'
+        $formMainWindow.Title = "AutopilotOOBE $ModuleVersion : Quit to OOBE"
     }
     else {
         $CloudAssignedForcedEnrollment = 'No'
+        #$formMainWindow.Title = "AutopilotOOBE $ModuleVersion Device Not Registered"
     }
 
     if ($Global:RegAutoPilot.IsDevicePersonalized -eq 1) {
@@ -492,6 +518,9 @@ if ($Hidden -contains 'Register') {
     Telemetry Level: $($Global:RegAutoPilot.CloudAssignedTelemetryLevel)
     TPM Attestation: $TPMAttestation
 "@
+}
+else {
+    $formMainWindow.Title = "AutopilotOOBE $ModuleVersion : Register Device"
 }
 #================================================
 #   Run Controls
@@ -648,6 +677,10 @@ $formMainWindowControlDocsButton.add_Click( {
 #================================================
 #   RegisterButton
 #================================================
+if ($env:UserName -ne 'defaultuser0') {
+    $formMainWindowControlRegisterButton.IsEnabled = $false
+}
+
 $formMainWindowControlRegisterButton.add_Click( {
     $formMainWindow.Close()
     Show-PowershellWindow
@@ -687,7 +720,17 @@ $formMainWindowControlRegisterButton.add_Click( {
     Write-Host -ForegroundColor Cyan "Get-WindowsAutoPilotInfo @Params"
 
     Start-Sleep -Seconds 3
+    $formMainWindow.Title = "AutopilotOOBE $ModuleVersion : Registering Device"
     Get-WindowsAutoPilotInfo @Params
+    $formMainWindow.Title = "AutopilotOOBE $ModuleVersion : Restart Device"
+
+    $PowerShellWindows = Get-Process -Name powershell -ErrorAction Ignore
+
+    if ((Get-Process -Name powershell -ErrorAction Ignore).MainWindowTitle -match 'Running Start-OOBEDeploy') {
+        Write-Warning "Waiting on OOBEDeploy to finish"
+        Break
+    }
+
 
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Shutdown Computer') {Stop-Computer}
@@ -720,30 +763,8 @@ $formMainWindowControlRegisterButton.add_Click( {
     }
 })
 #================================================
-#   Customizations
+#   Hide Windows
 #================================================
-[string]$ModuleVersion = Get-Module -Name AutopilotOOBE | Sort-Object -Property Version | Select-Object -ExpandProperty Version -Last 1
-$formMainWindow.Title = "$ModuleVersion AutopilotOOBE"
-#================================================
-#   Window Functions
-#   Minimize Command and PowerShell Windows
-#================================================
-$Script:showWindowAsync = Add-Type -MemberDefinition @"
-[DllImport("user32.dll")]
-public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-"@ -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
-function Hide-CmdWindow() {
-    $CMDProcess = Get-Process -Name cmd -ErrorAction Ignore
-    foreach ($Item in $CMDProcess) {
-        $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $Item.id).MainWindowHandle, 2)
-    }
-}
-function Hide-PowershellWindow() {
-    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 2)
-}
-function Show-PowershellWindow() {
-    $null = $showWindowAsync::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 10)
-}
 Hide-CmdWindow
 Hide-PowershellWindow
 ########################

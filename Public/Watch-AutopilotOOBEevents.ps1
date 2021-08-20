@@ -22,6 +22,7 @@ function Watch-AutopilotOOBEevents {
     #================================================
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$Title.log"
     Start-Transcript -Path (Join-Path "$env:SystemDrive\Temp" $Transcript) -ErrorAction Ignore
+    $host.ui.RawUI.WindowTitle = "$Title $env:SystemDrive\Temp\$Transcript"
     #================================================
     #   Main Variables
     #================================================

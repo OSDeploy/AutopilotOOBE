@@ -20,6 +20,7 @@ function Test-AutopilotOOBEnetwork {
     #================================================
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$Title.log"
     Start-Transcript -Path (Join-Path "$env:SystemDrive\Temp" $Transcript) -ErrorAction Ignore
+    $host.ui.RawUI.WindowTitle = "$Title $env:SystemDrive\Temp\$Transcript"
     #=======================================================================
     #   Networking Requirements
     #=======================================================================
@@ -372,7 +373,5 @@ function Test-AutopilotOOBEnetwork {
     #=======================================================================
     #   Complete
     #=======================================================================
-    Write-Host -ForegroundColor DarkGray '========================================================================='
     $Global:ProgressPreference = 'Continue'
-    Stop-Transcript
 }
