@@ -21,17 +21,17 @@ function Test-AutopilotOOBEnetwork {
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-$Title.log"
     Start-Transcript -Path (Join-Path "$env:SystemDrive\Temp" $Transcript) -ErrorAction Ignore
     $host.ui.RawUI.WindowTitle = "$Title $env:SystemDrive\Temp\$Transcript"
-    #=======================================================================
+    #================================================
     #   Networking Requirements
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test HTTPS Networking Requirements"
     Write-Host -ForegroundColor DarkGray "https://docs.microsoft.com/en-us/mem/autopilot/networking-requirements"
 
     $Global:ProgressPreference = 'SilentlyContinue'
-    #=======================================================================
+    #================================================
     #   Microsoft NCSI Connect Test
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan 'Microsoft NCSI Connect Test'
 
@@ -51,9 +51,9 @@ function Test-AutopilotOOBEnetwork {
             Write-Host -ForegroundColor Yellow "FAIL: $Uri"
         }
     }
-    #=======================================================================
+    #================================================
     #   PowerShell Gallery
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "PowerShell Gallery"
 
@@ -74,9 +74,9 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Windows Autopilot Deployment Service
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Windows Autopilot Deployment Service"
 
@@ -101,10 +101,10 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Windows Activation
     #   https://support.microsoft.com/en-us/topic/windows-activation-or-validation-fails-with-error-code-0x8004fe33-a9afe65e-230b-c1ed-3414-39acd7fddf52
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan 'Windows Activation'
 
@@ -155,10 +155,10 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Azure Active Directory | Office 365 IP Address and URL web service
     #   https://docs.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-ip-web-service?view=o365-worldwide
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Office 365 IP Address and URL Web Service"
 
@@ -242,11 +242,11 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Intune
     #   https://docs.microsoft.com/en-us/mem/intune/fundamentals/network-bandwidth-use
     #   https://docs.microsoft.com/en-us/mem/intune/fundamentals/intune-endpoints#access-for-managed-devices
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Intune Access for managed devices"
 
@@ -279,11 +279,11 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Intune
     #   https://docs.microsoft.com/en-us/mem/intune/fundamentals/network-bandwidth-use
     #   https://docs.microsoft.com/en-us/mem/intune/fundamentals/intune-endpoints#network-requirements-for-powershell-scripts-and-win32-apps
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Intune Network requirements for PowerShell scripts and Win32 apps"
 
@@ -315,10 +315,10 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Windows Update
     #   https://docs.microsoft.com/en-US/windows/deployment/update/windows-update-troubleshooting
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Windows Update"
 
@@ -343,9 +343,9 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Autopilot self-Deploying mode and Autopilot pre-provisioning
-    #=======================================================================
+    #================================================
     Write-Host -ForegroundColor DarkGray '========================================================================='
     Write-Host -ForegroundColor Cyan "Autopilot self-Deploying mode and Autopilot pre-provisioning"
 
@@ -370,8 +370,8 @@ function Test-AutopilotOOBEnetwork {
             finally {}
         }
     }
-    #=======================================================================
+    #================================================
     #   Complete
-    #=======================================================================
+    #================================================
     $Global:ProgressPreference = 'Continue'
 }

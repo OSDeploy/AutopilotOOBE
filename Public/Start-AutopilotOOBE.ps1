@@ -71,9 +71,9 @@ function Start-AutopilotOOBE {
         [string]$Docs,
         [string]$Title = 'Autopilot Manual Registration'
     )
-    #=======================================================================
+    #================================================
     #   WinPE and WinOS Start
-    #=======================================================================
+    #================================================
     if ($env:SystemDrive -eq 'X:') {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Green "Start-AutopilotOOBE in WinPE"
@@ -86,9 +86,9 @@ function Start-AutopilotOOBE {
         $ProgramDataOSDeploy = "$env:ProgramData\OSDeploy"
         $JsonPath = "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
     }
-    #=======================================================================
+    #================================================
     #   WinOS Transcript
-    #=======================================================================
+    #================================================
     if ($env:SystemDrive -ne 'X:') {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
@@ -96,13 +96,13 @@ function Start-AutopilotOOBE {
         Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
         $host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE $env:SystemRoot\Temp\$Transcript"
     }
-    #=======================================================================
+    #================================================
     #   WinOS Console Disable Line Wrap
-    #=======================================================================
+    #================================================
     reg add HKCU\Console /v LineWrap /t REG_DWORD /d 0 /f
-    #=======================================================================
+    #================================================
     #   Custom Profile Sample Variables
-    #=======================================================================
+    #================================================
     if ($CustomProfile -eq 'Sample') {
         $Title = 'Sample Autopilot Registration'
         $AddToGroup = 'Administrators'
@@ -114,9 +114,9 @@ function Start-AutopilotOOBE {
         $Docs = 'https://www.osdeploy.com/'
         $Hidden = 'GroupTag'
     }
-    #=======================================================================
+    #================================================
     #   Custom Profile
-    #=======================================================================
+    #================================================
     if ($CustomProfile) {
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
@@ -129,9 +129,9 @@ function Start-AutopilotOOBE {
             Copy-Item -Path $CustomProfileJson.FullName -Destination $JsonPath -Force -ErrorAction Ignore
         }
     }
-    #=======================================================================
+    #================================================
     #   Import Json
-    #=======================================================================
+    #================================================
     if (Test-Path $JsonPath) {
         Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
@@ -150,38 +150,38 @@ function Start-AutopilotOOBE {
             Set-Variable -Name $_.Name -Value $_.Value -Force
         }
     }
-    #=======================================================================
+    #================================================
     #   WinOS
-    #=======================================================================
+    #================================================
     if ($env:SystemDrive -ne 'X:') {
-        #=======================================================================
+        #================================================
         #   Set-PSRepository
-        #=======================================================================
+        #================================================
         $PSGalleryIP = (Get-PSRepository -Name PSGallery).InstallationPolicy
         if ($PSGalleryIP -eq 'Untrusted') {
             Write-Host -ForegroundColor DarkGray "========================================================================="
             Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
             Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
         }
-        #=======================================================================
+        #================================================
         #   Watch-AutopilotOOBEevents
-        #=======================================================================
+        #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEevents"
         Write-Host -ForegroundColor DarkCyan 'The EventLog is being monitored for MDM Diagnostic Events in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
         Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEevents"
-        #=======================================================================
+        #================================================
         #   Test-AutopilotOOBEnetwork
-        #=======================================================================
+        #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotOOBEnetwork"
         Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
         Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotOOBEnetwork"
-        #=======================================================================
+        #================================================
         #   Test-AutopilotRegistry
-        #=======================================================================
+        #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
         Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
@@ -210,9 +210,9 @@ function Start-AutopilotOOBE {
             $Run = 'MDMDiagAutopilotTPM'
             $Title = 'Autopilot Registration Information'
         }
-        #=======================================================================
+        #================================================
         #   Date Time
-        #=======================================================================
+        #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
         Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
@@ -227,9 +227,9 @@ function Start-AutopilotOOBE {
             Start-Sleep -Seconds 5
         }
     }
-    #=======================================================================
+    #================================================
     #   WinPE and WinOS Configuration Json
-    #=======================================================================
+    #================================================
     $Global:AutopilotOOBE = [ordered]@{
         AddToGroup = $AddToGroup
         AddToGroupOptions = $AddToGroupOptions
@@ -261,13 +261,13 @@ function Start-AutopilotOOBE {
             if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
         }
         $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$env:Temp\OSDeploy.AutopilotOOBE.json" -Force
-        #=======================================================================
+        #================================================
         #   Launch
-        #=======================================================================
+        #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
         Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
         Start-Sleep -Seconds 2
         & "$($MyInvocation.MyCommand.Module.ModuleBase)\Project\MainWindow.ps1"
-        #=======================================================================
+        #================================================
     }
 }

@@ -9,7 +9,7 @@
         RenderTransformOrigin="0.5,0.5"
         ResizeMode="NoResize"
         WindowStartupLocation = "CenterScreen"
-        Title="AutopilotOOBE" Height="670" Width="980">
+        Title="AutopilotOOBE" Height="670" Width="1000">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type Button}">
@@ -124,18 +124,18 @@
     </Window.Background>
 	<Grid>
 		<Grid.ColumnDefinitions>
-            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="600"/>
+			<ColumnDefinition Width="620"/>
 			<ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="180"/>
         </Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="0"/>
 			<RowDefinition Height="65"/>
 			<RowDefinition Height="35"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="380"/>
+			<RowDefinition Height="370"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="120"/>
 			<RowDefinition Height="10"/>
@@ -377,7 +377,7 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "520"
+                Width = "540"
                 />
 
 				<Button Name = "RunButton"
@@ -398,7 +398,7 @@
                 Foreground = "Black"
                 Height = "40"
                 Padding = "8"
-                Width = "520"
+                Width = "540"
                 />
 
                 <Button

@@ -601,7 +601,7 @@ $formMainWindowControlRunButton.add_Click( {
         'AutopilotDiagnostics Online'       {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand AutopilotDiagnosticsOnline"}
         'MDMDiagnosticsTool -out C:\Temp'                                       {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-out C:\Temp"}
         'MDMDiagnosticsTool -area Autopilot -cab C:\Temp\Autopilot.cab'         {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot","-cab C:\Temp\Autopilot.cab"}
-        'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'  {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\Autopilot.cab"}
+        'MDMDiagnosticsTool -area Autopilot;TPM -cab C:\Temp\AutopilotTPM.cab'  {Start-Process MDMDiagnosticsTool.exe -ArgumentList "-area Autopilot;TPM","-cab C:\Temp\AutopilotTPM.cab"}
         'TPM Get'                           {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand GetTpm"}
         'TPM Clear'                         {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand ClearTpm"}
         'TPM Initialize'                    {Start-Process -FilePath PowerShell.exe -ArgumentList '-NoLogo -NoExit',"-Command Invoke-AutopilotOOBEruncommand InitializeTpm"}
@@ -727,9 +727,11 @@ $formMainWindowControlRegisterButton.add_Click( {
     $PowerShellWindows = Get-Process -Name powershell -ErrorAction Ignore
 
     if ((Get-Process -Name powershell -ErrorAction Ignore).MainWindowTitle -match 'Running Start-OOBEDeploy') {
-        Write-Warning "Waiting on OOBEDeploy to finish"
-        Start-Sleep -Seconds 10
-        #Break
+        Write-Warning "Waiting for Start-OOBEDeploy to finish"
+    }
+
+    while ((Get-Process -Name powershell -ErrorAction Ignore).MainWindowTitle -match 'Running Start-OOBEDeploy') {
+        Start-Sleep -Seconds 5
     }
 
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
