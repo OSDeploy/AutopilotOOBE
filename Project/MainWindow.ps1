@@ -729,7 +729,7 @@ $formMainWindowControlRegisterButton.add_Click( {
     }
 
     while ((Get-Process -Name powershell).MainWindowTitle -match 'Running') {
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds 10
     }
 
     if ($formMainWindowControlPostActionComboBox.SelectedValue -eq 'Restart Computer') {Restart-Computer}
