@@ -1,4 +1,4 @@
-function Invoke-AutopilotOOBEruncommand {
+function Invoke-AutopilotOOBEcmd {
     [CmdletBinding()]
     param (
         [ValidateSet(
