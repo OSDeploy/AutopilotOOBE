@@ -12,7 +12,7 @@
                    "AssignedComputerName",
                    "AssignedUser"
                ],
-    "PostAction":  "Restart",
+    "PostAction":  "Quit",
     "Run":  "WindowsSettings",
     "Title":  "Baker Hughes Autopilot Registration"
 }
