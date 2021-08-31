@@ -264,7 +264,7 @@ function Show-PowershellWindow() {
 #================================================
 #   Sidebar
 #================================================
-if (Test-WebConnection) {
+if (Test-AutopilotOOBEconnection) {
     $formMainWindowControlOnlineStatusLabel.Background = 'Green'
 }
 else {
