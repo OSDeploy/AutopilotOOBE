@@ -9,8 +9,7 @@
                         ],
     "Hidden":  [
                    "AddToGroup",
-                   "AssignedComputerName",
-                   "AssignedUser"
+                   "AssignedComputerName"
                ],
     "PostAction":  "Quit",
     "Run":  "WindowsSettings",

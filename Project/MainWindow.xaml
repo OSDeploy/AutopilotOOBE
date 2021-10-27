@@ -269,26 +269,6 @@
                 />
 			</StackPanel>
 
-			<StackPanel x:Name = "AssignedUserStackPanel" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<Label Name = "AssignedUserLabel"
-                Content = "AssignedUser:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "Black"
-                />
-
-				<TextBox Name = "AssignedUserTextBox"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                Width = "380"
-                Padding = "8"
-                />
-			</StackPanel>
-
 			<StackPanel x:Name = "AssignedComputerNameStackPanel" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<Label Name = "AssignedComputerNameLabel"
                 Content = "AssignedComputerName:"
@@ -390,7 +370,7 @@
                 />
 			</StackPanel>
 			<StackPanel x:Name = "DocsStackPanel" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-				<ComboBox
+                <ComboBox
                 Name = "DocsComboBox"
                 BorderThickness = "2"
                 FontSize = "15"
@@ -400,7 +380,6 @@
                 Padding = "8"
                 Width = "540"
                 />
-
                 <Button
                 Name = "DocsButton"
                 Content = "Docs"

@@ -106,7 +106,6 @@ function Start-AutopilotOOBE {
     if ($CustomProfile -eq 'Sample') {
         $Title = 'Sample Autopilot Registration'
         $AddToGroup = 'Administrators'
-        $AssignedUserExample = 'someone@osdeploy.com'
         $AssignedComputerName = 'OSD-' + ((Get-CimInstance -ClassName Win32_BIOS).SerialNumber).Trim()
         $PostAction = 'Shutdown'
         $Assign = $true
@@ -205,8 +204,8 @@ function Start-AutopilotOOBE {
             Write-Host -ForegroundColor Gray "IsForcedEnrollmentEnabled: $($Global:RegAutoPilot.IsForcedEnrollmentEnabled)"
             Write-Host -ForegroundColor Green "This device has already been Autopilot Registered. Registration will not be enabled"
             Start-Sleep -Seconds 2
-            $Disabled = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign'
-            $Hidden = 'GroupTag','AddToGroup','AssignedUser','AssignedComputerName','PostAction','Assign','Register'
+            $Disabled = 'GroupTag','AddToGroup','AssignedComputerName','PostAction','Assign'
+            $Hidden = 'GroupTag','AddToGroup','AssignedComputerName','PostAction','Assign','Register'
             $Run = 'MDMDiagAutopilotTPM'
             $Title = 'Autopilot Registration Information'
         }
@@ -234,8 +233,6 @@ function Start-AutopilotOOBE {
         AddToGroup = $AddToGroup
         AddToGroupOptions = $AddToGroupOptions
         Assign = $Assign
-        AssignedUser = $AssignedUser
-        AssignedUserExample = $AssignedUserExample
         AssignedComputerName = $AssignedComputerName
         AssignedComputerNameExample = $AssignedComputerNameExample
         Disabled = $Disabled
