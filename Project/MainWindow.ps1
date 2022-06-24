@@ -392,6 +392,24 @@ if ($Global:AutopilotOOBE.AssignedComputerName -gt 0) {
     $formMainWindowControlAssignedComputerNameTextBox.Text = $Global:AutopilotOOBE.AssignedComputerName
 }
 #================================================
+#   AssignedUser Control
+#================================================
+# Disable the Control
+if ($Disabled -contains 'AssignedUser') {
+    $formMainWindowControlAssignedUserTextBox.IsEnabled = $false
+}
+
+# Hide the Control
+if ($Hidden -contains 'AssignedUser') {
+    $formMainWindowControlAssignedUserStackPanel.Visibility = 'Collapsed'
+}
+
+# Populate the Control
+$formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
+if ($Global:AutopilotOOBE.AssignedUser -gt 0) {
+    $formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser
+}
+#================================================
 #   PostAction Control
 #================================================
 # Disable the Control
@@ -685,6 +703,10 @@ $formMainWindowControlRegisterButton.add_Click( {
 
     if (($formMainWindowControlAssignedComputerNameTextBox.Text -gt 0) -and ($formMainWindowControlAssignedComputerNameTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedComputerNameExample)) {
         $Params.AssignedComputerName = $formMainWindowControlAssignedComputerNameTextBox.Text
+    }
+
+    if (($formMainWindowControlAssignedUserTextBox.Text -ne $null) -and ($formMainWindowControlAssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
+        $Params.AssignedUser = $formMainWindowControlAssignedUserTextBox.Text
     }
 
     $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-AutopilotOOBE.log"
