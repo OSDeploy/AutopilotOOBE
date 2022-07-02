@@ -311,4 +311,3 @@ function Start-AutopilotOOBE {
         #================================================
     }
 }
-Start-AutopilotOOBE
