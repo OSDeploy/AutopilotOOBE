@@ -374,6 +374,24 @@ if ($Global:AutopilotOOBE.AddToGroup) {
     $formMainWindowControlAddToGroupComboBox.Text = $Global:AutopilotOOBE.AddToGroup
 }
 #================================================
+#   AssignedUser Control
+#================================================
+# Disable the Control
+if ($Disabled -contains 'AssignedUser') {
+    $formMainWindowControlAssignedUserTextBox.IsEnabled = $false
+}
+
+# Hide the Control
+if ($Hidden -contains 'AssignedUser') {
+    $formMainWindowControlAssignedUserStackPanel.Visibility = 'Collapsed'
+}
+
+# Populate the Control
+$formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUserExample
+if ($Global:AutopilotOOBE.AssignedUser -gt 0) {
+    $formMainWindowControlAssignedUserTextBox.Text = $Global:AutopilotOOBE.AssignedUser
+}
+#================================================
 #   AssignedComputerName Control
 #================================================
 # Disable the Control
@@ -681,6 +699,10 @@ $formMainWindowControlRegisterButton.add_Click( {
 
     if ($formMainWindowControlGroupTagComboBox.Text -gt 0) {
         $Params.GroupTag = $formMainWindowControlGroupTagComboBox.Text
+    }
+
+    if (($formMainWindowControlAssignedUserTextBox.Text -gt 0) -and ($formMainWindowControlAssignedUserTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedUserExample)) {
+        $Params.AssignedUser = $formMainWindowControlAssignedUserTextBox.Text
     }
 
     if (($formMainWindowControlAssignedComputerNameTextBox.Text -gt 0) -and ($formMainWindowControlAssignedComputerNameTextBox.Text -notmatch $Global:AutopilotOOBE.AssignedComputerNameExample)) {

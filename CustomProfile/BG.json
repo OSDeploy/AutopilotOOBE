@@ -2,11 +2,13 @@
     "Assign":  {
                    "IsPresent":  true
                },
+    "AssignedUserExample":  "someone@example.com",
     "AssignedComputerNameExample":  "Azure AD Join Only",
     "Hidden":  [
                    "AddToGroup",
                    "AssignedComputerName",
-                   "GroupTag"
+                   "GroupTag",
+                   "AssignedUser"
                ],
     "PostAction":  "Restart",
     "Run":  "NetworkingWireless",
