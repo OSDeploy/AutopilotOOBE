@@ -290,25 +290,6 @@
                 />
 			</StackPanel>
 
-            <StackPanel x:Name = "AssignedUserStackPanel" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
-                <Label Name = "AssignedUserLabel"
-                Content = "Assigned User:"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                Foreground = "Black" />
-
-                <TextBox Name = "AssignedUserTextBox"
-                BorderThickness = "2"
-                FontFamily = "Segoe UI"
-                FontSize = "15"
-                FontWeight = "Normal"
-                Foreground = "Black"
-                Height = "40"
-                Text = ""
-                Width = "380"
-                Padding = "8" />
-            </StackPanel>
-            
 			<StackPanel x:Name = "PostActionStackPanel" Orientation = "Horizontal" HorizontalAlignment = "Right" VerticalAlignment = "Center" Margin = "7">
 				<Label
                 Name = "PostActionLabel"
