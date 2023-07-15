@@ -235,6 +235,8 @@ function Start-AutopilotOOBE {
         Assign = $Assign
         AssignedComputerName = $AssignedComputerName
         AssignedComputerNameExample = $AssignedComputerNameExample
+        AssignedUser = $AssignedUser
+        AssignedUserExample = $AssignedUserExample
         Disabled = $Disabled
         GroupTag = $GroupTag
         GroupTagOptions = $GroupTagOptions
