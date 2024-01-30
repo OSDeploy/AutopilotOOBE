@@ -7,7 +7,7 @@
 RootModule = 'AutopilotOOBE.psm1'
 
 # Version number of his module.
-ModuleVersion = '21.8.31.1'
+ModuleVersion = '24.1.29.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -22,7 +22,7 @@ Author = 'David Segura @SeguraOSD'
 CompanyName = 'osdeploy.com'
 
 # Copyright statement for this module
-Copyright = '(c) 2021 David Segura osdeploy.com. All rights reserved.'
+Copyright = '(c) 2024 David Segura osdeploy.com. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'

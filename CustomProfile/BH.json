@@ -5,6 +5,7 @@
     "GroupTag":  "Enterprise",
     "GroupTagOptions":  [
                             "Development",
+                            "Engineering",
                             "Enterprise"
                         ],
     "Hidden":  [
