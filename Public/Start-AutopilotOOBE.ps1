@@ -71,18 +71,68 @@ function Start-AutopilotOOBE {
         [string]$Docs,
         [string]$Title = 'Autopilot Manual Registration'
     )
+    #=================================================
+    #region Helper Functions
+    function Write-DarkGrayDate {
+        [CmdletBinding()]
+        param (
+            [Parameter(Position=0)]
+            [System.String]
+            $Message
+        )
+        if ($Message) {
+            Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) $Message"
+        }
+        else {
+            Write-Host -ForegroundColor DarkGray "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) " -NoNewline
+        }
+    }
+    function Write-DarkGrayHost {
+        [CmdletBinding()]
+        param (
+            [Parameter(Mandatory=$true, Position=0)]
+            [System.String]
+            $Message
+        )
+        Write-Host -ForegroundColor DarkGray $Message
+    }
+    function Write-DarkGrayLine {
+        [CmdletBinding()]
+        param ()
+        Write-Host -ForegroundColor DarkGray "========================================================================="
+    }
+    function Write-SectionHeader {
+        [CmdletBinding()]
+        param (
+            [Parameter(Mandatory=$true, Position=0)]
+            [System.String]
+            $Message
+        )
+        Write-DarkGrayLine
+        Write-DarkGrayDate
+        Write-Host -ForegroundColor Cyan $Message
+    }
+    function Write-SectionSuccess {
+        [CmdletBinding()]
+        param (
+            [Parameter(Position=0)]
+            [System.String]
+            $Message = 'Success!'
+        )
+        Write-DarkGrayDate
+        Write-Host -ForegroundColor Green $Message
+    }
+    #endregion
     #================================================
     #   WinPE and WinOS Start
     #================================================
     if ($env:SystemDrive -eq 'X:') {
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Green "Start-AutopilotOOBE in WinPE"
+        Write-SectionSuccess "Start-AutopilotOOBE in WinPE"
         $ProgramDataOSDeploy = 'C:\ProgramData\OSDeploy'
         $JsonPath = "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
     }
     if ($env:SystemDrive -ne 'X:') {
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Green "Start-AutopilotOOBE"
+        Write-SectionSuccess "Start-AutopilotOOBE"
         $ProgramDataOSDeploy = "$env:ProgramData\OSDeploy"
         $JsonPath = "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
     }
@@ -90,8 +140,7 @@ function Start-AutopilotOOBE {
     #   WinOS Transcript
     #================================================
     if ($env:SystemDrive -ne 'X:') {
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Start-Transcript"
+        Write-SectionHeader "Start-Transcript"
         $Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Start-AutopilotOOBE.log"
         Start-Transcript -Path (Join-Path "$env:SystemRoot\Temp" $Transcript) -ErrorAction Ignore
         $host.ui.RawUI.WindowTitle = "Start-AutopilotOOBE $env:SystemRoot\Temp\$Transcript"
@@ -118,13 +167,12 @@ function Start-AutopilotOOBE {
     #   Custom Profile
     #================================================
     if ($CustomProfile) {
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Loading AutopilotOOBE Custom Profile $CustomProfile"
+        Write-SectionHeader "Loading AutopilotOOBE Custom Profile $CustomProfile"
 
         $CustomProfileJson = Get-ChildItem "$($MyInvocation.MyCommand.Module.ModuleBase)\CustomProfile" *.json | Where-Object {$_.BaseName -eq $CustomProfile} | Select-Object -First 1
 
         if ($CustomProfileJson) {
-            Write-Host -ForegroundColor DarkGray "Saving Module CustomProfile to $JsonPath"
+            Write-DarkGrayHost"Saving Module CustomProfile to $JsonPath"
             if (!(Test-Path "$ProgramDataOSDeploy")) {New-Item "$ProgramDataOSDeploy" -ItemType Directory -Force | Out-Null}
             Copy-Item -Path $CustomProfileJson.FullName -Destination $JsonPath -Force -ErrorAction Ignore
         }
@@ -133,7 +181,7 @@ function Start-AutopilotOOBE {
     #   Import Json
     #================================================
     if (Test-Path $JsonPath) {
-        Write-Host -ForegroundColor DarkGray "Importing Configuration $JsonPath"
+        Write-DarkGrayHost "Importing Configuration $JsonPath"
         $ImportAutopilotOOBE = @()
         $ImportAutopilotOOBE = Get-Content -Raw -Path $JsonPath | ConvertFrom-Json
     
@@ -159,31 +207,27 @@ function Start-AutopilotOOBE {
         #================================================
         $PSGalleryIP = (Get-PSRepository -Name PSGallery).InstallationPolicy
         if ($PSGalleryIP -eq 'Untrusted') {
-            Write-Host -ForegroundColor DarkGray "========================================================================="
-            Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+            Write-SectionHeader "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
             Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
         }
         #================================================
         #   Watch-AutopilotOOBEevents
         #================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Watch-AutopilotOOBEevents"
+        Write-SectionHeader "Watch-AutopilotOOBEevents"
         Write-Host -ForegroundColor DarkCyan 'The EventLog is being monitored for MDM Diagnostic Events in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
         Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Watch-AutopilotOOBEevents"
         #================================================
         #   Test-AutopilotOOBEnetwork
         #================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotOOBEnetwork"
+        Write-SectionHeader "Test-AutopilotOOBEnetwork"
         Write-Host -ForegroundColor DarkCyan 'Required Autopilot network addresses are being tested in a minimized window'
         Write-Host -ForegroundColor DarkCyan 'Use Alt+Tab to view the progress in the separate PowerShell session'
         Start-Process PowerShell.exe -WindowStyle Minimized -ArgumentList "-NoExit -Command Test-AutopilotOOBEnetwork"
         #================================================
         #   Test-AutopilotRegistry
         #================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Test-AutopilotRegistry"
+        Write-SectionHeader "Test-AutopilotRegistry"
         Write-Host -ForegroundColor DarkCyan 'Gathering Autopilot Registration information from the Registry'
         $Global:RegAutoPilot = Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\AutoPilot'
         
@@ -214,7 +258,7 @@ function Start-AutopilotOOBE {
         #   Date Time
         #================================================
         Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Verify Date and Time"
+        Write-SectionHeader "Verify Date and Time"
         Write-Host -ForegroundColor DarkCyan 'Make sure the Time is set properly in the System BIOS as this can cause issues'
         Get-Date
         Get-TimeZone
@@ -249,14 +293,14 @@ function Start-AutopilotOOBE {
     }
     if ($env:SystemDrive -eq 'X:') {
         if (!(Test-Path "$ProgramDataOSDeploy")) {New-Item "$ProgramDataOSDeploy" -ItemType Directory -Force | Out-Null}
-        Write-Host -ForegroundColor DarkGray "Exporting Configuration $ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
+        Write-DarkGrayHost "Exporting Configuration $ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json"
         @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
             if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
         }
         $Global:AutopilotOOBE | ConvertTo-Json | Out-File "$ProgramDataOSDeploy\OSDeploy.AutopilotOOBE.json" -Force
     }
     else {
-        Write-Host -ForegroundColor DarkGray "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
+        Write-DarkGrayHost "Exporting Configuration $env:Temp\OSDeploy.AutopilotOOBE.json"
         @($Global:AutopilotOOBE.Keys) | ForEach-Object { 
             if (-not $Global:AutopilotOOBE[$_]) { $Global:AutopilotOOBE.Remove($_) }
         }
@@ -264,8 +308,7 @@ function Start-AutopilotOOBE {
         #================================================
         #   Launch
         #================================================
-        Write-Host -ForegroundColor DarkGray "========================================================================="
-        Write-Host -ForegroundColor Cyan "$((Get-Date).ToString('yyyy-MM-dd-HHmmss')) Starting AutopilotOOBE GUI"
+        Write-SectionHeader "Starting AutopilotOOBE GUI"
         Start-Sleep -Seconds 2
         & "$($MyInvocation.MyCommand.Module.ModuleBase)\Project\MainWindow.ps1"
         #================================================
